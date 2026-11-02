@@ -1,2 +1,4 @@
 # TM-App
-TM App is a mobile-first, installable social PWA combining private messaging, dating and friendship discovery, and an AI Studio. Built with a responsive design, secure account system, real-time chat, user profiles, subscription plans, and tier-based AI access.
+TM App is a mobile-first, installable social PWA combining private messaging, friendship/dating discovery, and AI Studio.
+
+Current version: responsive frontend shell. GitHub Pages deployment: https://40web-com.github.io/TM-App/
