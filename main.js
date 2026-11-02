@@ -10,13 +10,14 @@ const icon=(name)=>{const p={home:'<path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V
 async function uploadAndSendChatMedia(file,type){
 if(!activeChat||!file)return;
 if(file.size>26214400){alert("Files must be 25 MB or smaller.");return;}
+const mimeType=(file.type||"").split(";")[0].trim();
 const allowed=["image/jpeg","image/png","image/webp","image/gif","audio/webm","audio/ogg","audio/mp4","audio/mpeg","audio/aac","audio/3gpp","application/pdf","text/plain","application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document","application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet","application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation","application/zip"];
-if(!allowed.includes(file.type)){alert("This file type is not supported.");return;}
+if(!allowed.includes(mimeType)){alert("This file type is not supported.");return;}
 const attach=app.querySelector("[data-chat-attach]"),voice=app.querySelector("[data-voice-hold]");
 if(attach)attach.disabled=true;if(voice)voice.disabled=true;
 try{
-const ticket=await api("chat_upload_ticket",{session_token:session,chat_id:activeChat.id,file_name:file.name,mime_type:file.type,file_size:file.size});
-const uploaded=await fetch(ticket.signed_url,{method:"PUT",headers:{"Content-Type":file.type,"x-upsert":"false"},body:file});
+const ticket=await api("chat_upload_ticket",{session_token:session,chat_id:activeChat.id,file_name:file.name,mime_type:mimeType,file_size:file.size});
+const uploaded=await fetch(ticket.signed_url,{method:"PUT",headers:{"Content-Type":mimeType,"x-upsert":"false"},body:file});
 if(!uploaded.ok)throw Error("Upload failed. Please try again.");
 await api("chat_send",{session_token:session,chat_id:activeChat.id,type,media_url:ticket.path,body:type==="file"?file.name:""});
 await loadChatMessages();
