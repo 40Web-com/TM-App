@@ -315,3 +315,20 @@ body.tm-chat-open .chat-fullscreen,body.tm-chat-open .chat-messages{touch-action
 .chat-compose .chat-input-shell .chat-voice-button svg,.chat-compose .chat-input-shell .chat-send-button svg{width:22px!important;height:22px!important;fill:none!important;stroke:currentColor!important;stroke-width:2!important;stroke-linecap:round!important;stroke-linejoin:round!important}
 .chat-compose .chat-input-shell .chat-send-button[hidden],.chat-compose .chat-input-shell .chat-voice-button[hidden],.chat-attachment-menu[hidden]{display:none!important}
 @media(max-width:420px){.chat-fullscreen .chat-compose{gap:7px!important;padding-left:9px!important;padding-right:9px!important}.chat-compose .chat-attach-wrap,.chat-compose .chat-attach{flex-basis:40px!important;width:40px!important}.chat-compose .chat-input-shell{padding-left:13px!important}}
+
+/* Hard-hide native file chooser fields in the chat composer */
+#chat-send-form>input[type="file"],
+#chat-send-form>input[type="file"][hidden]{
+  display:none!important;
+  visibility:hidden!important;
+  position:absolute!important;
+  inline-size:0!important;
+  block-size:0!important;
+  min-width:0!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
