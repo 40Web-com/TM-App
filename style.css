@@ -231,3 +231,17 @@ body.tm-chat-open .chat-room-header{flex:0 0 60px!important}
 body.tm-chat-open .chat-messages{flex:1 1 0!important;min-height:0!important;overflow-x:hidden!important;overflow-y:auto!important}
 body.tm-chat-open .chat-compose{position:relative!important;inset:auto!important;transform:none!important;flex-shrink:0!important;margin:0!important;padding-bottom:max(8px,env(safe-area-inset-bottom))!important}
 body.tm-chat-open .chat-compose input{font-size:16px!important;scroll-margin:8px!important}
+
+
+/* Chat settings menu */
+body.tm-chat-open .chat-settings-panel{display:grid!important;gap:8px!important;padding:14px!important;border:1px solid #eadde2!important;border-radius:18px!important;background:#fff!important;box-shadow:0 16px 44px #2b0a1228!important}
+body.tm-chat-open .chat-settings-panel[hidden]{display:none!important}
+.chat-settings-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:5px}
+.chat-settings-head strong{font-size:16px;color:#321521}
+.chat-settings-head button{width:32px;height:32px;border:0;border-radius:50%;background:#f8edf1;color:#65263b;font-size:22px}
+.chat-settings-contact{display:flex;align-items:center;gap:10px;padding:9px 0 13px;border-bottom:1px solid #f0e5e9;margin-bottom:3px}
+.chat-settings-avatar{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#fbe3ea;color:#8b2946;font-weight:800}
+.chat-settings-contact div{display:grid;gap:3px}.chat-settings-contact div strong{font-size:14px;color:#321521}.chat-settings-contact small{font-size:11px;color:#8b6b75}
+.chat-settings-option{display:flex;align-items:center;width:100%;min-height:42px;padding:10px 12px;border:0;border-radius:10px;background:#fff5f8;color:#4a0e1b;text-align:left;font-size:14px}
+.chat-settings-option:active{background:#f3e2e9}
+.chat-settings-note{margin:3px 2px 0;color:#80616c;font-size:11px;line-height:1.45}
