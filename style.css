@@ -247,3 +247,9 @@ body.tm-chat-open .chat-settings-panel[hidden]{display:none!important}
 .chat-settings-note{margin:3px 2px 0;color:#80616c;font-size:11px;line-height:1.45}
 
 .chat-danger-option{color:#a5233c!important;background:#fff0f2!important;font-weight:700!important}
+
+/* Crisp, WhatsApp-inspired chat header action icons */
+.chat-action-icon{color:#54656f;background:transparent;transition:background .16s ease,color .16s ease}
+.chat-action-icon:hover,.chat-action-icon:focus-visible{background:#eef3f5;color:#128c7e;outline:none}
+.chat-action-icon svg{display:block;width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.chat-action-icon:active{transform:scale(.94)}
