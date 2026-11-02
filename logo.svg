@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+<title id="title">TM App — two hearts with flame</title>
+<defs>
+ <linearGradient id="flame" x1="0" y1="1" x2="0.7" y2="0"><stop stop-color="#ff3d16"/><stop offset=".48" stop-color="#ff8a00"/><stop offset="1" stop-color="#fff16a"/></linearGradient>
+ <linearGradient id="red" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff7777"/><stop offset=".45" stop-color="#ff263f"/><stop offset="1" stop-color="#a60024"/></linearGradient>
+ <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#72f5ff"/><stop offset=".42" stop-color="#167bff"/><stop offset="1" stop-color="#1424a8"/></linearGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="3.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<path d="M64 13C51 1 49 18 43 26 37 34 30 36 31 49 19 39 16 52 21 62c-10-3-13 9-4 20 9 10 24 15 33 25L64 120l14-13c12-11 28-17 34-29 7-13-2-21-10-16 3-13-6-20-14-15C83 31 77 16 64 13Z" fill="url(#flame)" opacity=".9" filter="url(#glow)"/>
+<path d="M64 36C55 27 44 31 39 40c-6 11 0 21 25 42 25-21 31-31 25-42-5-9-16-13-25-4Z" fill="#ffb22c" opacity=".55"/>
+<path d="M61 53C50 37 28 36 19 51 9 68 26 84 58 105l9-8C42 78 31 66 39 57c5-6 14-4 22 4Z" fill="url(#red)" stroke="#ff9a9a" stroke-width="2"/>
+<path d="M67 53C78 37 100 36 109 51c10 17-7 33-39 54l-9-8c25-19 36-31 28-40-5-6-14-4-22 4Z" fill="url(#blue)" stroke="#8ceaff" stroke-width="2"/>
+<path d="M61 53c-6-7-13-9-18-5-6 5-2 13 21 32 23-19 27-27 21-32-5-4-12-2-18 5l-3 4Z" fill="#ff5a2e" stroke="#ffd56b" stroke-width="1.5"/>
+<path d="M13 89c26 12 76 12 102 0" fill="none" stroke="#ffd64a" stroke-width="4" stroke-linecap="round" filter="url(#glow)"/>
+</svg>
