@@ -1,0 +1,9 @@
+{
+  "name": "TM App",
+  "short_name": "TM",
+  "description": "Connect, chat, discover people, and explore AI Studio.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#09090b"
+}
