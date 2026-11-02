@@ -31,3 +31,14 @@
 .credential-box strong{font-size:28px;color:#4A0E1B;letter-spacing:1px}
 @media(max-width:560px){.auth-wrap{justify-content:flex-start;padding:20px 14px max(22px,env(safe-area-inset-bottom));gap:12px}.auth-brand{margin:4px 0 4px}.auth-card{padding:22px 18px;border-radius:16px}.form-grid{grid-template-columns:minmax(0,1fr)}.form-grid .wide{grid-column:auto}.auth-card h1{font-size:30px}.auth-card .lead{font-size:14px}}
 @media(prefers-color-scheme:dark){.auth-wrap{background:#16090D}.auth-brand{color:#FBE3EA}.auth-card{background:#211017;border-color:#5B2A3B;color:#FBE3EA}.auth-card h1{color:#FBE3EA}.auth-card h1 span{color:#F4B6C8}.auth-card .lead,.auth-card label{color:#E7C7D1}.auth-card input:not([type=checkbox]),.auth-card select,.auth-card textarea{background:#16090D;color:#FBE3EA;border-color:#5B2A3B}.auth-card .primary-button{background:#E8799B;color:#2B0A12;border-color:#E8799B}.auth-card .secondary-button{background:#29131B;color:#FBE3EA;border-color:#5B2A3B}.auth-card .auth-small{color:#D6AAB7}.credential-box{background:#29131B;border-color:#5B2A3B}.credential-box strong{color:#FBE3EA}}
+
+/* Keep authentication bright and legible regardless of phone theme setting. */
+.auth-wrap{background:linear-gradient(145deg,#FFFFFF 0%,#FFF5F8 58%,#FBE3EA 100%);color:#241018}
+.auth-brand{color:#4A0E1B}.auth-card{background:#FFFFFF;color:#241018;border-color:#E8C8D3;box-shadow:0 16px 50px rgba(74,14,27,.09)}
+.auth-card h1{color:#241018}.auth-card h1 span{color:#8B2946}.auth-card .eyebrow{color:#8B2946}
+.auth-card label{color:#4B2731}.auth-card .lead{color:#62434D}
+.auth-card input:not([type=checkbox]),.auth-card select,.auth-card textarea{background:#FFFFFF;color:#241018;border-color:#E8C8D3}
+.auth-card .primary-button{background:#8B2946;color:#FFFFFF;border-color:#8B2946}.auth-card .primary-button:hover{background:#6A2034}
+.auth-card .secondary-button{background:#FFFFFF;color:#6A2034;border-color:#D9B5C2}.auth-card .auth-small{color:#62434D}
+.credential-box{background:#FFF5F8;border-color:#E8C8D3}.credential-box strong{color:#4A0E1B}
+@media(prefers-color-scheme:dark){.auth-wrap{background:linear-gradient(145deg,#FFFFFF 0%,#FFF5F8 58%,#FBE3EA 100%)}.auth-card{background:#FFFFFF;color:#241018;border-color:#E8C8D3}.auth-card h1{color:#241018}.auth-card h1 span{color:#8B2946}.auth-card label{color:#4B2731}.auth-card .lead{color:#62434D}.auth-card input:not([type=checkbox]),.auth-card select,.auth-card textarea{background:#FFFFFF;color:#241018;border-color:#E8C8D3}.auth-card .primary-button{background:#8B2946;color:#FFFFFF;border-color:#8B2946}.auth-card .secondary-button{background:#FFFFFF;color:#6A2034;border-color:#D9B5C2}.auth-card .auth-small{color:#62434D}.credential-box{background:#FFF5F8;border-color:#E8C8D3}.credential-box strong{color:#4A0E1B}}
