@@ -265,3 +265,6 @@ body.tm-chat-open .chat-settings-panel[hidden]{display:none!important}
 
 /* Let chat keep vertical scrolling while horizontal right-swipes are handled by the chat exit gesture. */
 body.tm-chat-open .chat-fullscreen,body.tm-chat-open .chat-messages{touch-action:pan-y}
+
+/* Chat media attachments and press-and-hold voice notes */
+.chat-compose .chat-voice-button{width:42px;height:42px;min-height:42px;flex:0 0 42px;border:0;border-radius:50%;background:#fbe3ea;color:#8b2946;font-size:20px;display:grid;place-items:center;touch-action:none;user-select:none;-webkit-user-select:none}.chat-compose .chat-voice-button.recording{background:#8b2946;color:#fff;box-shadow:0 0 0 5px #8b294622}.chat-compose .chat-voice-button:disabled,.chat-compose .chat-attach:disabled{opacity:.55}.chat-media-image-link{display:block;max-width:min( min(68vw,320px),100%);margin-bottom:4px}.chat-media-image{display:block;width:100%;max-height:320px;object-fit:contain;border-radius:12px}.chat-voice-player{display:block;width:min(260px,60vw);max-width:100%;height:40px;margin:4px 0}.chat-file-link{display:block;max-width:240px;overflow-wrap:anywhere;padding:9px 11px;margin:3px 0;border-radius:10px;background:#fbe3ea;color:#8b2946;text-decoration:none;font-weight:600}.chat-media-caption{margin-top:5px;overflow-wrap:anywhere}
