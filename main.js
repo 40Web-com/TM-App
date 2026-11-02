@@ -60,7 +60,7 @@ let media="";
 if(m.type==="photo"&&m.media_url)media='<a class="chat-media-image-link" href="'+safe(m.media_url)+'" target="_blank" rel="noopener"><img class="chat-media-image" src="'+safe(m.media_url)+'" alt="Shared image" loading="lazy"></a>';
 else if(m.type==="voice"&&m.media_url)media='<audio class="chat-voice-player" controls preload="metadata" src="'+safe(m.media_url)+'"></audio>';
 else if(m.type==="file"&&m.media_url)media='<a class="chat-file-link" href="'+safe(m.media_url)+'" target="_blank" rel="noopener" download>📎 '+(body||"Download file")+'</a>';
-return '<div class="message-row '+(m.sender_id===accountUser?.id?"mine":"theirs")+'"><div class="message-bubble">'+media+(m.type==="text"?body:(body?'<div class="chat-media-caption">'+body+'</div>':""))+'<small>'+time+'</small></div></div>';
+return '<div class="message-row '+(m.sender_id===accountUser?.id?"mine":"theirs")+'"><div class="message-bubble">'+media+(m.type==="text"?body:(m.type==="file"?"":(body?'<div class="chat-media-caption">'+body+'</div>':"")) )+'<small>'+time+'</small></div></div>';
 }
 function chatPage(){
 if(activeChat){
