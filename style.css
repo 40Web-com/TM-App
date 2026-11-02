@@ -268,3 +268,26 @@ body.tm-chat-open .chat-fullscreen,body.tm-chat-open .chat-messages{touch-action
 
 /* Chat media attachments and press-and-hold voice notes */
 .chat-compose .chat-voice-button{width:42px;height:42px;min-height:42px;flex:0 0 42px;border:0;border-radius:50%;background:#fbe3ea;color:#8b2946;font-size:20px;display:grid;place-items:center;touch-action:none;user-select:none;-webkit-user-select:none}.chat-compose .chat-voice-button.recording{background:#8b2946;color:#fff;box-shadow:0 0 0 5px #8b294622}.chat-compose .chat-voice-button:disabled,.chat-compose .chat-attach:disabled{opacity:.55}.chat-media-image-link{display:block;max-width:min(68vw,320px);margin-bottom:4px}.chat-media-image{display:block;width:100%;max-height:320px;object-fit:contain;border-radius:12px}.chat-voice-player{display:block;width:min(260px,60vw);max-width:100%;height:40px;margin:4px 0}.chat-file-link{display:block;max-width:240px;overflow-wrap:anywhere;padding:9px 11px;margin:3px 0;border-radius:10px;background:#fbe3ea;color:#8b2946;text-decoration:none;font-weight:600}.chat-media-caption{margin-top:5px;overflow-wrap:anywhere}
+
+/* WhatsApp-style chat composer */
+.chat-fullscreen .chat-compose{gap:9px!important;padding:9px 12px calc(9px + env(safe-area-inset-bottom))!important}
+.chat-attach-wrap{position:relative;flex:0 0 44px;display:grid;place-items:center}
+.chat-compose .chat-attach,.chat-compose .chat-voice-button,.chat-compose .chat-send-button{width:44px;height:44px;min-height:44px;flex:0 0 44px;border-radius:50%;display:grid;place-items:center;border:0}
+.chat-compose .chat-attach{background:transparent;color:#64747c}
+.chat-compose .chat-attach svg,.chat-compose .chat-voice-button svg,.chat-compose .chat-send-button svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.chat-compose .chat-voice-button{background:#128c7e;color:#fff;font-size:0;touch-action:none;position:relative}
+.chat-compose .chat-voice-button.recording{background:#d9364f;box-shadow:0 0 0 5px #d9364f22}
+.chat-compose .chat-voice-button.locked{width:58px;flex-basis:58px;border-radius:22px;background:#d9364f}
+.voice-lock-label{position:absolute;top:-23px;white-space:nowrap;font-size:10px;font-weight:700;color:#d9364f}
+.chat-compose .chat-send-button{background:#128c7e;color:#fff;font-size:0}
+.chat-compose .chat-send-button[hidden],.chat-compose .chat-voice-button[hidden]{display:none!important}
+.chat-attachment-menu{position:absolute;z-index:1005;left:0;bottom:54px;width:226px;padding:8px;display:grid;grid-template-columns:1fr 1fr;gap:4px;background:#fff;border:1px solid #e5ecef;border-radius:18px;box-shadow:0 14px 38px #172b3326}
+.chat-attachment-menu[hidden]{display:none!important}
+.chat-attachment-menu button{display:flex;align-items:center;gap:9px;min-height:48px;padding:6px;border:0;border-radius:12px;background:transparent;color:#33434a;text-align:left;font-size:12px;font-weight:650}
+.chat-attachment-menu button:active,.chat-attachment-menu button:hover{background:#f2f7f6}
+.attach-menu-icon{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border-radius:11px;font-size:19px}
+.attach-photo{background:#e4f4ed;color:#168b69}.attach-doc{background:#e8f0ff;color:#4779d0}.attach-video{background:#f2eaff;color:#8456c6}.attach-link{background:#e7f4fb;color:#2582a6}.attach-calendar{background:#fff0e4;color:#d17a37}.attach-location{background:#fce9ed;color:#c34c68}
+.chat-video-player{display:block;width:min(70vw,340px);max-height:300px;border-radius:12px;background:#111;margin:4px 0}
+.chat-compose input[name="body"]{border:0!important;background:#f0f2f3!important;border-radius:24px!important;box-shadow:none!important}
+.chat-compose input[name="body"]:focus{background:#fff!important;border:1px solid #b7d9d3!important}
+@media(max-width:760px){.chat-attachment-menu{width:218px;bottom:54px}.chat-compose .chat-attach,.chat-compose .chat-voice-button,.chat-compose .chat-send-button{width:42px;height:42px;min-height:42px;flex-basis:42px}.chat-compose .chat-voice-button.locked{width:58px;flex-basis:58px}}
