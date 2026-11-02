@@ -221,3 +221,13 @@ body.tm-chat-open .chat-action-icon{width:38px!important;height:38px!important;m
 body.tm-chat-open .chat-messages{padding:12px 10px 16px!important}
 body.tm-chat-open .chat-compose{padding:8px 9px calc(8px + env(safe-area-inset-bottom))!important}
 }
+
+
+/* Android keyboard-aware chat viewport */
+html:has(body.tm-chat-open),body.tm-chat-open{overscroll-behavior:none}
+body.tm-chat-open .page-content{top:var(--tm-vv-top,0px)!important;height:var(--tm-vv-height,100dvh)!important;max-height:var(--tm-vv-height,100dvh)!important;bottom:auto!important}
+body.tm-chat-open .chat-fullscreen{top:var(--tm-vv-top,0px)!important;bottom:auto!important;height:var(--tm-vv-height,100dvh)!important;max-height:var(--tm-vv-height,100dvh)!important;min-height:0!important;padding-top:0!important;padding-bottom:0!important;transition:none!important}
+body.tm-chat-open .chat-room-header{flex:0 0 60px!important}
+body.tm-chat-open .chat-messages{flex:1 1 0!important;min-height:0!important;overflow-x:hidden!important;overflow-y:auto!important}
+body.tm-chat-open .chat-compose{position:relative!important;inset:auto!important;transform:none!important;flex-shrink:0!important;margin:0!important;padding-bottom:max(8px,env(safe-area-inset-bottom))!important}
+body.tm-chat-open .chat-compose input{font-size:16px!important;scroll-margin:8px!important}
