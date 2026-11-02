@@ -1,102 +1,28 @@
-const app = document.querySelector("#app");
-
-const icon = (name) => {
-  const paths = {
-    home: '<path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/>',
-    chats: '<path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 8.7 3.9a8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/>',
-    discover: '<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>',
-    profile: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
-    heart: '<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8z"/>',
-    sparkle: '<path d="m12 3 1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2z"/><path d="m19 14 1.2 2.8L23 18l-2.8 1.2L19 22l-1.2-2.8L15 18l2.8-1.2z"/>',
-    wallet: '<rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 8h18M16 14h2"/>',
-    arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>'
-  };
-  return `<svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${paths[name] || paths.sparkle}</svg>`;
-};
-
-const navItems = [
-  { id: "home", label: "Home", icon: "home" },
-  { id: "chats", label: "Chats", icon: "chats" },
-  { id: "discover", label: "Discover", icon: "discover" },
-  { id: "profile", label: "Profile", icon: "profile" }
-];
-
-let activePage = "home";
-
-function navButton(item, mobile = false) {
-  return `<button class="${mobile ? "mobile-nav-item" : "nav-item"} ${activePage === item.id ? "active" : ""}" data-page="${item.id}" ${activePage === item.id ? 'aria-current="page"' : ""}>
-    ${icon(item.icon)}<span>${mobile ? `<small>${item.label}</small>` : item.label}</span>
-  </button>`;
+const app=document.querySelector("#app");
+const SUPABASE_URL="https://swfawduoosskffbuniks.supabase.co";
+const SUPABASE_KEY="sb_publishable_rkR-lAksyaDc9dNU4fgkZg_MNoN5RGb";
+const ACCOUNT_API=SUPABASE_URL+"/functions/v1/tm-account";
+let activePage="home",authView="welcome",guest=false,session=null,accountUser=null,showCode=null,formError="",busy=false;
+try{session=localStorage.getItem("tm_session");accountUser=JSON.parse(localStorage.getItem("tm_user")||"null");guest=localStorage.getItem("tm_guest")==="1";}catch{}
+const icon=(name)=>{const p={home:'<path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/>',chats:'<path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 8.7 3.9a8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/>',discover:'<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>',profile:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8z"/>',sparkle:'<path d="m12 3 1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2z"/>',wallet:'<rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 8h18M16 14h2"/>',arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>'};return '<svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+(p[name]||p.sparkle)+'</svg>';};
+async function api(action,payload={}){const res=await fetch(ACCOUNT_API,{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY,"Authorization":"Bearer "+SUPABASE_KEY},body:JSON.stringify({action,...payload,device:navigator.userAgent.slice(0,120)})});const data=await res.json().catch(()=>({error:"Server returned an invalid response."}));if(!res.ok)throw Error(data.error||"Request failed");return data;}
+function safe(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function brand(){return '<div class="auth-brand"><img src="./logo.svg" alt=""><span>TM <b>App</b></span></div>';}
+function navItems(){return [{id:"home",label:"Home",icon:"home"},{id:"chats",label:"Chats",icon:"chats"},{id:"discover",label:"Discover",icon:"discover"},{id:"profile",label:"Profile",icon:"profile"}];}
+function navButton(item,mobile=false){return '<button class="'+(mobile?"mobile-nav-item":"nav-item")+' '+(activePage===item.id?"active":"")+'" data-page="'+item.id+'">'+icon(item.icon)+'<span>'+(mobile?'<small>'+item.label+'</small>':item.label)+'</span></button>';}
+function shell(){return '<div class="app-shell"><aside class="sidebar"><a class="brand" href="./" data-page="home"><img class="brand-logo" src="./logo.svg" alt=""><span>TM <b>App</b></span></a><nav>'+navItems().map(x=>navButton(x)).join("")+'</nav><div class="sidebar-footer">Your world. Your people.</div></aside><main class="main-content"><header class="topbar"><a class="mobile-brand" href="./" data-page="home"><img class="brand-logo" src="./logo.svg" alt="">TM App</a><div class="topbar-spacer"></div><span class="topbar-note">'+(guest?"Guest preview":accountUser?.tm_number||"Connect with your people")+'</span><button class="avatar-button" data-page="profile">'+icon("profile")+'</button></header><section class="page-content">'+pageContent()+'</section><nav class="mobile-nav">'+navItems().map(x=>navButton(x,true)).join("")+'</nav></main></div>';}
+function home(){return '<div class="hero"><div><p class="eyebrow">WELCOME TO TM</p><h1>Your world.<br><span>Your people.</span></h1><p class="lead">A place to chat privately, meet people, and discover something new.</p></div><div class="hero-art"><div class="hero-halo"></div><img src="./logo.svg" alt=""></div></div><div class="section-heading"><div><p class="eyebrow">EXPLORE TM</p><h2>What brings you here?</h2></div></div><div class="category-grid"><button class="category-card" data-page="chats"><span class="category-icon">'+icon("chats")+'</span><span class="category-title">TM Chat</span><span class="category-copy">Private conversations with your people.</span><span class="category-action">Open chats →</span></button><button class="category-card" data-page="discover"><span class="category-icon">'+icon("heart")+'</span><span class="category-title">Dating & Friends</span><span class="category-copy">Discover people and real connections.</span><span class="category-action">Discover people →</span></button><button class="category-card" data-page="ai"><span class="category-icon">'+icon("sparkle")+'</span><span class="category-title">AI Studio</span><span class="category-copy">Creative AI tools, unlocked at Tier 60.</span><span class="category-action">Explore AI Studio →</span></button><button class="category-card" data-page="plans"><span class="category-icon">'+icon("wallet")+'</span><span class="category-title">Plans & Tiers</span><span class="category-copy">Explore Gold, Diamond, and Platinum.</span><span class="category-action">View plans →</span></button></div><div class="home-note"><strong>Welcome '+safe(accountUser?.display_name||"to TM")+'!</strong><p>TM Chat, dating, friends and AI Studio in one place.</p></div>';}
+function pageContent(){if(activePage==="home")return home();const map={chats:["TM Chat","Private conversations, messages, and media."],discover:["Discover","Find friends and dating connections."],profile:["Your Profile",accountUser?("TM number: "+safe(accountUser.tm_number)):"Create an account to start your profile."],ai:["AI Studio","AI Studio unlocks at Tier 60."],plans:["Plans & Tiers","Gold, Diamond, and Platinum memberships."]};const [t,d]=map[activePage]||map.home;return '<div class="page-heading"><p class="eyebrow">TM APP</p><h1>'+t+'</h1><p class="lead">'+d+'</p></div><div class="coming-panel"><h2>Account connection is active</h2><p>This area is next in the build sequence. Sign-up and login are connected to TM backend now.</p>'+(guest?'<button class="primary-button" data-auth="register">Create account to continue</button>':'')+'</div>';}
+function welcome(){return '<div class="auth-wrap">'+brand()+'<div class="auth-card"><p class="eyebrow">YOUR WORLD. YOUR PEOPLE.</p><h1>Welcome to <span>TM</span></h1><p class="lead">Chat privately, meet friends, and discover new connections.</p><div class="auth-actions"><button class="primary-button" data-auth="register">Create account</button><button class="secondary-button" data-auth="login">Log in</button><button class="text-button" data-auth="guest">Continue as guest</button></div><p class="auth-small">TM numbers are internal app IDs, not real phone numbers. TM is for adults 18+.</p></div></div>';}
+function registerForm(){return '<div class="auth-wrap">'+brand()+'<form class="auth-card" id="register-form"><button type="button" class="text-button back-button" data-auth="welcome">← Back</button><p class="eyebrow">ACCOUNT SETUP · 18+</p><h1>Create your <span>TM account</span></h1><p class="lead">Complete your profile details to get a unique TM number and PIN.</p>'+errorHtml()+'<div class="form-grid"><label>Display name<input name="display_name" required maxlength="70" autocomplete="name"></label><label>Date of birth<input name="birth_date" type="date" required max="'+new Date(Date.now()-18*365.25*86400000).toISOString().slice(0,10)+'"></label><label>Gender<select name="gender" required><option value="">Select</option><option>Woman</option><option>Man</option><option>Non-binary</option><option>Other</option><option>Prefer not to say</option></select></label><label>City<input name="city" required maxlength="80"></label><label>Country<input name="country" required maxlength="80" value="Nigeria"></label><label>Looking for<select name="looking_for" required><option value="">Select</option><option value="friends">Friends</option><option value="dating">Dating</option><option value="both">Both</option></select></label><label class="wide">Interests (comma-separated)<input name="interests" placeholder="Music, books, travel"></label><label class="wide">Languages<input name="languages" placeholder="English, Yoruba"></label><label class="wide">Short bio<textarea name="bio" rows="3" maxlength="300"></textarea></label></div><label class="terms"><input type="checkbox" name="terms" required> I agree to the Terms and Privacy Policy.</label><button class="primary-button full" type="submit" '+(busy?"disabled":"")+'>'+(busy?"Creating account…":"Create account")+'</button><p class="auth-small">Your TM number is not a phone number and cannot receive calls or SMS.</p></form></div>';}
+function loginForm(){return '<div class="auth-wrap">'+brand()+'<form class="auth-card" id="login-form"><button type="button" class="text-button back-button" data-auth="welcome">← Back</button><p class="eyebrow">WELCOME BACK</p><h1>Log in to <span>TM</span></h1>'+errorHtml()+'<label>TM number<input name="tm_number" placeholder="+1 690 XXX XXXX" required autocomplete="username"></label><label>4-digit code<input name="pin" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required autocomplete="current-password"></label><button class="primary-button full" type="submit" '+(busy?"disabled":"")+'>'+(busy?"Logging in…":"Log in")+'</button><p class="auth-small">Forgot your code? Account recovery will be added next; keep your code in a safe place.</p></form></div>';}
+function errorHtml(){return formError?'<p class="form-error" role="alert">'+safe(formError)+'</p>':"";}
+function credentialScreen(){return '<div class="auth-wrap">'+brand()+'<div class="auth-card"><p class="eyebrow">SAVE THIS NOW</p><h1>Your TM account is ready</h1><p class="lead">This code is shown only once. Save it somewhere private.</p><div class="credential-box"><label>TM number</label><strong>'+safe(showCode?.user.tm_number)+'</strong><label>4-digit code</label><strong class="pin-display">'+safe(showCode?.pin)+'</strong></div><button class="primary-button full" data-copy="'+safe(showCode?.user.tm_number+"  PIN: "+showCode?.pin)+'">Copy credentials</button><button class="secondary-button full" data-auth="continue">I saved my code — continue</button><p class="auth-small">Never share your PIN. TM number is an app ID, not a phone number.</p></div></div>';}
+function render(){if(showCode){app.innerHTML=credentialScreen();wire();return;}if(!session&&!guest){app.innerHTML=authView==="register"?registerForm():authView==="login"?loginForm():welcome();wire();return;}app.innerHTML=shell();wire();}
+function wire(){app.querySelectorAll("[data-auth]").forEach(el=>el.addEventListener("click",async()=>{const v=el.dataset.auth;formError="";if(v==="guest"){guest=true;localStorage.setItem("tm_guest","1");authView="welcome";render();return;}if(v==="continue"){showCode=null;authView="welcome";render();return;}if(v==="logout"){session=null;accountUser=null;guest=false;localStorage.removeItem("tm_session");localStorage.removeItem("tm_user");localStorage.removeItem("tm_guest");authView="welcome";render();return;}authView=v;render();}));
+app.querySelectorAll("[data-page]").forEach(el=>el.addEventListener("click",e=>{if(el.tagName==="A")e.preventDefault();const p=el.dataset.page;if(p==="chats"||p==="discover"||p==="ai"){if(guest){authView="register";render();return;}}activePage=p;render();window.scrollTo(0,0);}));
+app.querySelectorAll("[data-copy]").forEach(el=>el.addEventListener("click",()=>navigator.clipboard?.writeText(el.dataset.copy).then(()=>{el.textContent="Copied";}).catch(()=>{el.textContent=el.dataset.copy;})));
+const rf=app.querySelector("#register-form");if(rf)rf.addEventListener("submit",async e=>{e.preventDefault();busy=true;formError="";render();const d=new FormData(rf);try{const out=await api("register",{display_name:d.get("display_name"),birth_date:d.get("birth_date"),gender:d.get("gender"),city:d.get("city"),country:d.get("country"),looking_for:[d.get("looking_for")],interests:String(d.get("interests")||"").split(",").map(x=>x.trim()).filter(Boolean),languages:String(d.get("languages")||"").split(",").map(x=>x.trim()).filter(Boolean),bio:d.get("bio"),terms_accepted:d.get("terms")==="on"});showCode={user:out.user,pin:out.pin};session=out.session_token;accountUser=out.user;localStorage.setItem("tm_session",session);localStorage.setItem("tm_user",JSON.stringify(accountUser));guest=false;localStorage.removeItem("tm_guest");}catch(err){formError=err.message;}finally{busy=false;render();}});
+const lf=app.querySelector("#login-form");if(lf)lf.addEventListener("submit",async e=>{e.preventDefault();busy=true;formError="";render();const d=new FormData(lf);try{const out=await api("login",{tm_number:d.get("tm_number"),pin:d.get("pin")});session=out.session_token;accountUser=out.user;guest=false;localStorage.setItem("tm_session",session);localStorage.setItem("tm_user",JSON.stringify(accountUser));localStorage.removeItem("tm_guest");activePage="home";}catch(err){formError=err.message;}finally{busy=false;render();}});
 }
-
-function render() {
-  app.innerHTML = `
-    <div class="app-shell">
-      <aside class="sidebar">
-        <a class="brand" href="./" data-page="home" aria-label="TM App home"><img class="brand-logo" src="./logo.svg" alt=""><span>TM <b>App</b></span></a>
-        <nav aria-label="Main navigation">${navItems.map(item => navButton(item)).join("")}</nav>
-        <div class="sidebar-footer"><span class="footer-heart">${icon("heart")}</span><span>Your world. Your people.</span></div>
-      </aside>
-      <main class="main-content">
-        <header class="topbar">
-          <a class="mobile-brand" href="./" data-page="home"><img class="brand-logo" src="./logo.svg" alt=""><span>TM App</span></a>
-          <div class="topbar-spacer"></div>
-          <span class="topbar-note">Connect with your people</span>
-          <button class="avatar-button" data-page="profile" aria-label="Open profile">${icon("profile")}</button>
-        </header>
-        <section class="page-content">${renderPage()}</section>
-        <nav class="mobile-nav" aria-label="Mobile navigation">${navItems.map(item => navButton(item, true)).join("")}</nav>
-      </main>
-    </div>`;
-
-  app.querySelectorAll("[data-page]").forEach(button => {
-    button.addEventListener("click", event => {
-      if (button.tagName === "A") event.preventDefault();
-      activePage = button.dataset.page;
-      render();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-  });
-}
-
-function renderPage() {
-  if (activePage === "home") return homePage();
-  const pageMap = {
-    chats: ["TM Chat", "Private conversations, all in one place.", "Chat features are scheduled for build step 4."],
-    discover: ["Discover", "Find friends, dating connections, and your community.", "Profiles and matching are scheduled for build step 5."],
-    ai: ["AI Studio", "Your creative AI space unlocks at Tier 60.", "AI Studio and its tier lock are scheduled for build step 7."],
-    plans: ["Plans & Tiers", "Explore Gold, Diamond, and Platinum membership.", "Plans, purchases, and tier tracking are scheduled for build step 6."],
-    profile: ["Your Profile", "Your TM identity starts here.", "Profile creation and editing are scheduled for build step 3."]
-  };
-  const [title, subtitle, note] = pageMap[activePage] || pageMap.profile;
-  return `<div class="page-heading"><p class="eyebrow">TM APP</p><h1>${title}</h1><p class="lead">${subtitle}</p></div>
-    <div class="coming-panel"><div class="coming-mark">${icon("sparkle")}</div><span class="status-label">BUILD IN PROGRESS</span><h2>Coming in its build step</h2><p>${note}</p><button class="primary-button" data-page="home">Back to Home</button></div>`;
-}
-
-function homePage() {
-  return `
-    <div class="hero">
-      <div class="hero-copy">
-        <p class="eyebrow">WELCOME TO TM</p>
-        <h1>Your world.<br><span>Your people.</span></h1>
-        <p class="lead">A place to chat privately, meet people, and discover something new.</p>
-      </div>
-      <div class="hero-art" aria-hidden="true"><div class="hero-halo"></div><img src="./logo.svg" alt=""></div>
-    </div>
-    <div class="section-heading"><div><p class="eyebrow">EXPLORE TM</p><h2>What brings you here?</h2></div></div>
-    <div class="category-grid">
-      <button class="category-card" data-page="chats"><span class="category-icon">${icon("chats")}</span><span class="category-title">TM Chat</span><span class="category-copy">Private conversations with your people.</span><span class="category-action">Open chats ${icon("arrow")}</span></button>
-      <button class="category-card" data-page="discover"><span class="category-icon">${icon("heart")}</span><span class="category-title">Dating & Friends</span><span class="category-copy">Discover people and build real connections.</span><span class="category-action">Discover people ${icon("arrow")}</span></button>
-      <button class="category-card" data-page="ai"><span class="category-icon">${icon("sparkle")}</span><span class="category-title">AI Studio</span><span class="category-copy">Creative AI tools, unlocked at Tier 60.</span><span class="category-action">Explore AI Studio ${icon("arrow")}</span></button>
-      <button class="category-card" data-page="plans"><span class="category-icon">${icon("wallet")}</span><span class="category-title">Plans & Tiers</span><span class="category-copy">Explore Gold, Diamond, and Platinum.</span><span class="category-action">View plans ${icon("arrow")}</span></button>
-    </div>
-    <div class="home-note"><span class="note-icon">${icon("heart")}</span><div><strong>A little space to feel connected.</strong><p>TM brings chat, friendships, dating, and AI experiences together in one place.</p></div></div>
-    <div class="section-heading suggested-heading"><div><p class="eyebrow">YOUR COMMUNITY</p><h2>People suggested for you</h2></div><span class="coming-tag">Coming soon</span></div>
-    <div class="suggested-preview"><div class="suggested-avatar">${icon("profile")}</div><div><strong>Your suggestions will appear here</strong><p>Complete your profile to help TM find people with shared interests.</p></div></div>`;
-}
-
 render();
-
-if ("serviceWorker" in navigator && import.meta.env.PROD) {
-  window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(console.error));
-}
