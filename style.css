@@ -140,3 +140,15 @@ h1 span,.hero h1 span{color:#8B2946}
  .mobile-brand{color:#4A0E1B}
  .avatar-button{background:#FBE3EA;color:#4A0E1B;border-color:#E8C8D3}
 }
+
+/* FINAL FORCE-LIGHT OVERRIDE (device dark mode must not tint the UI) */
+html,body,#app,.app-shell,.main-content,.page-content,.topbar,.mobile-nav{background-color:#FFFFFF!important;color:#241018!important;color-scheme:light!important}
+body{background:#FFFFFF!important}
+.auth-wrap{background:#FFF7FA!important;color:#241018!important}
+.auth-card{background:#FFFFFF!important;color:#241018!important}
+.auth-card h1,.auth-card h2,.auth-card label{color:#241018!important}
+.auth-card .lead,.auth-card .auth-small{color:#62434D!important}
+.auth-card input:not([type=checkbox]),.auth-card select,.auth-card textarea{background:#FFFFFF!important;color:#241018!important}
+.sidebar{background:#4A0E1B!important;color:#FFFFFF!important}
+.category-card{background:#FFFFFF!important;color:#241018!important}
+.coming-panel,.home-note{background:#FFF5F8!important;color:#241018!important}
