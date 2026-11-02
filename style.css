@@ -1,5 +1,5 @@
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -106,3 +106,37 @@ h1 span{color:var(--oxblood)}
 }
 @media(max-width:360px){.hero-art{display:none}.category-card{padding:12px;min-height:175px}.category-title{font-size:15px}}
 @media(prefers-color-scheme:dark) and (max-width:760px){.mobile-nav{background:#16090D;border-color:#5B2A3B}.mobile-nav-item.active{color:#F4B6C8}.mobile-brand{color:#FBE3EA}}
+
+/* Bright, readable TM theme: do not auto-switch the whole interface to dark mode. */
+:root{color-scheme:light;--deep:#241018;--muted:#62434D;--surface:#FFFFFF;--chat-bg:#FFF5F8;--border-pink:#E8C8D3}
+body,.main-content{background:#FFFFFF;color:#241018}
+.topbar{background:#FFFFFF;color:#241018}
+.sidebar{background:#4A0E1B;color:#FFFFFF}
+.nav-item{color:#FCE8EF}.nav-item.active,.nav-item:hover{background:#6A2034;color:#FFFFFF}
+.hero h1,h1,h2,h3{color:#241018}
+h1 span,.hero h1 span{color:#8B2946}
+.lead,.category-copy,.home-note p,.coming-panel p,.suggested-preview p{color:#62434D}
+.category-card{background:#FFFFFF;color:#241018;border-color:#E8C8D3}
+.category-icon,.note-icon,.coming-mark,.suggested-avatar{background:#FBE3EA;color:#6A2034}
+.category-action{color:#6A2034}
+.coming-panel,.home-note{background:#FFF5F8;border-color:#E8C8D3}
+.primary-button{background:#8B2946;color:#FFFFFF}
+.primary-button:hover{background:#6A2034}
+.mobile-nav{background:#FFFFFF;border-color:#E8C8D3}
+.mobile-nav-item{color:#62434D}.mobile-nav-item.active{color:#8B2946}
+.mobile-brand{color:#4A0E1B}
+@media(prefers-color-scheme:dark){
+ body,.main-content{background:#FFFFFF;color:#241018}
+ .topbar{background:#FFFFFF;color:#241018;border-color:#E8C8D3}
+ h1,h2,h3,.hero h1{color:#241018}
+ .hero h1 span,h1 span{color:#8B2946}
+ .category-card{background:#FFFFFF;color:#241018;border-color:#E8C8D3}
+ .category-copy,.lead,.home-note p,.suggested-preview p,.coming-panel p{color:#62434D}
+ .home-note,.coming-panel{background:#FFF5F8;border-color:#E8C8D3}
+ .category-icon,.note-icon,.coming-mark,.suggested-avatar{background:#FBE3EA;color:#6A2034}
+ .category-action{color:#6A2034}
+ .mobile-nav{background:#FFFFFF;border-color:#E8C8D3}
+ .mobile-nav-item{color:#62434D}.mobile-nav-item.active{color:#8B2946}
+ .mobile-brand{color:#4A0E1B}
+ .avatar-button{background:#FBE3EA;color:#4A0E1B;border-color:#E8C8D3}
+}
