@@ -262,3 +262,6 @@ body.tm-chat-open .chat-settings-panel[hidden]{display:none!important}
 .chat-fullscreen{touch-action:pan-y}
 
 .chat-list-loading{display:flex;gap:8px;align-items:center;justify-content:center;padding:26px;color:#87949b}.chat-list-loading span{width:7px;height:7px;border-radius:50%;background:#128c7e;animation:tm-chat-pulse 1s infinite ease-in-out}.chat-list-loading span:nth-child(2){animation-delay:.15s}.chat-list-loading span:nth-child(3){animation-delay:.3s}
+
+/* Let chat keep vertical scrolling while horizontal right-swipes are handled by the chat exit gesture. */
+body.tm-chat-open .chat-fullscreen,body.tm-chat-open .chat-messages{touch-action:pan-y}
