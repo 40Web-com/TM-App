@@ -350,3 +350,9 @@ body.tm-chat-open .chat-fullscreen,body.tm-chat-open .chat-messages{touch-action
 .chat-image-viewer{position:fixed;inset:0;z-index:99999;background:rgba(10,10,12,.96);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box}
 .chat-image-viewer img{max-width:100%;max-height:100%;object-fit:contain}
 .chat-image-viewer button{position:absolute;top:max(18px,env(safe-area-inset-top));right:18px;width:44px;height:44px;border:0;border-radius:50%;background:#ffffff20;color:#fff;font-size:30px}
+
+
+/* Keep every conversation anchored at the newest message, like modern messaging apps. */
+body.tm-chat-open .chat-messages::before{content:"";display:block;flex:1 0 auto;min-height:0}
+body.tm-chat-open .chat-messages{display:flex!important;flex-direction:column!important;justify-content:flex-start!important;}
+body.tm-chat-open .chat-messages>.message-row{flex:0 0 auto}
