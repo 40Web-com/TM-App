@@ -11,19 +11,19 @@ const icon=(name)=>{const p={home:'<path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V
 async function uploadAndSendChatMedia(file,type){
 if(!activeChat||!file)return;
 if(file.size>26214400){alert("Files must be 25 MB or smaller.");return;}
+const chatId=activeChat.id,preview=URL.createObjectURL(file),caption=type==="file"?file.name:"",tempId="tmp-media-"+Date.now()+"-"+Math.random().toString(36).slice(2);
+chatMessages=[...chatMessages,{id:tempId,chat_id:chatId,sender_id:accountUser.id,type,body:caption,media_url:preview,status:"uploading",created_at:new Date().toISOString()}];render();
 const mimeType=(file.type||"").split(";")[0].trim();
 const allowed=["image/jpeg","image/png","image/webp","image/gif","audio/webm","audio/ogg","audio/mp4","audio/mpeg","audio/aac","audio/3gpp","video/mp4","video/webm","video/quicktime","video/3gpp","application/pdf","text/plain","application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document","application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet","application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation","application/zip"];
-if(!allowed.includes(mimeType)){alert("This file type is not supported.");return;}
-const attach=app.querySelector("[data-chat-attach]"),voice=app.querySelector("[data-voice-hold]");
-if(attach)attach.disabled=true;if(voice)voice.disabled=true;
+if(!allowed.includes(mimeType)){URL.revokeObjectURL(preview);const item=chatMessages.find(x=>x.id===tempId);if(item)item.status="failed";render();return;}
 try{
-const ticket=await api("chat_upload_ticket",{session_token:session,chat_id:activeChat.id,file_name:file.name,mime_type:mimeType,file_size:file.size});
+const ticket=await api("chat_upload_ticket",{session_token:session,chat_id:chatId,file_name:file.name||"voice-note",mime_type:mimeType,file_size:file.size});
 const uploaded=await fetch(ticket.signed_url,{method:"PUT",headers:{"Content-Type":mimeType,"x-upsert":"false"},body:file});
 if(!uploaded.ok)throw Error("Upload failed. Please try again.");
-await api("chat_send",{session_token:session,chat_id:activeChat.id,type,media_url:ticket.path,body:type==="file"?file.name:""});
-await loadChatMessages();
-}catch(err){alert(err.message||"Could not send attachment.");}
-finally{if(attach)attach.disabled=false;if(voice)voice.disabled=false;}
+const out=await api("chat_send",{session_token:session,chat_id:chatId,type,media_url:ticket.path,body:caption});
+URL.revokeObjectURL(preview);
+if(activeChat?.id===chatId){const index=chatMessages.findIndex(x=>x.id===tempId);if(index>=0)chatMessages[index]=out.message;render();}
+}catch(err){URL.revokeObjectURL(preview);const item=chatMessages.find(x=>x.id===tempId);if(item)item.status="failed";render();console.warn("Media send failed",err);}
 }
 async function startChatVoiceRecording(button){
 if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){voicePressPending=false;alert("Voice recording is not supported in this browser.");return;}
