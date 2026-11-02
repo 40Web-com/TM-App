@@ -2,7 +2,8 @@ const app=document.querySelector("#app");
 const SUPABASE_URL="https://swfawduoosskffbuniks.supabase.co";
 const SUPABASE_KEY="sb_publishable_rkR-lAksyaDc9dNU4fgkZg_MNoN5RGb";
 const ACCOUNT_API=SUPABASE_URL+"/functions/v1/tm-account";
-let voiceRecorder=null,voiceChunks=[],voiceStream=null,voicePressPending=false;\nlet deviceId=localStorage.getItem("tm_device_id");if(!deviceId){deviceId=crypto.randomUUID();localStorage.setItem("tm_device_id",deviceId);}
+let voiceRecorder=null,voiceChunks=[],voiceStream=null,voicePressPending=false;
+let deviceId=localStorage.getItem("tm_device_id");if(!deviceId){deviceId=crypto.randomUUID();localStorage.setItem("tm_device_id",deviceId);}
 const savedTm=localStorage.getItem("tm_saved_tm")||"";
 let googleAccessToken=null,googleProfile=null;let activePage=localStorage.getItem("tm_active_page")||"home",authView="welcome",recoveryMode="tm_id",recoveredTm=null,guest=false,session=null,accountUser=null,showCode=null,formError="",busy=false,activeChat=null,chatList=[],chatMessages=[],chatLoading=false,chatListLoading=false,discoverProfiles=[];
 try{session=localStorage.getItem("tm_session");accountUser=JSON.parse(localStorage.getItem("tm_user")||"null");guest=localStorage.getItem("tm_guest")==="1";}catch{}
