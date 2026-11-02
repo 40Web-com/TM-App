@@ -4,7 +4,7 @@
   "description": "Connect, chat, discover people, and explore AI Studio.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#09090b",
-  "theme_color": "#09090b",
+  "background_color": "#FFFFFF",
+  "theme_color": "#4A0E1B",
   "scope": "./"
 }
