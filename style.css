@@ -332,3 +332,5 @@ body.tm-chat-open .chat-fullscreen,body.tm-chat-open .chat-messages{touch-action
   opacity:0!important;
   pointer-events:none!important;
 }
+
+#chat-send-form input[type="file"]{display:none!important}
