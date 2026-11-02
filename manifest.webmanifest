@@ -5,6 +5,6 @@
   "start_url": "./",
   "display": "standalone",
   "background_color": "#FFFFFF",
-  "theme_color": "#4A0E1B",
+  "theme_color": "#FFFFFF",
   "scope": "./"
 }
