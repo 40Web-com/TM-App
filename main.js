@@ -61,7 +61,7 @@ if(m.type==="photo"&&m.media_url)media='<button type="button" class="chat-media-
 else if(m.type==="video"&&m.media_url)media='<video class="chat-video-player" controls playsinline preload="metadata" src="'+safe(m.media_url)+'"></video>';
 else if(m.type==="voice"&&m.media_url)media='<audio class="chat-voice-player" controls preload="metadata" src="'+safe(m.media_url)+'"></audio>';
 else if(m.type==="file"&&m.media_url)media='<a class="chat-file-link" href="'+safe(m.media_url)+'" target="_blank" rel="noopener" download>📎 '+(body||"Download file")+'</a>';
-return '<div class="message-row '+(m.sender_id===accountUser?.id?"mine":"theirs")+'"><div class="message-bubble">'+media+(m.type==="text"?body:(m.type==="file"?"":(body?'<div class="chat-media-caption">'+body+'</div>':"")) )+'<small>'+time+'</small></div></div>';
+return '<div class="message-row '+(m.sender_id===accountUser?.id?"mine":"theirs")+'"><div class="message-bubble">'+media+(m.type==="text"?body:(m.type==="file"?"":(body?'<div class="chat-media-caption">'+body+'</div>':"")) )+'<small>'+time+(m.status==="sending"?" · Sending…":m.status==="uploading"?" · Uploading…":m.status==="failed"?" · Failed to send":"")+'</small></div></div>';
 }
 function chatPage(){
 if(activeChat){
