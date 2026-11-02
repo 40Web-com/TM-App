@@ -1,5 +1,6 @@
 const app = document.querySelector("#app");
 
+const logo = '<img class="brand-logo" src="./logo.svg" alt="TM App twin-heart flame logo">';
 const navItems = [
   { id: "home", label: "Home", icon: "⌂" },
   { id: "chats", label: "Chats", icon: "▤" },
@@ -14,7 +15,7 @@ function render() {
   app.innerHTML = `
     <div class="app-shell">
       <aside class="sidebar">
-        <a class="brand" href="#" aria-label="TM App home"><span class="brand-mark">TM</span><span>TM App</span></a>
+        <a class="brand" href="#" aria-label="TM App home">${logo}<span>TM App</span></a>
         <nav aria-label="Main navigation">
           ${navItems.map(item => `
             <button class="nav-item ${activePage === item.id ? "active" : ""}" data-page="${item.id}">
@@ -27,7 +28,7 @@ function render() {
 
       <main class="main-content">
         <header class="topbar">
-          <div class="mobile-brand"><span class="brand-mark">TM</span> TM App</div>
+          <div class="mobile-brand">${logo}<span>TM App</span></div>
           <div class="topbar-note">Connect. Chat. Discover.</div>
           <button class="avatar-button" aria-label="Open profile" data-page="profile">Y</button>
         </header>
@@ -60,7 +61,7 @@ function renderPage() {
     home: `
       <div class="welcome-row">
         <div><p class="eyebrow">WELCOME TO TM</p><h1>Your world,<br /><span>your people.</span></h1></div>
-        <div class="welcome-orb" aria-hidden="true"><span>TM</span></div>
+        <div class="welcome-orb" aria-hidden="true"><img src="./logo.svg" alt="" /></div>
       </div>
       <p class="lead">A place to connect, make friends, chat, and explore something new.</p>
       <div class="feature-grid">
