@@ -245,3 +245,5 @@ body.tm-chat-open .chat-settings-panel[hidden]{display:none!important}
 .chat-settings-option{display:flex;align-items:center;width:100%;min-height:42px;padding:10px 12px;border:0;border-radius:10px;background:#fff5f8;color:#4a0e1b;text-align:left;font-size:14px}
 .chat-settings-option:active{background:#f3e2e9}
 .chat-settings-note{margin:3px 2px 0;color:#80616c;font-size:11px;line-height:1.45}
+
+.chat-danger-option{color:#a5233c!important;background:#fff0f2!important;font-weight:700!important}
