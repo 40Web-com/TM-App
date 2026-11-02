@@ -293,3 +293,25 @@ body.tm-chat-open .chat-fullscreen,body.tm-chat-open .chat-messages{touch-action
 @media(max-width:760px){.chat-attachment-menu{width:218px;bottom:54px}.chat-compose .chat-attach,.chat-compose .chat-voice-button,.chat-compose .chat-send-button{width:42px;height:42px;min-height:42px;flex-basis:42px}.chat-compose .chat-voice-button.locked{width:58px;flex-basis:58px}}
 
 .chat-attachment-menu .attach-menu-icon svg{display:block;width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* Final compact WhatsApp-like composer: one message pill, one smart action */
+.chat-fullscreen .chat-compose{display:flex!important;align-items:center!important;gap:10px!important;padding:10px 12px calc(10px + env(safe-area-inset-bottom))!important;background:#fff!important}
+.chat-compose input[type="file"][hidden]{display:none!important;position:absolute!important;width:0!important;height:0!important;opacity:0!important;pointer-events:none!important}
+.chat-compose .chat-attach-wrap{position:relative!important;flex:0 0 42px!important;width:42px!important;height:46px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.chat-compose .chat-attach{width:42px!important;height:42px!important;min-height:42px!important;flex:0 0 42px!important;border:0!important;border-radius:50%!important;background:#fce8ee!important;color:#8b2946!important;display:grid!important;place-items:center!important}
+.chat-compose .chat-attach svg{width:25px!important;height:25px!important;stroke:currentColor!important;stroke-width:2.2!important;fill:none!important;stroke-linecap:round!important}
+.chat-attachment-menu{left:0!important;bottom:56px!important;width:244px!important;padding:10px!important;grid-template-columns:1fr 1fr!important;gap:5px!important;border:1px solid #eee2e7!important;border-radius:19px!important;background:#fff!important;box-shadow:0 12px 36px #32152124!important}
+.chat-attachment-menu button{min-width:0!important;min-height:54px!important;gap:8px!important;padding:7px!important;border-radius:13px!important;font-size:12px!important}
+.chat-compose .chat-input-shell{box-sizing:border-box!important;min-width:0!important;flex:1 1 auto!important;min-height:48px!important;display:flex!important;align-items:center!important;gap:5px!important;padding:3px 5px 3px 15px!important;border:1px solid #eee6e9!important;border-radius:26px!important;background:#f7f5f6!important;box-shadow:0 1px 2px #32152108!important}
+.chat-compose .chat-input-shell:focus-within{border-color:#d7a8b8!important;background:#fff!important;box-shadow:0 0 0 3px #8b294610!important}
+.chat-compose .chat-input-shell input[name="body"]{box-sizing:border-box!important;display:block!important;flex:1 1 auto!important;width:0!important;min-width:0!important;min-height:40px!important;height:40px!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;outline:0!important;background:transparent!important;box-shadow:none!important;color:#26151b!important;font-size:16px!important}
+.chat-compose .chat-input-shell input[name="body"]::placeholder{color:#8b8588!important;opacity:1!important}
+.chat-compose .chat-input-shell input[name="body"]:focus{border:0!important;background:transparent!important}
+.chat-compose .chat-input-shell .chat-voice-button,.chat-compose .chat-input-shell .chat-send-button{width:38px!important;height:38px!important;min-height:38px!important;flex:0 0 38px!important;margin:0!important;border:0!important;border-radius:50%!important;display:grid!important;place-items:center!important}
+.chat-compose .chat-input-shell .chat-voice-button{background:transparent!important;color:#64747c!important}
+.chat-compose .chat-input-shell .chat-voice-button.recording{background:#d9364f!important;color:#fff!important;box-shadow:0 0 0 4px #d9364f20!important}
+.chat-compose .chat-input-shell .chat-voice-button.locked{width:54px!important;flex-basis:54px!important;border-radius:20px!important;background:#d9364f!important;color:#fff!important}
+.chat-compose .chat-input-shell .chat-send-button{background:#128c7e!important;color:#fff!important}
+.chat-compose .chat-input-shell .chat-voice-button svg,.chat-compose .chat-input-shell .chat-send-button svg{width:22px!important;height:22px!important;fill:none!important;stroke:currentColor!important;stroke-width:2!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+.chat-compose .chat-input-shell .chat-send-button[hidden],.chat-compose .chat-input-shell .chat-voice-button[hidden],.chat-attachment-menu[hidden]{display:none!important}
+@media(max-width:420px){.chat-fullscreen .chat-compose{gap:7px!important;padding-left:9px!important;padding-right:9px!important}.chat-compose .chat-attach-wrap,.chat-compose .chat-attach{flex-basis:40px!important;width:40px!important}.chat-compose .chat-input-shell{padding-left:13px!important}}
