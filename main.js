@@ -64,6 +64,8 @@ function renderPage() {
   const pageMap = {
     chats: ["TM Chat", "Private conversations, all in one place.", "Chat features are scheduled for build step 4."],
     discover: ["Discover", "Find friends, dating connections, and your community.", "Profiles and matching are scheduled for build step 5."],
+    ai: ["AI Studio", "Your creative AI space unlocks at Tier 60.", "AI Studio and its tier lock are scheduled for build step 7."],
+    plans: ["Plans & Tiers", "Explore Gold, Diamond, and Platinum membership.", "Plans, purchases, and tier tracking are scheduled for build step 6."],
     profile: ["Your Profile", "Your TM identity starts here.", "Profile creation and editing are scheduled for build step 3."]
   };
   const [title, subtitle, note] = pageMap[activePage] || pageMap.profile;
