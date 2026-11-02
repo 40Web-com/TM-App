@@ -253,3 +253,10 @@ body.tm-chat-open .chat-settings-panel[hidden]{display:none!important}
 .chat-action-icon:hover,.chat-action-icon:focus-visible{background:#eef3f5;color:#128c7e;outline:none}
 .chat-action-icon svg{display:block;width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .chat-action-icon:active{transform:scale(.94)}
+
+/* Fast cached chat paint and edge-swipe navigation */
+.chat-loading{display:flex;gap:7px;align-items:center;justify-content:center;padding:28px;color:#87949b}
+.chat-loading span{width:7px;height:7px;border-radius:50%;background:#128c7e;animation:tm-chat-pulse 1s infinite ease-in-out}
+.chat-loading span:nth-child(2){animation-delay:.15s}.chat-loading span:nth-child(3){animation-delay:.3s}
+@keyframes tm-chat-pulse{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1.1)}}
+.chat-fullscreen{touch-action:pan-y}
