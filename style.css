@@ -291,3 +291,5 @@ body.tm-chat-open .chat-fullscreen,body.tm-chat-open .chat-messages{touch-action
 .chat-compose input[name="body"]{border:0!important;background:#f0f2f3!important;border-radius:24px!important;box-shadow:none!important}
 .chat-compose input[name="body"]:focus{background:#fff!important;border:1px solid #b7d9d3!important}
 @media(max-width:760px){.chat-attachment-menu{width:218px;bottom:54px}.chat-compose .chat-attach,.chat-compose .chat-voice-button,.chat-compose .chat-send-button{width:42px;height:42px;min-height:42px;flex-basis:42px}.chat-compose .chat-voice-button.locked{width:58px;flex-basis:58px}}
+
+.chat-attachment-menu .attach-menu-icon svg{display:block;width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
