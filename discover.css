@@ -23,3 +23,24 @@
 .settings-danger h2{color:#9b2947}
 .settings-danger .settings-row{color:#9b2947}
 @media(max-width:600px){.settings-section{padding:16px;border-radius:15px}.settings-layout{gap:12px;margin-top:14px}}
+
+/* Dating & Friends room polish: clean responsive discovery workspace */
+.page-heading:has(+ .discover-notification),.page-heading:has(+ .discover-matches){margin-bottom:18px}
+.discover-toolbar{max-width:1080px;margin:24px auto 14px;padding:12px 15px;border:1px solid #f0e1e7;border-radius:14px;background:#fff;display:flex;align-items:center;gap:12px}
+.discover-toolbar span{font-size:13px;font-weight:600;color:#6e4252}
+.discover-toolbar button{margin-left:auto;min-height:38px;padding:8px 15px;border-radius:10px}
+.discover-deck{max-width:560px;margin:16px auto 36px}
+.discover-swipe-card{border:1px solid #eadde3;border-radius:26px;background:#fff;box-shadow:0 14px 42px rgba(51,18,34,.09)}
+.discover-swipe-photo{background:linear-gradient(135deg,#f9eaf0,#f2dce5)}
+.discover-swipe-title h2{font-size:clamp(25px,4vw,32px);letter-spacing:-.025em;text-shadow:0 2px 10px #16070d55}
+.discover-profile-details{padding:22px 24px;gap:17px}
+.discover-profile-meta span{background:#faf5f7;border:1px solid #f0e4e9;border-radius:999px;padding:6px 10px;color:#745563}
+.discover-swipe-actions{padding:16px 20px 24px;border-top:1px solid #f4e9ee;background:#fff}
+.discover-no-button,.discover-yes-button{width:62px;height:62px;display:grid;place-items:center;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
+.discover-no-button:hover,.discover-yes-button:hover{transform:translateY(-2px);box-shadow:0 8px 22px #4a0e1b1c}
+.discover-empty{max-width:560px;margin:28px auto;padding:42px 24px;border:1px solid #eadde3;background:linear-gradient(145deg,#fff,#fff7fa);box-shadow:0 10px 30px rgba(51,18,34,.05)}
+.discover-empty h2{margin:12px 0 8px;color:#321521;font-size:24px}
+.discover-empty p{max-width:340px;margin:0 auto 18px;line-height:1.6}
+.discover-match-chip{transition:transform .15s ease,box-shadow .15s ease}
+.discover-match-chip:hover{transform:translateY(-2px);box-shadow:0 8px 22px #4a0e1b12}
+@media(max-width:600px){.discover-toolbar{margin:14px 0;padding:10px 12px}.discover-deck{margin:12px auto 24px}.discover-profile-details{padding:17px}.discover-swipe-actions{padding:12px 16px 20px}}
