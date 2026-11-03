@@ -365,3 +365,6 @@ body.tm-chat-open .chat-messages>.message-row{flex:0 0 auto}
 .profile-status-dot.online{background:#22c55e}
 .profile-status-dot.offline{background:#9ca3af}
 .profile-photo-grid img{object-fit:cover;object-position:center}
+
+.discover-swipe-photo{position:relative}
+.discover-swipe-photo .profile-status-dot{position:absolute;top:14px;right:14px;z-index:4;width:15px;height:15px}
