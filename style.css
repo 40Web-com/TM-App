@@ -368,3 +368,16 @@ body.tm-chat-open .chat-messages>.message-row{flex:0 0 auto}
 
 .discover-swipe-photo{position:relative}
 .discover-swipe-photo .profile-status-dot{position:absolute;top:14px;right:14px;z-index:4;width:15px;height:15px}
+
+
+/* Fix profile photo preview: never let the uploaded image escape its circular avatar. */
+.profile-editor .profile-preview-card{position:relative;isolation:isolate}
+.profile-editor .profile-preview-cover{position:relative;overflow:visible}
+.profile-editor .profile-avatar-wrap{box-sizing:border-box;position:absolute;left:22px;bottom:-45px;width:112px;height:112px;min-width:112px;min-height:112px;max-width:112px;max-height:112px;overflow:visible;border-radius:50%;z-index:2}
+.profile-editor .profile-avatar-wrap img#profile-photo-preview{position:absolute;inset:0;display:block;width:100%;height:100%;min-width:0;min-height:0;max-width:100%;max-height:100%;object-fit:cover;object-position:center;border-radius:50%;box-sizing:border-box}
+.profile-editor .profile-avatar-wrap img#profile-photo-preview[hidden]{display:none!important}
+.profile-editor .profile-avatar-wrap #profile-avatar-placeholder{width:100%;height:100%;display:grid;place-items:center;border-radius:50%;overflow:hidden}
+.profile-editor .profile-avatar-wrap .photo-add{z-index:4}
+.profile-editor .profile-preview-info{position:relative;min-width:0;overflow-wrap:anywhere;padding:52px 22px 20px}
+.profile-editor .profile-preview-info h2,.profile-editor .profile-preview-info p{max-width:100%;overflow-wrap:anywhere}
+@media(max-width:600px){.profile-editor .profile-avatar-wrap{left:22px;width:112px;height:112px;min-width:112px;min-height:112px}}
