@@ -50,3 +50,11 @@
 .discover-message-button svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;}
 .discover-message-button:hover{background:#f1f5f9;transform:translateY(-1px);}
 .discover-message-button:focus-visible{outline:3px solid rgba(99,102,241,.35);outline-offset:2px;}
+
+/* Profile photo clarity and polished dating-card sizing */
+.discover-deck{max-width:440px;margin:18px auto 36px}
+.discover-swipe-photo{height:clamp(340px,62vh,520px);background:#f7edf1}
+.discover-swipe-photo>img,.discover-gallery img,.discover-match-avatar img{filter:none;-webkit-filter:none;image-rendering:auto;backface-visibility:hidden}
+.discover-swipe-photo>img{object-position:center 30%;}
+.discover-gallery img{object-position:center;}
+@media(max-width:600px){.discover-deck{max-width:100%;}.discover-swipe-photo{height:clamp(340px,58vh,500px);}}
