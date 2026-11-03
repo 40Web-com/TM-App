@@ -44,3 +44,9 @@
 .discover-match-chip{transition:transform .15s ease,box-shadow .15s ease}
 .discover-match-chip:hover{transform:translateY(-2px);box-shadow:0 8px 22px #4a0e1b12}
 @media(max-width:600px){.discover-toolbar{margin:14px 0;padding:10px 12px}.discover-deck{margin:12px auto 24px}.discover-profile-details{padding:17px}.discover-swipe-actions{padding:12px 16px 20px}}
+
+/* Clean, icon-only profile messaging action */
+.discover-message-button{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;min-width:46px;padding:0;border:1px solid rgba(100,116,139,.22);border-radius:50%;background:#fff;color:#334155;box-shadow:0 4px 14px rgba(15,23,42,.08);cursor:pointer;transition:transform .16s ease,background .16s ease,color .16s ease;}
+.discover-message-button svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;}
+.discover-message-button:hover{background:#f1f5f9;transform:translateY(-1px);}
+.discover-message-button:focus-visible{outline:3px solid rgba(99,102,241,.35);outline-offset:2px;}
