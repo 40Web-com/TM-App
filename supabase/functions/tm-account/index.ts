@@ -111,10 +111,17 @@ Deno.serve(async(req)=>{
    const excluded=new Set([uid,...(blocked.data||[]).map(x=>x.blocked_id),...(passed.data||[]).map(x=>x.passed_user_id),...(liked.data||[]).map(x=>x.to_user_id)]);
    // Fetch candidates separately and filter in JS. This avoids fragile PostgREST "NOT IN"
    // syntax and avoids issuing an empty .in() query when no other users exist yet.
-   const {data:rows,error}=await db.from("users").select("id,tm_number,display_name,birth_date,gender,city,country,bio,photo_url,profile_photo_url,gallery_photo_urls,looking_for,languages,interests,preferred_partner,flirt_style,plan,tier").eq("profile_complete",true).neq("id",uid).limit(100);
-   if(error){console.error("discover_list users query failed",error);return out(400,{error:"Could not load discover profiles."});}
    const {data:reverseBlocks}=await db.from("blocks").select("blocker_id").eq("blocked_id",uid);const blockSet=new Set((reverseBlocks||[]).map(x=>x.blocker_id));
-   const candidates=(rows||[]).filter(u=>!excluded.has(u.id)&&!blockSet.has(u.id));
+   // Discover must search beyond the first 100 database rows; demo/test accounts
+   // can be spread across the full 10k profile pool. Fetch in pages until enough
+   // eligible profiles are found (or the table is exhausted).
+   const candidates:any[]=[];let offset=0;const pageSize=1000;
+   while(offset<10000&&candidates.length<100){
+    const {data:rows,error}=await db.from("users").select("id,tm_number,display_name,birth_date,gender,city,country,bio,photo_url,profile_photo_url,gallery_photo_urls,looking_for,languages,interests,preferred_partner,flirt_style,plan,tier").eq("profile_complete",true).neq("id",uid).range(offset,offset+pageSize-1);
+    if(error){console.error("discover_list users query failed",error);return out(400,{error:"Could not load discover profiles."});}
+    const page=(rows||[]).filter(u=>!excluded.has(u.id)&&!blockSet.has(u.id));candidates.push(...page);
+    if(!rows||rows.length<pageSize)break;offset+=pageSize;
+   }
    let onlineIds=new Set();
    if(candidates.length){const activeSessions=await db.from("sessions").select("user_id").in("user_id",candidates.map(u=>u.id)).is("revoked_at",null).gt("last_seen",new Date(Date.now()-120000).toISOString());onlineIds=new Set((activeSessions.data||[]).map(x=>x.user_id));}
    const profiles=candidates.slice(0,40).map(u=>{const bd=new Date(u.birth_date);const now=new Date();let age=now.getFullYear()-bd.getFullYear();if(now.getMonth()<bd.getMonth()||(now.getMonth()===bd.getMonth()&&now.getDate()<bd.getDate()))age--;return {...u,age,is_online:onlineIds.has(u.id),photo_url:u.profile_photo_url||u.photo_url||null};});
