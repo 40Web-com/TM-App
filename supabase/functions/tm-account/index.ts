@@ -138,7 +138,7 @@ Deno.serve(async(req)=>{
   if(b.action==="discover_pass"){const q=await db.from("passes").upsert({user_id:uid,passed_user_id:target},{onConflict:"user_id,passed_user_id"});if(q.error)return out(400,{error:"Could not pass profile."});return out(200,{passed:true});}
   const q=await db.from("likes").upsert({from_user_id:uid,to_user_id:target},{onConflict:"from_user_id,to_user_id"});if(q.error)return out(400,{error:"Could not like profile."});
   const {data:mutual}=await db.from("likes").select("id").eq("from_user_id",target).eq("to_user_id",uid).maybeSingle();if(!mutual)return out(200,{liked:true,matched:false});
-  const [a,b]=[uid,target].sort();let {data:match}=await db.from("matches").select("id,chat_id").eq("user_a",a).eq("user_b",b).maybeSingle();let isNew=!match;
+  const [userA,userB]=[uid,target].sort();let {data:match}=await db.from("matches").select("id,chat_id").eq("user_a",userA).eq("user_b",userB).maybeSingle();let isNew=!match;
   if(!match){const ins=await db.from("matches").insert({user_a:a,user_b:b}).select("id,chat_id").single();if(ins.error)return out(200,{liked:true,matched:true,match_saved:false});match=ins.data;}
   let chatId=match.chat_id;
   if(!chatId){const {data:chat,error}=await db.from("chats").insert({}).select("id").single();if(error||!chat)return out(200,{liked:true,matched:true,match_id:match.id,chat_unavailable:true});const ins=await db.from("chat_members").insert([{chat_id:chat.id,user_id:uid},{chat_id:chat.id,user_id:target}]);if(ins.error){await db.from("chats").delete().eq("id",chat.id);return out(200,{liked:true,matched:true,match_id:match.id,chat_unavailable:true});}chatId=chat.id;await db.from("matches").update({chat_id:chatId}).eq("id",match.id);}
