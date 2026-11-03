@@ -113,20 +113,30 @@ Deno.serve(async(req)=>{
    // Fetch candidates separately and filter in JS. This avoids fragile PostgREST "NOT IN"
    // syntax and avoids issuing an empty .in() query when no other users exist yet.
    const {data:reverseBlocks}=await db.from("blocks").select("blocker_id").eq("blocked_id",uid);const blockSet=new Set((reverseBlocks||[]).map(x=>x.blocker_id));
-   // Discover must search beyond the first 100 database rows; demo/test accounts
-   // can be spread across the full 10k profile pool. Fetch in pages until enough
-   // eligible profiles are found (or the table is exhausted).
+   // Load the complete eligible pool and shuffle it for each request. Discover is a random deck, not a numbered/first-row list.
    const candidates:any[]=[];let offset=0;const pageSize=1000;
-   while(offset<10000&&candidates.length<100){
+   while(offset<20000){
     const {data:rows,error}=await db.from("users").select("id,tm_number,display_name,birth_date,gender,city,country,bio,photo_url,profile_photo_url,gallery_photo_urls,looking_for,languages,interests,preferred_partner,flirt_style,plan,tier").eq("profile_complete",true).neq("id",uid).range(offset,offset+pageSize-1);
     if(error){console.error("discover_list users query failed",error);return out(400,{error:"Could not load discover profiles."});}
-    const page=(rows||[]).filter(u=>!excluded.has(u.id)&&!blockSet.has(u.id));candidates.push(...page);
-    if(!rows||rows.length<pageSize)break;offset+=pageSize;
+    if(!rows||rows.length===0)break;
+    candidates.push(...rows);if(rows.length<pageSize)break;offset+=pageSize;
    }
+   const eligible=candidates.filter(u=>!excluded.has(u.id)&&!blockSet.has(u.id));
+   const prefCountry=String(b.country||"").trim().toLowerCase();
+   const minAge=Math.max(18,Number(b.min_age)||18),maxAge=Math.min(100,Number(b.max_age)||100);
+   const today=new Date();
+   const filtered=eligible.filter(u=>{
+    if(prefCountry&&String(u.country||"").toLowerCase()!==prefCountry)return false;
+    if(u.birth_date){const bd=new Date(u.birth_date);let age=today.getFullYear()-bd.getFullYear();if(today.getMonth()<bd.getMonth()||(today.getMonth()===bd.getMonth()&&today.getDate()<bd.getDate()))age--;if(age<minAge||age>maxAge)return false;}
+    return true;
+   });
+   // Fisher-Yates shuffle so the deck is randomized, independent of profile ID/creation order.
+   for(let i=filtered.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[filtered[i],filtered[j]]=[filtered[j],filtered[i]];}
+   candidates.length=0;candidates.push(...filtered);
    let onlineIds=new Set();
    if(candidates.length){const activeSessions=await db.from("sessions").select("user_id").in("user_id",candidates.map(u=>u.id)).is("revoked_at",null).gt("last_seen",new Date(Date.now()-120000).toISOString());onlineIds=new Set((activeSessions.data||[]).map(x=>x.user_id));}
    const profiles=candidates.slice(0,40).map(u=>{const bd=new Date(u.birth_date);const now=new Date();let age=now.getFullYear()-bd.getFullYear();if(now.getMonth()<bd.getMonth()||(now.getMonth()===bd.getMonth()&&now.getDate()<bd.getDate()))age--;return {...u,age,is_online:onlineIds.has(u.id),photo_url:u.profile_photo_url||u.photo_url||null};});
-   return out(200,{profiles,preferences:my,total_profiles:totalProfiles||0});
+   return out(200,{profiles,preferences:my,total_profiles:totalProfiles||0,eligible_profiles:candidates.length});
   }
   if(b.action==="match_list"){
    const {data:matches,error}=await db.from("matches").select("id,user_a,user_b,chat_id,created_at").or("user_a.eq."+uid+",user_b.eq."+uid).order("created_at",{ascending:false});
