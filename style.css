@@ -356,3 +356,12 @@ body.tm-chat-open .chat-fullscreen,body.tm-chat-open .chat-messages{touch-action
 body.tm-chat-open .chat-messages::before{content:"";display:block;flex:1 0 auto;min-height:0}
 body.tm-chat-open .chat-messages{display:flex!important;flex-direction:column!important;justify-content:flex-start!important;}
 body.tm-chat-open .chat-messages>.message-row{flex:0 0 auto}
+
+/* Profile photo and presence indicators */
+.profile-avatar-wrap{overflow:visible}
+.profile-avatar-wrap img{object-fit:cover;object-position:center;width:100%;height:100%;border-radius:50%;display:block}
+.profile-status-dot{display:inline-block;width:12px;height:12px;border-radius:50%;border:2px solid #fff;background:#22c55e;box-shadow:0 1px 4px #0002;flex:0 0 auto}
+.profile-avatar-wrap .profile-status-dot{position:absolute;right:3px;bottom:5px;width:17px;height:17px;z-index:3}
+.profile-status-dot.online{background:#22c55e}
+.profile-status-dot.offline{background:#9ca3af}
+.profile-photo-grid img{object-fit:cover;object-position:center}
