@@ -111,11 +111,7 @@ async function loadDiscover(){
 if(!session){discoverProfiles=[];discoverLoading=false;render();return;}
 discoverLoading=true;render();
 try{const [profiles,matches]=await Promise.all([api("discover_list",{session_token:session}),api("match_list",{session_token:session})]);discoverProfiles=profiles.profiles||[];
-if(!discoverProfiles.length)discoverProfiles=[
-{id:"demo-ava",display_name:"Ava",age:26,city:"Lagos",country:"Nigeria",gender:"Woman",bio:"Sample profile · Loves live music, beach walks and trying new food spots.",interests:["Music","Travel","Food"],looking_for:["Friends","Dating"],languages:["English"],plan:"Free",is_demo:true},
-{id:"demo-noah",display_name:"Noah",age:29,city:"Abuja",country:"Nigeria",gender:"Man",bio:"Sample profile · Into photography, football and weekend adventures.",interests:["Photography","Football","Adventure"],looking_for:["Dating"],languages:["English"],plan:"Free",is_demo:true},
-{id:"demo-zara",display_name:"Zara",age:25,city:"Accra",country:"Ghana",gender:"Woman",bio:"Sample profile · Book lover, creative thinker and coffee enthusiast.",interests:["Books","Art","Coffee"],looking_for:["Friends","Dating"],languages:["English"],plan:"Free",is_demo:true}
-];
+// Never fabricate demo dating profiles: show only real, completed member profiles.
 discoverMatches=matches.matches||[];discoverNotifications=matches.notifications||[];}
 catch(err){console.warn("Discover could not load",err);discoverNotice="We couldn’t refresh profiles. Please try again.";}
 finally{discoverLoading=false;render();}
