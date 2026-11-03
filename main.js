@@ -111,7 +111,8 @@ function credentialScreen(){return '<div class="auth-wrap">'+brand()+'<div class
 async function loadDiscover(){
 if(!session){discoverProfiles=[];discoverLoading=false;render();return;}
 discoverLoading=true;render();
-try{const [profiles,matches]=await Promise.all([api("discover_list",{session_token:session}),api("match_list",{session_token:session})]);discoverProfiles=profiles.profiles||[];discoverTotalProfiles=Number(profiles.total_profiles||0);
+const prefs=JSON.parse(localStorage.getItem("tm_discover_preferences")||"{}");
+try{const [profiles,matches]=await Promise.all([api("discover_list",{session_token:session,country:prefs.country||"",min_age:prefs.min_age||18,max_age:prefs.max_age||100}),api("match_list",{session_token:session})]);discoverProfiles=profiles.profiles||[];discoverTotalProfiles=Number(profiles.total_profiles||0);
 // Never fabricate demo dating profiles: show only real, completed member profiles.
 discoverMatches=matches.matches||[];discoverNotifications=matches.notifications||[];}
 catch(err){console.warn("Discover could not load",err);discoverNotice="We couldn’t refresh profiles. Please try again.";}
