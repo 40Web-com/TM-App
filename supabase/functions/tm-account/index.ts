@@ -107,6 +107,7 @@ Deno.serve(async(req)=>{
   if(b.action==="notification_read"){const id=String(b.notification_id||"");const {error}=await db.from("notifications").update({read_at:new Date().toISOString()}).eq("id",id).eq("user_id",uid);if(error)return out(400,{error:"Could not mark notification read."});return out(200,{read:true});}
   if(b.action==="discover_list"){
    const {data:my}=await db.from("users").select("looking_for,gender,city,country").eq("id",uid).single();
+   const {count:totalProfiles}=await db.from("users").select("id",{count:"exact",head:true}).eq("profile_complete",true);
    const [blocked,passed,liked]=await Promise.all([db.from("blocks").select("blocked_id").eq("blocker_id",uid),db.from("passes").select("passed_user_id").eq("user_id",uid),db.from("likes").select("to_user_id").eq("from_user_id",uid)]);
    const excluded=new Set([uid,...(blocked.data||[]).map(x=>x.blocked_id),...(passed.data||[]).map(x=>x.passed_user_id),...(liked.data||[]).map(x=>x.to_user_id)]);
    // Fetch candidates separately and filter in JS. This avoids fragile PostgREST "NOT IN"
@@ -125,7 +126,7 @@ Deno.serve(async(req)=>{
    let onlineIds=new Set();
    if(candidates.length){const activeSessions=await db.from("sessions").select("user_id").in("user_id",candidates.map(u=>u.id)).is("revoked_at",null).gt("last_seen",new Date(Date.now()-120000).toISOString());onlineIds=new Set((activeSessions.data||[]).map(x=>x.user_id));}
    const profiles=candidates.slice(0,40).map(u=>{const bd=new Date(u.birth_date);const now=new Date();let age=now.getFullYear()-bd.getFullYear();if(now.getMonth()<bd.getMonth()||(now.getMonth()===bd.getMonth()&&now.getDate()<bd.getDate()))age--;return {...u,age,is_online:onlineIds.has(u.id),photo_url:u.profile_photo_url||u.photo_url||null};});
-   return out(200,{profiles,preferences:my});
+   return out(200,{profiles,preferences:my,total_profiles:totalProfiles||0});
   }
   if(b.action==="match_list"){
    const {data:matches,error}=await db.from("matches").select("id,user_a,user_b,chat_id,created_at").or("user_a.eq."+uid+",user_b.eq."+uid).order("created_at",{ascending:false});
