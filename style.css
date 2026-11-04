@@ -416,3 +416,7 @@ body.tm-chat-open .chat-messages>.message-row{flex:0 0 auto}
 
 /* Local image information inspector */
 .tm-image-info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:14px}.tm-image-info-row{display:flex;flex-direction:column;gap:6px;padding:13px;border:1px solid var(--border,#e5e7eb);border-radius:12px;background:var(--surface,#fff);min-width:0}.tm-image-info-row strong{font-size:12px;opacity:.68}.tm-image-info-row span{font-size:14px;font-weight:600;overflow-wrap:anywhere}.tm-image-info-grid h3{margin:0 0 10px}
+
+
+/* TM AI provider output */
+.tm-ai-result{display:grid;gap:12px;margin-top:14px;overflow-wrap:anywhere}.tm-ai-generated-image{display:block;width:100%;max-height:70vh;object-fit:contain;border-radius:16px;background:#f3f4f6;border:1px solid #e5e7eb}.tm-ai-result .ai-workspace-pick{display:inline-flex;justify-content:center;align-items:center;text-decoration:none;padding:12px 16px;border-radius:12px;cursor:pointer}.ai-workspace-pick:disabled{opacity:.6;cursor:wait}
