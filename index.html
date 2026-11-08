@@ -7,7 +7,7 @@
   <meta name="description" content="TM AI Studio — AI photo, video and creative tools.">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" type="image/svg+xml" href="./logo.svg">
-  <link rel="stylesheet" href="./style.css?v=81">
+  <link rel="stylesheet" href="./style.css?v=82">
   <link rel="stylesheet" href="./auth.css?v=8">
   <title>TM AI Studio — Create something extraordinary</title>
   <link rel="stylesheet" href="./discover.css?v=6">
@@ -16,8 +16,8 @@
 <body>
   <div id="app" aria-live="polite"><div class="app-loading"><img src="./logo.svg" alt=""><span>Loading TM App…</span></div></div>
   <script>window.addEventListener("error",function(e){const a=document.querySelector("#app");if(a){a.innerHTML="<div style=\"padding:24px;font:16px system-ui;color:#b42318\"><h2>TM App startup error</h2><p>"+String(e.message||"Script failed").replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))+"</p><small>Reload after fixing this error.</small></div>";}});window.addEventListener("unhandledrejection",function(e){console.error("TM startup promise:",e.reason);});</script>
-  <script src="./main.js?v=122" defer></script>
-  <script src="./pay-menu.js?v=1"></script>
+  <script src="./main.js?v=123" defer></script>
+  <script src="./pay-menu.js?v=2"></script>
   <script>if ("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));</script>
 </body>
 </html>
