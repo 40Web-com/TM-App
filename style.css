@@ -420,3 +420,71 @@ body.tm-chat-open .chat-messages>.message-row{flex:0 0 auto}
 
 /* TM AI provider output */
 .tm-ai-result{display:grid;gap:12px;margin-top:14px;overflow-wrap:anywhere}.tm-ai-generated-image{display:block;width:100%;max-height:70vh;object-fit:contain;border-radius:16px;background:#f3f4f6;border:1px solid #e5e7eb}.tm-ai-result .ai-workspace-pick{display:inline-flex;justify-content:center;align-items:center;text-decoration:none;padding:12px 16px;border-radius:12px;cursor:pointer}.ai-workspace-pick:disabled{opacity:.6;cursor:wait}
+
+
+/* FREE FIRE ITEMS SPIN */
+.ff-page{max-width:1120px;margin:0 auto;padding:22px 0 70px;color:#f5f5fb}
+.ff-hero{position:relative;overflow:hidden;display:grid;grid-template-columns:1.1fr .9fr;align-items:center;min-height:330px;padding:42px 48px;border-radius:28px;background:radial-gradient(circle at 80% 45%,rgba(128,78,255,.3),transparent 32%),linear-gradient(120deg,#10111d,#171329 58%,#24143c);border:1px solid rgba(180,151,255,.2);box-shadow:0 22px 60px rgba(12,9,27,.18)}
+.ff-eyebrow{display:block;color:#b9a2ff;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+.ff-hero h1{font-size:clamp(36px,6vw,62px);line-height:.94;letter-spacing:-2.6px;margin:16px 0;color:#fff;font-weight:900}
+.ff-hero h1 em{font-style:normal;color:#c5a7ff}
+.ff-hero-copy>p{max-width:420px;color:#c8c5d8;font-size:14px;line-height:1.7;margin:0}
+.ff-daily-tag{display:inline-flex;margin-top:24px;padding:9px 14px;border:1px solid rgba(190,165,255,.32);border-radius:30px;color:#e4d9ff;font-size:10px;font-weight:800;letter-spacing:1px}
+.ff-wheel-art{height:240px;display:grid;place-items:center;position:relative}
+.ff-wheel-glow{position:absolute;width:210px;height:210px;border-radius:50%;background:#8d56ff;filter:blur(55px);opacity:.28}
+.ff-wheel{position:relative;width:208px;height:208px;border:8px solid #d5c4ff;border-radius:50%;background:conic-gradient(#5832a2 0 60deg,#211b3b 60deg 120deg,#7547bd 120deg 180deg,#201c35 180deg 240deg,#5832a2 240deg 300deg,#211b3b 300deg);box-shadow:0 0 0 8px rgba(183,151,255,.12),0 16px 42px #090812;display:grid;grid-template-columns:1fr 1fr 1fr;place-items:center;font-size:28px}
+.ff-wheel:after{content:"TM";position:absolute;width:60px;height:60px;border-radius:50%;background:#fff;color:#25143d;display:grid;place-items:center;font-size:18px;font-weight:900;border:5px solid #c6a8ff}
+.ff-wheel-pointer{position:absolute;top:0;z-index:2;color:#ffdb74;font-size:27px;text-shadow:0 3px 10px #000}
+.ff-prize-section{margin:30px 0}
+.ff-section-title h2,.ff-card-heading h2,.ff-my-claims h2,.ff-admin h2{font-size:23px;letter-spacing:-.5px;margin:7px 0;color:inherit}
+.ff-prize-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:15px}
+.ff-prize-grid>div{min-height:90px;padding:14px 8px;border-radius:15px;border:1px solid rgba(255,255,255,.09);background:linear-gradient(145deg,#202033,#151522);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-size:25px}
+.ff-prize-grid b{font-size:10px;color:#d8d4e9;text-align:center}
+.ff-spin-card{padding:26px;border-radius:22px;background:#171724;border:1px solid rgba(255,255,255,.1);box-shadow:0 18px 50px rgba(0,0,0,.16)}
+.ff-card-heading{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:20px}
+.ff-card-heading p,.ff-admin-head p{color:#aaa8bb;font-size:13px;margin:5px 0 0;line-height:1.6}
+.ff-card-icon{width:54px;height:54px;border-radius:17px;display:grid;place-items:center;background:#29213e;font-size:27px}
+#ff-spin-form{display:grid;grid-template-columns:1fr 190px;gap:10px;align-items:end}
+#ff-spin-form label{grid-column:1/-1;color:#b9b3ce;font-size:10px;font-weight:800;letter-spacing:1.2px}
+#ff-player-uid{width:100%;min-width:0;height:52px;padding:0 16px;border-radius:12px;border:1px solid #403951;background:#10101a;color:#fff;font-size:16px;outline:none}
+#ff-player-uid:focus{border-color:#a77cff;box-shadow:0 0 0 3px rgba(167,124,255,.12)}
+#ff-player-uid:disabled{opacity:.65}
+.ff-spin-button,.ff-claim-button{height:52px;border:0;border-radius:12px;background:linear-gradient(100deg,#8751e8,#bd76ff);color:#fff;font-size:12px;font-weight:900;letter-spacing:1px;cursor:pointer;box-shadow:0 8px 22px rgba(133,77,225,.2)}
+.ff-spin-button:disabled{opacity:.48;cursor:not-allowed}
+.ff-rules,.ff-loading,.ff-error{font-size:12px;line-height:1.6;color:#a9a5b8;margin:14px 0 0}
+.ff-error{color:#ff9d9d}
+.ff-result{margin-top:22px;padding:22px;border-radius:17px;text-align:center;background:#202033;border:1px solid rgba(255,255,255,.1)}
+.ff-result-icon{display:block;font-size:40px;margin-bottom:8px}
+.ff-result small{font-size:9px;font-weight:900;letter-spacing:1.8px;color:#c4a8ff}
+.ff-result h2{font-size:24px;margin:7px 0;color:#fff}
+.ff-result p{font-size:12px;color:#b7b3c7;margin:0 0 14px}
+.ff-result.ff-coins{border-color:rgba(255,211,102,.25)}
+.ff-result.ff-item{border-color:rgba(255,206,111,.35);background:linear-gradient(135deg,#282139,#332345)}
+.ff-claim-button{padding:0 25px;height:46px}
+.ff-claim-status{display:inline-block;border-radius:30px;padding:8px 13px;background:rgba(255,255,255,.09);font-size:11px;color:#eee}
+.ff-my-claims,.ff-admin{margin-top:30px}
+.ff-my-claim{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.09)}
+.ff-my-claim>span:first-child{display:grid;gap:4px}
+.ff-my-claim b{font-size:13px}.ff-my-claim small{color:#aaa;font-size:10px}
+.ff-status{font-size:9px;text-transform:uppercase;letter-spacing:.8px;font-weight:900;padding:6px 9px;border-radius:30px;background:rgba(255,255,255,.1);color:#e4e0ef}
+.ff-status-approved{background:rgba(75,185,130,.15);color:#86e1b1}
+.ff-status-rejected{background:rgba(245,100,100,.15);color:#ff9e9e}
+.ff-status-fulfilled{background:rgba(95,151,255,.16);color:#a9c7ff}
+.ff-disclaimer{margin-top:22px;padding:15px 17px;border-radius:13px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07);color:#a9a5b8;font-size:10px;line-height:1.7}
+.ff-admin{padding:24px;border-radius:20px;background:#11111b;border:1px solid rgba(181,150,255,.2)}
+.ff-admin-head{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:16px}
+.ff-refresh{border:1px solid #554477;background:#211a32;color:#e4d7ff;border-radius:9px;padding:9px 12px;font-size:11px}
+.ff-claim-list{display:grid;gap:12px}
+.ff-admin-claim{padding:16px;border-radius:14px;background:#1d1c2b;border:1px solid rgba(255,255,255,.07)}
+.ff-admin-claim-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.ff-admin-claim time{font-size:10px;color:#aaa}
+.ff-admin-claim h3{margin:12px 0 7px;color:#fff;font-size:16px}
+.ff-admin-claim p{font-size:11px;color:#c0bdce;line-height:1.6;margin:5px 0}
+.ff-admin-claim code{color:#f1d38c}
+.ff-admin-note{padding:8px 10px;background:rgba(255,255,255,.06);border-radius:8px}
+.ff-admin-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.ff-admin-actions button{border:0;border-radius:9px;padding:10px 13px;background:#8b5ae3;color:white;font-size:10px;font-weight:800}
+.ff-admin-actions .ff-reject{background:#61343e}
+.ff-empty{padding:25px;text-align:center;color:#aaa;font-size:12px}
+.right-menu .nav-item[data-page="freefire"]{font-size:12px;line-height:1.35}
+@media(max-width:700px){.ff-page{padding:12px 0 55px}.ff-hero{grid-template-columns:1fr;padding:28px 22px 12px;min-height:0}.ff-hero h1{font-size:43px}.ff-hero-copy>p{font-size:12px}.ff-wheel-art{height:205px}.ff-wheel{width:175px;height:175px;font-size:24px}.ff-wheel-glow{width:170px;height:170px}.ff-prize-grid{grid-template-columns:repeat(3,1fr);gap:8px}.ff-prize-grid>div{min-height:78px}.ff-spin-card{padding:20px 16px}#ff-spin-form{grid-template-columns:1fr}#ff-spin-form label{grid-column:1}.ff-spin-button{width:100%}.ff-admin{padding:18px 14px}.ff-admin-head{align-items:flex-start}.ff-admin-claim-top{align-items:flex-start}.ff-admin-claim time{max-width:125px;text-align:right}}
