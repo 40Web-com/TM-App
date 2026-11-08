@@ -1,10 +1,11 @@
-const CACHE_NAME = "tm-app-pages-v91";
+const CACHE_NAME = "tm-app-pages-v92";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./style.css",
   "./auth.css",
   "./main.js",
+  "./style.css",
   "./pay-menu.js",
   "./manifest.webmanifest",
   "./logo.svg",
