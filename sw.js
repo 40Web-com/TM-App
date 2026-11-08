@@ -1,4 +1,4 @@
-const CACHE_NAME = "tm-app-pages-v92";
+const CACHE_NAME = "tm-app-pages-v93";
 const APP_SHELL = [
   "./",
   "./index.html",
