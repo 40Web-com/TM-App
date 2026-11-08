@@ -570,3 +570,28 @@ body.tm-chat-open .chat-messages>.message-row{flex:0 0 auto}
 .ff-spin-progress i{display:block;height:100%;width:40%;background:linear-gradient(90deg,#f2a900,#ffe3a1);animation:ff-progress 2.4s ease-in-out infinite}
 @keyframes ff-progress{0%{transform:translateX(-110%)}100%{transform:translateX(260%)}}
 @media(max-width:680px){.ff-lux-page.ff-redesign{padding:14px 10px 42px}.ff-category-lux-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.ff-character-drop-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.ff-character-drop-card{height:130px}.ff-item-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.ff-item-showcase img{height:125px}.ff-drop-feature-heading{align-items:flex-start;flex-direction:column;gap:3px}}
+
+/* User-requested Free Fire room: character collage background, compact 4x4 inventory */
+.ff-lux-page.ff-redesign{position:relative;isolation:isolate;max-width:1180px;margin:0 auto;padding:18px 14px 50px}
+.ff-lux-page.ff-redesign:before{content:"";position:absolute;z-index:-2;inset:0;pointer-events:none;background-image:linear-gradient(180deg,rgba(8,7,12,.72),rgba(8,7,12,.94) 45%,rgba(8,7,12,.98)),url("https://dl.dir.freefiremobile.com/common/web_event/official2.ff.garena.all/20238/910b28b862289a31be67610333f71bdd.jpg"),url("https://freefiremobile-a.akamaihd.net/common/web_event/officialwebsite/character/new/Kelly.jpg"),url("https://freefiremobile-a.akamaihd.net/common/web_event/officialwebsite/character/new/Hayato.jpg"),url("https://freefiremobile-a.akamaihd.net/common/officialwebsite/character/list_img/Alok.jpg");background-position:center,10% 0,35% 0,65% 0,90% 0;background-size:cover,25% 390px,25% 390px,25% 390px,25% 390px;background-repeat:no-repeat}
+.ff-brand-header{display:grid;grid-template-columns:76px minmax(150px,1fr) auto auto;align-items:center;gap:12px;background:rgba(16,13,19,.88);border:1px solid rgba(255,255,255,.12);padding:12px;border-radius:16px;backdrop-filter:blur(10px)}
+.ff-official-logo{width:76px;height:58px;object-fit:contain;object-position:center;background:#171219;border-radius:8px;padding:3px}
+.ff-player-badge{display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.ff-player-tools{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.ff-player-tools span{display:inline-flex;align-items:center;gap:3px;padding:4px 7px;border:1px solid rgba(245,192,88,.22);border-radius:7px;background:rgba(9,8,12,.8);font-size:10px;white-space:nowrap}
+.ff-category-room{position:relative;background:rgba(10,8,12,.76);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:20px;margin-top:14px;backdrop-filter:blur(5px)}
+.ff-category-heading{max-width:700px;margin:0 auto;text-align:center}
+.ff-category-lux-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px auto;max-width:100%}
+.ff-category-lux{min-width:0;min-height:105px;padding:8px;gap:5px;border-radius:11px}
+.ff-category-art{height:60px;overflow:hidden;border-radius:7px}
+.ff-category-art img{width:100%;height:100%;object-fit:cover}
+.ff-item-room{background:rgba(10,8,12,.82);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:18px;margin-top:12px}
+.ff-item-room .ff-room-heading{margin-bottom:12px}
+.ff-item-gallery{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.ff-item-showcase{min-width:0;border-radius:10px;overflow:hidden}
+.ff-item-showcase img{width:100%;height:100px;object-fit:contain;background:rgba(18,14,20,.9);padding:4px}
+.ff-item-showcase>div{padding:6px 8px;display:flex;flex-direction:column;gap:3px}
+.ff-item-showcase>div span{font-size:9px}
+.ff-item-showcase>div b{font-size:11px;line-height:1.2;overflow-wrap:anywhere}
+.ff-spin-control{margin-top:14px}
+@media(max-width:720px){.ff-brand-header{grid-template-columns:58px minmax(0,1fr);gap:8px;padding:9px}.ff-official-logo{width:58px;height:48px}.ff-brand-caption{font-size:11px}.ff-coin-wallet{grid-column:1/2;order:3}.ff-player-badge{grid-column:2/3;grid-row:2/3}.ff-category-room,.ff-item-room{padding:12px}.ff-category-lux-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.ff-category-lux{min-height:90px}.ff-category-art{height:48px}.ff-item-gallery{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.ff-item-showcase img{height:72px;padding:2px}.ff-item-showcase>div{padding:4px}.ff-item-showcase>div b{font-size:9px}.ff-item-showcase>div span{font-size:8px}.ff-player-tools span{font-size:9px;padding:3px 5px}}
