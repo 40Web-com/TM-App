@@ -488,3 +488,5 @@ body.tm-chat-open .chat-messages>.message-row{flex:0 0 auto}
 .ff-empty{padding:25px;text-align:center;color:#aaa;font-size:12px}
 .right-menu .nav-item[data-page="freefire"]{font-size:12px;line-height:1.35}
 @media(max-width:700px){.ff-page{padding:12px 0 55px}.ff-hero{grid-template-columns:1fr;padding:28px 22px 12px;min-height:0}.ff-hero h1{font-size:43px}.ff-hero-copy>p{font-size:12px}.ff-wheel-art{height:205px}.ff-wheel{width:175px;height:175px;font-size:24px}.ff-wheel-glow{width:170px;height:170px}.ff-prize-grid{grid-template-columns:repeat(3,1fr);gap:8px}.ff-prize-grid>div{min-height:78px}.ff-spin-card{padding:20px 16px}#ff-spin-form{grid-template-columns:1fr}#ff-spin-form label{grid-column:1}.ff-spin-button{width:100%}.ff-admin{padding:18px 14px}.ff-admin-head{align-items:flex-start}.ff-admin-claim-top{align-items:flex-start}.ff-admin-claim time{max-width:125px;text-align:right}}
+
+.ff-wheel.spinning{animation:ff-wheel-spin 1.15s cubic-bezier(.12,.72,.16,1) infinite}@keyframes ff-wheel-spin{to{transform:rotate(720deg)}}
