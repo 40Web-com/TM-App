@@ -33,5 +33,5 @@ async function checkin(){try{const r=await call("uid_checkin",{uid:playerUID});u
 async function gift(){try{const uid=document.querySelector("#giftuid").value.trim(),item_name=document.querySelector("#giftname").value.trim(),image_url=document.querySelector("#giftimg").value.trim();await call("admin_gift",{uid,item_name,image_url});toast("Gift sent and notification created");document.querySelector("#giftname").value="";await loadAdminClaims()}catch(e){toast(e.message)}}
 async function loadAdminClaims(){const el=document.querySelector("#adminclaims");if(!el)return;try{const d=await call("admin_claims");el.innerHTML=claimRows(d.claims||[])}catch(e){el.innerHTML=esc(e.message)}}
 nav.addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(b){if(b.dataset.tab==="uid"){changeUid();return;}tab=b.dataset.tab;render()}});
-load();
+load();verifyPaystackReturn();
 </script></body></html>
