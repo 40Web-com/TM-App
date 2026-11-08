@@ -22,16 +22,16 @@ Deno.serve(async(req:Request)=>{
   const defaultCC=currencyByCountry[u.country]||"USD";const requestedCC=String(b.currency||defaultCC).toUpperCase();const cc=/^[A-Z]{3}$/.test(requestedCC)?requestedCC:defaultCC;const starter=cc===defaultCC?10000:0;let {data:w}=await db.from("aliyankeyye_wallets").select("balance").eq("user_id",u.id).eq("currency",cc).maybeSingle();
   if(!w){const q=await db.from("aliyankeyye_wallets").insert({user_id:u.id,currency:cc,balance:starter}).select("balance").single();if(q.error)throw q.error;w=q.data;}
   const {data:txs,error:te}=await db.from("aliyankeyye_transactions").select("*").or(`sender_user_id.eq.${u.id},recipient_user_id.eq.${u.id}`).order("created_at",{ascending:false}).limit(50);if(te)throw te;
-  const list=(txs||[]).map(t=>({...t,direction:t.sender_user_id===u.id?"out":"in",title:t.sender_user_id===u.id?(t.recipient_name||t.recipient_email):(u.display_name||"Incoming virtual transfer")}));
+  const list=(txs||[]).map(t=>({...t,direction:t.sender_user_id===u.id?"out":"in",title:t.sender_user_id===u.id?(t.recipient_name||t.recipient_email):(u.display_name||"Incoming transfer")}));
   return out(200,{balance:w.balance,currency:cc,transactions:list,profile:{tm_number:u.tm_number,email:u.email,display_name:u.display_name}});
  }
  if(b.action==="transfer"){
-  if(b.acknowledged_simulation!==true)return out(400,{error:"Confirm that this is virtual simulation currency."});
+  if(b.acknowledged_simulation!==true)return out(400,{error:"Confirm this Aliyankee Pay account transfer."});
   const email=String(b.recipient_email||"").trim().toLowerCase(),name=String(b.recipient_name||"").trim().slice(0,80),bank=String(b.recipient_bank||""),account=String(b.recipient_account||""),currency=String(b.currency||"").toUpperCase(),amount=Number(b.amount),memo=String(b.note||"").slice(0,120);
   if(email.length>254||email.indexOf("@")<1||email.lastIndexOf(".")<email.indexOf("@")+2||email.endsWith("."))return out(400,{error:"Enter a valid recipient email."});
-  if(email===String(u.email||"").toLowerCase())return out(400,{error:"You cannot transfer virtual funds to your own email."});
-  if(!["Aliyankee Sim Bank","TM Virtual Bank","Aliyankee Sandbox Wallet"].includes(bank)||!/^[0-9]{6,20}$/.test(account))return out(400,{error:"Select a virtual bank and enter a valid simulator account number."});if(!/^[A-Z]{3}$/.test(currency)||!Number.isFinite(amount)||amount<=0||amount>100000000)return out(400,{error:"Enter a valid currency and amount."});
-  const result=await db.rpc("aliyankeyye_virtual_transfer",{p_sender:u.id,p_email:email,p_name:name,p_bank:bank,p_account:account,p_currency:currency,p_amount:amount,p_memo:memo});if(result.error)return out(400,{error:result.error.message||"Virtual transfer failed."});
+  if(email===String(u.email||"").toLowerCase())return out(400,{error:"You cannot transfer account credits to your own email."});
+  if(!["Aliyankee Pay Account","TM Account"].includes(bank)||!/^[0-9]{6,20}$/.test(account))return out(400,{error:"Select an account type and enter a valid account number."});if(!/^[A-Z]{3}$/.test(currency)||!Number.isFinite(amount)||amount<=0||amount>100000000)return out(400,{error:"Enter a valid currency and amount."});
+  const result=await db.rpc("aliyankeyye_virtual_transfer",{p_sender:u.id,p_email:email,p_name:name,p_bank:bank,p_account:account,p_currency:currency,p_amount:amount,p_memo:memo});if(result.error)return out(400,{error:result.error.message||"Transfer failed."});
   const tx=result.data.transaction,recipientName=name||email;const status=await emailNotice(email,recipientName,bank,account,amount,currency,tx.reference,u.display_name||u.tm_number,memo);
   await db.from("aliyankeyye_transactions").update({email_status:status}).eq("id",tx.id);
   const {data:w}=await db.from("aliyankeyye_wallets").select("balance").eq("user_id",u.id).eq("currency",currency).single();
