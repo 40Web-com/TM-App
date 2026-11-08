@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101714"><meta name="description" content="Aliyankee Pay — TM virtual currency simulator">
+<title>Aliyankee Pay · TM App</title>
+<link rel="stylesheet" href="./aliyankee-pay.css?v=1">
+</head>
+<body>
+<div class="ap-shell">
+<header class="ap-top">
+<a class="ap-brand" href="./"><span class="ap-logo">A</span><span><b>Aliyankee</b><small>PAY · TM SIMULATOR</small></span></a>
+<div class="ap-topright"><span class="ap-sim"><i></i> SIMULATOR</span><button id="ap-theme" class="icon-btn" aria-label="Toggle theme">☾</button><button id="ap-back" class="icon-btn" aria-label="Back to TM">↗</button></div>
+</header>
+<main>
+<div class="ap-warning"><b>Virtual money only</b><span>Aliyankee Pay is a simulation. No real funds or bank transfers occur.</span></div>
+<section class="ap-welcome"><div><small>WELCOME TO YOUR VIRTUAL WALLET</small><h1>Money moves.<br><em>Virtually.</em></h1><p>Explore transfers and currencies in the TM simulation economy.</p></div><div class="ap-globe">₳</div></section>
+<section class="ap-balance-card">
+<div class="ap-bal-top"><span>VIRTUAL BALANCE</span><button id="ap-hide-balance" aria-label="Hide balance">◉</button></div>
+<div class="ap-bal-amount"><strong id="ap-balance">—</strong><select id="ap-wallet-currency" aria-label="Wallet currency"></select></div>
+<div class="ap-bal-bottom"><span id="ap-wallet-label">Aliyankee virtual wallet</span><span class="ap-demo-chip">SIMULATED</span></div>
+<div class="ap-actions"><button class="ap-action" data-open="send"><span>↗</span> Send</button><button class="ap-action" data-open="receive"><span>↓</span> Receive</button><button class="ap-action" data-open="history"><span>◷</span> History</button></div>
+</section>
+<div class="ap-shortcuts"><button data-open="send"><span class="shortcut-icon">↗</span><b>Virtual transfer</b><small>Send by email</small></button><button data-open="receive"><span class="shortcut-icon">＋</span><b>Receive</b><small>Virtual funds</small></button><button data-open="currencies"><span class="shortcut-icon">◎</span><b>Currencies</b><small>Global list</small></button><button data-open="history"><span class="shortcut-icon">▤</span><b>Activity</b><small>Transaction log</small></button></div>
+<section class="ap-section"><div class="ap-section-head"><div><small>YOUR ACTIVITY</small><h2>Recent transactions</h2></div><button class="ap-text-btn" data-open="history">View all →</button></div><div id="ap-transactions" class="ap-transactions"><div class="ap-empty"><span>▤</span><b>No activity yet</b><p>Virtual transfers will appear here.</p></div></div></section>
+<section class="ap-section ap-services"><div class="ap-section-head"><div><small>ALIYANKEYE TOOLS</small><h2>Explore your wallet</h2></div></div><div class="ap-service-grid"><button data-open="send"><span>↗</span><b>Send virtual currency</b><small>TM users or email recipients</small></button><button data-open="currencies"><span>🌐</span><b>Global currencies</b><small>Browse currency codes & symbols</small></button><button data-open="settings"><span>⚙</span><b>Wallet settings</b><small>Display preferences</small></button></div></section>
+</main>
+<nav class="ap-bottom"><a href="./"><span>⌂</span>TM App</a><button class="active" data-open="wallet"><span>▣</span>Wallet</button><button data-open="send"><span>↗</span>Transfer</button><button data-open="history"><span>◷</span>Activity</button><button data-open="settings"><span>⚙</span>Settings</button></nav>
+</div>
+<div id="ap-modal" class="ap-modal" hidden><div class="ap-modal-scrim" data-close></div><section class="ap-modal-panel" role="dialog" aria-modal="true"><header><div><small id="ap-modal-kicker">ALIYANKEYE PAY</small><h2 id="ap-modal-title">Virtual transfer</h2></div><button class="icon-btn" data-close aria-label="Close">×</button></header><div id="ap-modal-content"></div></section></div>
+<div id="ap-toast" class="ap-toast" role="status" aria-live="polite"></div>
+<script src="./aliyankee-pay.js?v=1"></script>
+</body></html>
