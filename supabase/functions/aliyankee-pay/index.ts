@@ -32,10 +32,15 @@ Deno.serve(async(req:Request)=>{
   if(email===String(u.email||"").toLowerCase())return out(400,{error:"You cannot transfer account credits to your own email."});
   if(!["Aliyankee Pay Account","TM Account"].includes(bank)||!/^[0-9]{6,20}$/.test(account))return out(400,{error:"Select an account type and enter a valid account number."});if(!/^[A-Z]{3}$/.test(currency)||!Number.isFinite(amount)||amount<=0||amount>100000000)return out(400,{error:"Enter a valid currency and amount."});
   const result=await db.rpc("aliyankeyye_virtual_transfer",{p_sender:u.id,p_email:email,p_name:name,p_bank:bank,p_account:account,p_currency:currency,p_amount:amount,p_memo:memo});if(result.error)return out(400,{error:result.error.message||"Transfer failed."});
-  const tx=result.data.transaction,recipientName=name||email;const status=await emailNotice(email,recipientName,bank,account,amount,currency,tx.reference,u.display_name||u.tm_number,memo);
-  await db.from("aliyankeyye_transactions").update({email_status:status}).eq("id",tx.id);
+  const tx=result.data.transaction,recipientName=name||email;
+  const recipientEmailStatus=await emailNotice(email,recipientName,bank,account,amount,currency,tx.reference,u.display_name||u.tm_number,memo);
+  const senderEmailStatus=u.email
+   ? await emailNotice(String(u.email),recipientName,bank,account,amount,currency,tx.reference,u.display_name||u.tm_number,memo)
+   : "no_sender_email";
+  const emailStatus=recipientEmailStatus==="sent"&&senderEmailStatus==="sent"?"sent":`recipient:${recipientEmailStatus};sender:${senderEmailStatus}`;
+  await db.from("aliyankeyye_transactions").update({email_status:emailStatus}).eq("id",tx.id);
   const {data:w}=await db.from("aliyankeyye_wallets").select("balance").eq("user_id",u.id).eq("currency",currency).single();
-  return out(200,{balance:w?.balance??result.data.balance,transaction:{...tx,direction:"out",title:recipientName,email_status:status},email_status:status});
+  return out(200,{balance:w?.balance??result.data.balance,transaction:{...tx,direction:"out",title:recipientName,email_status:emailStatus},email_status:emailStatus,sender_email_status:senderEmailStatus,recipient_email_status:recipientEmailStatus});
  }
  return out(400,{error:"Unknown Aliyankee Pay action."});
  }catch(e){console.error("Aliyankee Pay",e);return out(500,{error:"Aliyankee Pay service error. Please try again."})}
