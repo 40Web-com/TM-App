@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#17151d">
+<title>Free Fire Zap — TM App</title>
+<style>
+:root{--bg:#17151d;--panel:#221f2b;--line:#34303f;--txt:#f4eee4;--mute:#a79fb3;--ember:#ff6a1a;--gold:#ffc83d;--ice:#5ee1ff;--ok:#5fd18a;--bad:#ff5d6c;--r:14px}
+*{box-sizing:border-box;margin:0}
+html{scroll-padding-top:70px}
+body{background:var(--bg);color:var(--txt);font:15px/1.5 "Trebuchet MS",Verdana,sans-serif;padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
+h1,h2,h3{font-family:Impact,"Arial Narrow",sans-serif;letter-spacing:.5px;font-weight:400}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+header h1{font-size:24px;color:var(--ember)}header h1 span{color:var(--txt)}
+.logo{width:46px;height:46px;border-radius:12px;object-fit:cover;background:var(--panel)}
+main{max-width:880px;margin:0 auto;padding:14px}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);display:flex;overflow-x:auto;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));z-index:6}
+nav button{flex:1 0 auto;min-width:64px;background:none;border:0;color:var(--mute);padding:8px 6px;font:inherit;font-size:12px;border-radius:10px}
+nav button.on{color:var(--bg);background:var(--ember);font-weight:700}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.stat{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px}
+.stat b{display:block;font-size:22px}.stat small{color:var(--mute)}
+.c-coin b{color:var(--gold)}.c-dia b{color:var(--ice)}.c-evo b{color:var(--ember)}.c-rare b{color:#d79bff}
+input,select,textarea{width:100%;background:var(--bg);color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:11px;font:inherit;margin:4px 0 10px}
+label{font-size:13px;color:var(--mute)}
+button.b{background:var(--ember);color:#1a1008;border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer}
+button.b.alt{background:transparent;color:var(--txt);border:1px solid var(--line)}
+button.b.sm{padding:6px 10px;font-size:13px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--ice);outline-offset:2px}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.tag{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;border:1px solid var(--line);color:var(--mute)}
+.tag.Beginner{color:var(--mute)}.tag.Elite{color:var(--ice);border-color:var(--ice)}.tag.Legendary{color:var(--gold);border-color:var(--gold)}.tag.Top{color:#1a1008;background:var(--ember);border-color:var(--ember)}
+.bar{height:8px;background:var(--bg);border-radius:9px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ember),var(--gold))}
+.mute{color:var(--mute);font-size:13px}.ok{color:var(--ok)}.bad{color:var(--bad)}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px}.tabs button{white-space:nowrap}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:#fff;color:#111;padding:10px 16px;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9;max-width:90%}
+#toast.show{opacity:1}
+main{padding-bottom:100px}
+.thumb{width:56px;height:56px;border-radius:10px;object-fit:cover;background:var(--bg);flex:none}
+.it{display:flex;gap:12px;align-items:center}
+.sel-on{outline:2px solid var(--ember)}
+#sel{position:fixed;left:8px;right:8px;bottom:calc(64px + env(safe-area-inset-bottom,0px));background:var(--panel);border:1px solid var(--ember);border-radius:12px;padding:8px 10px;display:none;z-index:7}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <h1>FREE FIRE <span>ZAP</span></h1>
+  <!-- Replace LOGO_URL below with your own Free Fire logo image (use a licensed/official one) -->
+  <img class="logo" id="logo" alt="Free Fire logo" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23ff6a1a'/%3E%3Cpath d='M34 8c2 10 12 14 12 28a14 14 0 0 1-28 0c0-8 5-11 7-17 3 3 4 6 4 9 3-5 5-12 5-20z' fill='%23ffc83d'/%3E%3C/svg%3E">
+</header>
+<main id="app"></main>
+<nav id="nav"></nav>
+<div id="sel"></div>
+<div id="toast" role="status"></div>
+
+<script>
+/* ============ CONFIG – edit these ============ */
+const CFG = {
+  ADMIN_PIN: "change-this-pin",           // admin panel PIN (move to server auth when you add a backend)
+  PAY_INFO: "Bank: YOUR BANK • Acct: 0000000000 • Name: YOUR NAME",  // shown to customers for deposits
+  WHATSAPP: "2349041259863",
+  IMG_BASE: "images/",   // folder of your existing Free Fire item images; default file = IMG_BASE + item id + ".png" (or set a path per item in Admin)
+  MIN_GUN_INSTALLMENT: 5000,
+  DAILY_GIFTS: [ // weights = luck
+    {w:45,cat:"coin",name:"FF Coin",qty:50},{w:35,cat:"diamond",name:"Diamond",qty:10},
+    {w:10,cat:"evo",name:"Evo Token",qty:1},{w:7,cat:"rare",name:"Rare Emote",qty:1},{w:3,cat:"rare",name:"Rare Skin Crate",qty:1}]
+};
+/* ============ DATABASE ADAPTER ============
+   Everything below talks to DB only. Today it saves in this browser (localStorage) so the whole flow
+   works for testing. To make it truly shared/real, replace load()/save() with calls to your backend
+   (Supabase/Firebase) and move money + admin actions to server-side rules. */
+const DB = {
+  key:"ffzap_v1",
+  load(){try{return JSON.parse(localStorage.getItem(this.key))}catch(e){return null}},
+  save(s){try{localStorage.setItem(this.key,JSON.stringify(s))}catch(e){}}
+};
+const seed = () => ({users:{},session:null,feed:[],rooms:[],deposits:[],withdrawals:[],plans:[],notifs:[],
+ catalog:[
+  {id:"d1",cat:"diamond",name:"100 Diamonds",price:900,qty:100},{id:"d2",cat:"diamond",name:"520 Diamonds",price:4500,qty:520},
+  {id:"d3",cat:"diamond",name:"1060 Diamonds",price:9000,qty:1060},{id:"c1",cat:"coin",name:"1,000 FF Coins",price:700,qty:1000},
+  {id:"c2",cat:"coin",name:"5,000 FF Coins",price:3200,qty:5000},{id:"e1",cat:"evo",name:"Evo Access (Weekly)",price:1500,qty:1},
+  {id:"e2",cat:"evo",name:"Evo Access (Monthly)",price:5000,qty:1},{id:"m1",cat:"emote",name:"Rare Emote – Throne",price:2500,qty:1},
+  {id:"s1",cat:"skin",name:"Bundle Skin – Elite",price:6000,qty:1},{id:"h1",cat:"character",name:"Character – Alok",price:3500,qty:1},
+  {id:"h2",cat:"character",name:"Character – Chrono",price:3500,qty:1},{id:"h3",cat:"character",name:"Character – K",price:3500,qty:1},
+  {id:"g1",cat:"gun",name:"AK Rare Skin",price:5000,qty:1},{id:"g2",cat:"gun",name:"M1887 Evo Skin",price:8000,qty:1},{id:"g3",cat:"gun",name:"MP40 Legend Skin",price:12000,qty:1}
+ ]});
+let S = DB.load() || seed();
+const save = () => DB.save(S);
+
+/* ============ HELPERS ============ */
+const $ = s => document.querySelector(s);
+const esc = t => String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = n => "₦" + Number(n).toLocaleString();
+const uid = () => Math.random().toString(36).slice(2,9);
+const me = () => S.users[S.session];
+const toast = m => {const t=$("#toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2400)};
+const notify = (user,msg) => {S.notifs.unshift({id:uid(),user,msg,t:Date.now(),read:false});};
+const RANKS=[["Beginner",0],["Elite",100],["Legendary",400],["Top",1000]];
+const rankOf = xp => RANKS.filter(r=>xp>=r[1]).pop();
+const nextRank = xp => RANKS.find(r=>r[1]>xp);
+const addXp = (u,n) => {const before=rankOf(u.xp)[0];u.xp+=n;const after=rankOf(u.xp)[0];if(before!==after)notify(u.name,"You ranked up to "+after+"!");};
+const give = (u,cat,name,qty,img) => {const f=u.inv.find(i=>i.name===name&&i.cat===cat);f?f.qty+=qty:u.inv.push({id:uid(),cat,name,qty,img});};
+const total = (u,cat) => u.inv.filter(i=>i.cat===cat).reduce((a,i)=>a+i.qty,0);
+const copy = async txt => {try{await navigator.clipboard.writeText(txt);toast("Copied "+txt)}catch(e){prompt("Copy this UID:",txt)}};
+const IMG_FALLBACK="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2334303f'/%3E%3Cpath d='M32 14l5 12 13 1-10 9 3 13-11-7-11 7 3-13-10-9 13-1z' fill='%23ffc83d'/%3E%3C/svg%3E";
+const imgOf = i => i.img || (CFG.IMG_BASE + i.id + ".png");
+const thumb = src => `<img class="thumb" loading="lazy" alt="" src="${esc(src)}" onerror="this.onerror=null;this.src=IMG_FALLBACK">`;
+function selBar(){const el=$("#sel"),i=me()&&S.sel&&S.catalog.find(x=>x.id===S.sel);
+ if(!i){el.style.display="none";return}
+ el.style.display="block";
+ el.innerHTML=`<div class="row"><span class="it">${thumb(imgOf(i))}<span><b>${esc(i.name)}</b><br><span class="mute">${money(i.price)}</span></span></span><span><button class="b sm" data-act="buy" data-id="${i.id}">Buy</button> ${i.cat==="gun"&&i.price>=CFG.MIN_GUN_INSTALLMENT?`<button class="b alt sm" data-act="plan" data-id="${i.id}">Installments</button> `:""}<button class="b alt sm" data-act="select" data-id="${i.id}" aria-label="Clear selection">✕</button></span></div>`}
+const day = () => new Date().toISOString().slice(0,10);
+
+/* ============ ROUTER ============ */
+let tab = "home", sub = "";
+const TABS=[["home","Home"],["compete","Compete"],["rooms","Rooms"],["shop","Shop"],["wallet","Wallet"],["items","My items"],["ranks","Ranks"],["alerts","Alerts"]];
+function go(t){tab=t;sub="";render();scrollTo(0,0)}
+function render(){
+  const nav=$("#nav"),app=$("#app");
+  if(!me()){nav.style.display="none";app.innerHTML=authView();selBar();return}
+  nav.style.display="flex";
+  const unread=S.notifs.filter(n=>n.user===me().name&&!n.read).length;
+  nav.innerHTML=TABS.map(([k,l])=>`<button data-go="${k}" class="${tab===k?"on":""}">${l}${k==="alerts"&&unread?" ("+unread+")":""}</button>`).join("");
+  const v={home:homeView,compete:competeView,rooms:roomsView,shop:shopView,wallet:walletView,items:itemsView,ranks:ranksView,alerts:alertsView,admin:adminView}[tab];
+  app.innerHTML=v();selBar();
+}
+
+/* ============ AUTH ============ */
+function authView(){return `<div class="card"><h2>Join the hub</h2><p class="mute">Create an account to compete, claim daily gifts and buy items.</p>
+<label>Username</label><input id="au" autocomplete="username">
+<label>Password (min 6)</label><input id="ap" type="password" autocomplete="current-password">
+<label>Your Free Fire UID (needed to sign up)</label><input id="auid" inputmode="numeric" placeholder="e.g. 123456789">
+<div class="row"><button class="b" data-act="signup">Create account</button><button class="b alt" data-act="login">Log in</button></div></div>`}
+async function hash(p){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(p));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+async function signup(){
+  const n=$("#au").value.trim(),p=$("#ap").value,f=$("#auid").value.trim();
+  if(!/^[\w.-]{3,20}$/.test(n))return toast("Username: 3–20 letters/numbers");
+  if(p.length<6)return toast("Password needs 6+ characters");
+  if(!/^\d{6,14}$/.test(f))return toast("Enter a valid Free Fire UID (numbers only)");
+  if(S.users[n])return toast("Username taken");
+  S.users[n]={name:n,pass:await hash(p),ff:f,wallet:0,xp:0,streak:0,lastVisit:"",lastGift:0,inv:[],joined:Date.now()};
+  S.session=n;visit();notify(n,"Welcome to Free Fire Zap! Claim your first daily gift.");save();render();
+}
+async function login(){
+  const n=$("#au").value.trim(),u=S.users[n];
+  if(!u||u.pass!==await hash($("#ap").value))return toast("Wrong username or password");
+  S.session=n;visit();save();render();
+}
+function visit(){ // daily visit reward + streak
+  const u=me(),d=day();if(u.lastVisit===d)return;
+  const y=new Date(Date.now()-864e5).toISOString().slice(0,10);
+  u.streak=u.lastVisit===y?u.streak+1:1;u.lastVisit=d;
+  const xp=10+Math.min(u.streak,7)*2;addXp(u,xp);toast("Daily visit +"+xp+" XP • streak "+u.streak);
+}
+
+/* ============ VIEWS ============ */
+function homeView(){const u=me(),r=rankOf(u.xp),nx=nextRank(u.xp);
+ const pct=nx?Math.round((u.xp-r[1])/(nx[1]-r[1])*100):100,ready=Date.now()-u.lastGift>864e5;
+ return `<div class="card"><div class="row"><div><h2>${esc(u.name)}</h2><span class="tag ${r[0]}">${r[0]}</span> <span class="mute">UID ${esc(u.ff)}</span></div>
+ <div class="mute">Wallet<br><b style="font-size:20px;color:var(--txt)">${money(u.wallet)}</b></div></div>
+ <div class="bar"><i style="width:${pct}%"></i></div><p class="mute">${u.xp} XP • ${nx?(nx[1]-u.xp)+" XP to "+nx[0]:"Top rank reached"} • ${u.streak}-day visit streak</p></div>
+ <div class="grid">
+  <div class="stat c-coin"><small>FF Coin</small><b>${total(u,"coin").toLocaleString()}</b></div>
+  <div class="stat c-dia"><small>Diamond</small><b>${total(u,"diamond").toLocaleString()}</b></div>
+  <div class="stat c-evo"><small>Evo</small><b>${total(u,"evo")}</b></div>
+  <div class="stat c-rare"><small>Rare items</small><b>${["rare","emote","skin","character","gun"].reduce((a,c)=>a+total(u,c),0)}</b></div></div>
+ <div class="card" style="margin-top:12px"><h3>Daily gift</h3><p class="mute">Coins or diamonds every day. Lucky players pull an emote or rare item.</p>
+ <button class="b" data-act="gift" ${ready?"":"disabled style='opacity:.5'"}>${ready?"Claim today's gift":"Come back in 24h"}</button></div>
+ <div class="row"><button class="b" data-go="compete">Find a player to compete</button><button class="b alt" data-go="shop">Browse shop</button></div>`}
+
+function competeView(){const u=me();
+ return `<div class="card"><h3>I want to compete</h3><label>Game mode</label>
+ <select id="cm"><option>Clash Squad 1v1</option><option>Clash Squad 4v4</option><option>Custom room</option><option>Battle Royale squad</option></select>
+ <label>Note (optional)</label><input id="cn" maxlength="80" placeholder="e.g. rank Heroic, play tonight 8pm">
+ <button class="b" data-act="post">Post to feed (UID ${esc(u.ff)})</button></div>
+ ${S.feed.length?S.feed.map(p=>{const pu=S.users[p.user];return `<div class="card"><div class="row"><div><b>${esc(p.user)}</b> <span class="tag ${rankOf(pu?pu.xp:0)[0]}">${rankOf(pu?pu.xp:0)[0]}</span><br><span class="mute">${esc(p.mode)} • ${esc(p.note||"")}</span></div>
+ ${p.user===u.name?`<button class="b alt sm" data-act="delpost" data-id="${p.id}">Remove</button>`:`<button class="b sm" data-act="challenge" data-uid="${esc(p.ff)}" data-user="${esc(p.user)}">Compete – copy UID</button>`}</div></div>`}).join(""):`<p class="mute">No players posted yet. Be the first to post.</p>`}`}
+
+function roomsView(){const u=me();
+ return `<div class="card"><h3>Create event room</h3><label>Room title</label><input id="rt" maxlength="40" placeholder="Friday Night Clash">
+ <label>Date & time</label><input id="rd" type="datetime-local"><label>Max players</label><input id="rm" type="number" value="12" min="2" max="50">
+ <label>Entry fee (₦, 0 = free)</label><input id="rf" type="number" value="0" min="0">
+ <button class="b" data-act="mkroom">Create room</button></div>
+ ${S.rooms.length?S.rooms.map(r=>{const joined=r.players.includes(u.name);return `<div class="card"><div class="row"><div><b>${esc(r.title)}</b><br><span class="mute">${new Date(r.when).toLocaleString()} • host ${esc(r.host)} • ${r.fee?money(r.fee):"Free"}</span><br><span class="mute">${r.players.length}/${r.max} booked</span></div>
+ <button class="b sm ${joined?"alt":""}" data-act="${joined?"leave":"join"}" data-id="${r.id}">${joined?"Leave":"Book my slot"}</button></div>
+ ${r.players.length?`<p class="mute" style="margin-top:8px">${r.players.map(p=>esc(p)+" ("+esc(S.users[p]?S.users[p].ff:"")+")").join(", ")}</p>`:""}</div>`}).join(""):`<p class="mute">No event rooms yet.</p>`}`}
+
+const CATS=[["all","All"],["diamond","Diamonds"],["coin","Coins"],["evo","Evo"],["emote","Emotes"],["skin","Skins"],["character","Characters"],["gun","Guns"]];
+function shopView(){const f=sub||"all";
+ const list=S.catalog.filter(i=>f==="all"||i.cat===f);
+ return `<div class="tabs">${CATS.map(([k,l])=>`<button class="b sm ${f===k?"":"alt"}" data-sub="${k}">${l}</button>`).join("")}</div>
+ <p class="mute">Wallet: ${money(me().wallet)} • Guns from ${money(CFG.MIN_GUN_INSTALLMENT)} can be paid weekly or monthly.</p>
+ ${list.map(i=>`<div class="card ${S.sel===i.id?"sel-on":""}"><div class="row"><div class="it" data-act="select" data-id="${i.id}" style="cursor:pointer">${thumb(imgOf(i))}<div><b>${esc(i.name)}</b><br><span class="mute">${i.cat} • tap to select</span></div></div><div style="text-align:right"><b>${money(i.price)}</b><br>
+ <button class="b sm" data-act="buy" data-id="${i.id}">Buy now</button>
+ ${i.cat==="gun"&&i.price>=CFG.MIN_GUN_INSTALLMENT?`<button class="b alt sm" data-act="plan" data-id="${i.id}">Pay in installments</button>`:""}</div></div></div>`).join("")||`<p class="mute">Nothing here yet.</p>`}`}
+
+function walletView(){const u=me();
+ const my=S.deposits.filter(d=>d.user===u.name),pl=S.plans.filter(p=>p.user===u.name);
+ return `<div class="card"><h3>Add money</h3><p class="mute">1) Send the amount to:<br>${esc(CFG.PAY_INFO)}<br>2) Submit it below. You get a notification when approved.</p>
+ <label>Amount sent (₦)</label><input id="da" type="number" min="100"><label>Payment reference / sender name</label><input id="dr" maxlength="60">
+ <button class="b" data-act="deposit">Submit deposit</button>
+ <a class="mute" href="https://wa.me/${CFG.WHATSAPP}" target="_blank" rel="noopener"> Need help? WhatsApp us</a></div>
+ <div class="card"><h3>Installment plans</h3>${pl.length?pl.map(p=>`<div class="row" style="margin-bottom:8px"><div class="it">${thumb(p.img||IMG_FALLBACK)}<div><b>${esc(p.item)}</b><br><span class="mute">${p.paid}/${p.n} paid • ${money(p.each)} every ${p.every}${p.paid>=p.n?" • Completed":""}</span></div></div>
+ ${p.paid<p.n?`<button class="b sm" data-act="payplan" data-id="${p.id}">Pay ${money(p.each)}</button>`:`<span class="ok">Delivered</span>`}</div>`).join(""):`<p class="mute">No plans yet. Pick a gun in the shop.</p>`}</div>
+ <div class="card"><h3>Deposit history</h3>${my.length?my.map(d=>`<div class="row"><span>${money(d.amount)} <span class="mute">${esc(d.ref)}</span></span><span class="${d.status==="approved"?"ok":d.status==="rejected"?"bad":"mute"}">${d.status}</span></div>`).join(""):`<p class="mute">No deposits yet.</p>`}</div>`}
+
+function itemsView(){const u=me(),wd=S.withdrawals.filter(w=>w.user===u.name);
+ return `<div class="card"><h3>My items</h3>${u.inv.length?u.inv.map(i=>`<div class="row" style="margin-bottom:8px"><span class="it">${thumb(i.img||IMG_FALLBACK)}<span>${esc(i.name)} <b>×${i.qty.toLocaleString()}</b></span></span><button class="b sm" data-act="wd" data-id="${i.id}">Withdraw</button></div>`).join(""):`<p class="mute">Nothing yet. Claim your daily gift or visit the shop.</p>`}
+ <p class="mute">Withdraw sends the item to your Free Fire account. We'll use the UID you enter.</p></div>
+ <div class="card"><h3>Withdrawals</h3>${wd.length?wd.map(w=>`<div class="row" style="margin-bottom:8px"><span class="it">${thumb(w.img||IMG_FALLBACK)}<span>${esc(w.name)} ×${w.qty} → UID ${esc(w.ff)}</span></span><span class="${w.status==="delivered"?"ok":"mute"}">${w.status}</span></div>`).join(""):`<p class="mute">No withdrawals yet.</p>`}</div>`}
+
+function ranksView(){const all=Object.values(S.users).sort((a,b)=>b.xp-a.xp);
+ return `<div class="card"><h3>How ranks work</h3><p class="mute">Beginner → Elite (100 XP) → Legendary (400 XP) → Top (1,000 XP). Earn XP by visiting daily, posting to compete, joining rooms, claiming gifts and buying.</p></div>
+ <div class="card"><h3>Leaderboard</h3>${all.slice(0,20).map((p,i)=>`<div class="row" style="margin-bottom:6px"><span>${i+1}. ${esc(p.name)} <span class="tag ${rankOf(p.xp)[0]}">${rankOf(p.xp)[0]}</span></span><b>${p.xp} XP</b></div>`).join("")}</div>`}
+
+function alertsView(){const u=me();const l=S.notifs.filter(n=>n.user===u.name);
+ setTimeout(()=>{let ch=false;l.forEach(n=>{if(!n.read){n.read=true;ch=true}});if(ch){save()}},500);
+ return `<div class="card"><h3>Notifications</h3>${l.length?l.map(n=>`<p style="margin-bottom:8px">${esc(n.msg)}<br><span class="mute">${new Date(n.t).toLocaleString()}</span></p>`).join(""):`<p class="mute">Nothing yet.</p>`}</div>
+ <button class="b alt" data-act="logout">Log out</button>`}
+
+let isAdmin=false;
+function adminView(){
+ if(!isAdmin)return `<div class="card"><h3>Admin</h3><label>Admin PIN</label><input id="ap2" type="password"><button class="b" data-act="adminlogin">Open admin</button></div>`;
+ const pd=S.deposits.filter(d=>d.status==="pending"),pw=S.withdrawals.filter(w=>w.status==="pending");
+ return `<div class="card"><h3>Pending deposits (${pd.length})</h3>${pd.map(d=>`<div class="row" style="margin-bottom:8px"><span>${esc(d.user)} • ${money(d.amount)}<br><span class="mute">${esc(d.ref)}</span></span><span><button class="b sm" data-act="dep" data-v="approved" data-id="${d.id}">Approve</button> <button class="b alt sm" data-act="dep" data-v="rejected" data-id="${d.id}">Reject</button></span></div>`).join("")||`<p class="mute">None</p>`}</div>
+ <div class="card"><h3>Pending withdrawals (${pw.length})</h3>${pw.map(w=>`<div class="row" style="margin-bottom:8px"><span class="it">${thumb(w.img||IMG_FALLBACK)}<span>${esc(w.user)} • ${esc(w.name)} ×${w.qty}<br><b>UID ${esc(w.ff)}</b></span></span><span><button class="b alt sm" data-act="cp" data-uid="${esc(w.ff)}">Copy UID</button> <button class="b sm" data-act="deliver" data-id="${w.id}">Mark delivered</button></span></div>`).join("")||`<p class="mute">None</p>`}</div>
+ <div class="card"><h3>Add / update shop item</h3><label>Name</label><input id="in"><label>Category</label><select id="ic">${CATS.slice(1).map(c=>`<option value="${c[0]}">${c[1]}</option>`).join("")}</select>
+ <label>Price (₦)</label><input id="ip" type="number"><label>Quantity delivered</label><input id="iq" type="number" value="1"><label>Image path or link (optional)</label><input id="ii" placeholder="images/ak-skin.png"><button class="b" data-act="additem">Add to shop</button></div>
+ <div class="card"><h3>Manage prices</h3>${S.catalog.map(i=>`<div class="row" style="margin-bottom:6px"><span class="it">${thumb(imgOf(i))}<span>${esc(i.name)}</span></span><span><input style="width:110px;margin:0" placeholder="image path" value="${esc(i.img||"")}" data-img="${i.id}"> <input style="width:90px;margin:0" type="number" value="${i.price}" data-price="${i.id}"> <button class="b alt sm" data-act="rm" data-id="${i.id}">Remove</button></span></div>`).join("")}</div>
+ <div class="card"><h3>Credit a user</h3><label>Username</label><input id="cu"><label>Amount (₦)</label><input id="ca" type="number"><button class="b" data-act="credit">Add to wallet</button></div>`}
+
+/* ============ ACTIONS ============ */
+const A={
+ signup,login,
+ logout(){S.session=null;save();render()},
+ gift(){const u=me();if(Date.now()-u.lastGift<864e5)return;
+  let r=Math.random()*100,g=CFG.DAILY_GIFTS.find(x=>(r-=x.w)<0)||CFG.DAILY_GIFTS[0];
+  give(u,g.cat,g.name,g.qty);u.lastGift=Date.now();addXp(u,5);notify(u.name,"Daily gift: "+g.name+" ×"+g.qty);save();render();toast("You got "+g.name+" ×"+g.qty+"!")},
+ post(){const u=me();S.feed.unshift({id:uid(),user:u.name,ff:u.ff,mode:$("#cm").value,note:$("#cn").value.trim(),t:Date.now()});S.feed=S.feed.slice(0,60);addXp(u,5);save();render()},
+ delpost(e){S.feed=S.feed.filter(p=>p.id!==e.id);save();render()},
+ challenge(e){copy(e.uid);const t=S.users[e.user];if(t)notify(t.name,me().name+" wants to compete with you!");save()},
+ mkroom(){const t=$("#rt").value.trim(),w=$("#rd").value;if(!t||!w)return toast("Add a title and time");const u=me();
+  S.rooms.unshift({id:uid(),title:t,when:w,max:+$("#rm").value||12,fee:+$("#rf").value||0,host:u.name,players:[u.name]});addXp(u,5);save();render()},
+ join(e){const r=S.rooms.find(x=>x.id===e.id),u=me();if(r.players.length>=r.max)return toast("Room is full");
+  if(r.fee){if(u.wallet<r.fee)return toast("Add money to your wallet first");u.wallet-=r.fee;const h=S.users[r.host];if(h)h.wallet+=r.fee}
+  r.players.push(u.name);addXp(u,5);save();render();toast("Slot booked")},
+ leave(e){const r=S.rooms.find(x=>x.id===e.id);r.players=r.players.filter(p=>p!==me().name);save();render()},
+ select(e){S.sel=S.sel===e.id?null:e.id;save();render()},
+ buy(e){const u=me(),i=S.catalog.find(x=>x.id===e.id);if(u.wallet<i.price)return toast("Not enough balance – add money in Wallet");
+  u.wallet-=i.price;if(S.sel===i.id)S.sel=null;give(u,i.cat,i.name,i.qty,imgOf(i));addXp(u,20);notify(u.name,"Purchased "+i.name+". Open My items to withdraw it.");save();render();toast("Bought "+i.name)},
+ plan(e){const i=S.catalog.find(x=>x.id===e.id),u=me();
+  const w=prompt("Pay weekly or monthly? Type: weekly or monthly","weekly");if(!w)return;const every=w.toLowerCase().startsWith("m")?"month":"week";
+  const n=+prompt("How many payments? (weekly: 2–12, monthly: 2–6)",every==="week"?"4":"3");if(!(n>=2&&n<=(every==="week"?12:6)))return toast("Invalid number of payments");
+  const each=Math.ceil(i.price/n);if(u.wallet<each)return toast("Add "+money(each)+" to wallet to start (first payment)");
+  u.wallet-=each;S.plans.push({id:uid(),user:u.name,item:i.name,itemId:i.id,img:imgOf(i),n,each,every,paid:1});if(S.sel===i.id)S.sel=null;
+  notify(u.name,"Installment started for "+i.name+": "+n+" payments of "+money(each)+" every "+every+". Item is delivered after the last payment.");save();render()},
+ payplan(e){const u=me(),p=S.plans.find(x=>x.id===e.id);if(u.wallet<p.each)return toast("Add money to wallet first");
+  u.wallet-=p.each;p.paid++;if(p.paid>=p.n){const i=S.catalog.find(x=>x.id===p.itemId);give(u,i?i.cat:"gun",p.item,1,p.img);addXp(u,30);notify(u.name,p.item+" fully paid and added to My items!")}save();render()},
+ deposit(){const a=+$("#da").value,r=$("#dr").value.trim();if(!(a>=100)||!r)return toast("Enter amount (min ₦100) and reference");
+  S.deposits.unshift({id:uid(),user:me().name,amount:a,ref:r,status:"pending",t:Date.now()});save();render();toast("Submitted – waiting for approval")},
+ wd(e){const u=me(),i=u.inv.find(x=>x.id===e.id);const ff=prompt("Enter the Free Fire UID to receive "+i.name,u.ff);if(!ff)return;
+  if(!/^\d{6,14}$/.test(ff.trim()))return toast("Enter a valid UID");
+  let q=i.qty;if(q>1){q=+prompt("How many to withdraw? (max "+i.qty+")",i.qty);if(!(q>=1&&q<=i.qty))return toast("Invalid quantity")}
+  i.qty-=q;if(i.qty<=0)u.inv=u.inv.filter(x=>x.id!==i.id);
+  S.withdrawals.unshift({id:uid(),user:u.name,name:i.name,qty:q,img:i.img,ff:ff.trim(),status:"pending",t:Date.now()});
+  notify(u.name,"Withdrawal requested: "+i.name+" ×"+q+" to UID "+ff.trim()+". We'll notify you when it's delivered.");save();render()},
+ adminlogin(){if($("#ap2").value===CFG.ADMIN_PIN){isAdmin=true;render()}else toast("Wrong PIN")},
+ dep(e){const d=S.deposits.find(x=>x.id===e.id);d.status=e.v;const u=S.users[d.user];
+  if(e.v==="approved"&&u){u.wallet+=d.amount;notify(u.name,"Deposit of "+money(d.amount)+" approved.")}else if(u)notify(u.name,"Deposit of "+money(d.amount)+" was rejected. Contact support.");save();render()},
+ deliver(e){const w=S.withdrawals.find(x=>x.id===e.id);w.status="delivered";notify(w.user,"Delivered: "+w.name+" ×"+w.qty+" sent to UID "+w.ff+". Check your game!");save();render()},
+ cp(e){copy(e.uid)},
+ additem(){const n=$("#in").value.trim(),p=+$("#ip").value;if(!n||!(p>0))return toast("Name and price required");
+  S.catalog.push({id:uid(),cat:$("#ic").value,name:n,price:p,qty:+$("#iq").value||1,img:$("#ii").value.trim()});save();render()},
+ rm(e){S.catalog=S.catalog.filter(i=>i.id!==e.id);save();render()},
+ credit(){const u=S.users[$("#cu").value.trim()],a=+$("#ca").value;if(!u||!a)return toast("Check username and amount");u.wallet+=a;notify(u.name,money(a)+" added to your wallet.");save();render();toast("Done")}
+};
+document.addEventListener("click",ev=>{
+  const g=ev.target.closest("[data-go]");if(g)return go(g.dataset.go);
+  const s=ev.target.closest("[data-sub]");if(s){sub=s.dataset.sub;return render()}
+  const a=ev.target.closest("[data-act]");if(a&&A[a.dataset.act])A[a.dataset.act](a.dataset);
+});
+document.addEventListener("change",ev=>{const im=ev.target.dataset.img;if(im){const i=S.catalog.find(x=>x.id===im);i.img=ev.target.value.trim();save();render();return}const p=ev.target.dataset.price;if(p){const i=S.catalog.find(x=>x.id===p);i.price=+ev.target.value||i.price;save();toast("Price updated")}});
+if(me())visit();
+render();
+</script>
+</body>
+</html>
