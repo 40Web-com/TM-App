@@ -609,3 +609,24 @@ body.tm-chat-open .chat-messages>.message-row{flex:0 0 auto}
 .ff-reward-actions-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.ff-reward-action{min-height:340px;padding:28px}.ff-real-scratch{position:relative;overflow:hidden;transform:none;animation:none;touch-action:none;cursor:crosshair}.ff-scratch-under{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}.ff-real-scratch canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}.ff-real-scratch canvas.scratch-done{pointer-events:none}.ff-game-friends-art{text-align:center;padding:20px;background:#ffffff08;border-radius:14px;font-size:30px}.ff-reward-action button:disabled{opacity:.6}@media(max-width:650px){.ff-reward-actions-grid{grid-template-columns:1fr}.ff-reward-action{min-height:300px;padding:22px}}
 /* Four-column reward collection grid */
 .ff-reward-actions-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.ff-reward-action{min-height:300px;padding:16px;overflow-wrap:anywhere}.ff-reward-action h2{font-size:clamp(16px,1.6vw,22px)}.ff-reward-action p{font-size:12px}.ff-invite-link{flex-direction:column;align-items:stretch}.ff-invite-link button{width:100%}.ff-real-scratch{width:100%;height:155px;min-height:155px;touch-action:none}.ff-real-scratch canvas{display:block;touch-action:none;pointer-events:auto;z-index:2}.ff-scratch-under{z-index:1}@media(max-width:760px){.ff-reward-actions-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.ff-reward-action{min-height:280px;padding:12px}.ff-reward-action h2{font-size:16px}.ff-reward-action p{font-size:11px}.ff-real-scratch{height:130px;min-height:130px}}
+/* Compact reward dashboard + 4x4 daily scratch-card room */
+.ff-reward-actions-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.ff-reward-action{min-height:230px;padding:12px;gap:8px;border-radius:15px}
+.ff-reward-icon{font-size:23px}.ff-reward-action h2{font-size:clamp(14px,1.35vw,19px)}
+.ff-reward-action p{font-size:11px;line-height:1.4;margin:0}
+.ff-reward-action>span{font-size:8px;letter-spacing:1px}
+.ff-scratch-preview{padding:4px}.ff-scratch-card-visual{width:140px;height:105px;border-radius:12px}
+.ff-scratch-card-visual b{font-size:22px}.ff-scratch-card-visual strong{font-size:15px}
+.ff-scratch-card-visual small{font-size:7px;letter-spacing:1px}
+.ff-reward-action button{padding:9px 8px;font-size:10px}
+.ff-invite-link input{font-size:9px;padding:8px}
+.ff-scratch-card-collection{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:24px auto;max-width:850px}
+.ff-room-card{min-width:0;aspect-ratio:1/1.12;border:1px solid #e5b44c;border-radius:13px;background:radial-gradient(circle at 50% 20%,#6b451e,#1b1010 70%);color:#ffda8b;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;padding:8px;box-shadow:inset 0 0 20px #f4bd4a22,0 8px 22px #0005;cursor:pointer;transition:transform .15s,border-color .15s}
+.ff-room-card b{font-size:clamp(11px,1.4vw,17px);text-align:center}.ff-room-card small{font-size:8px;letter-spacing:1px;text-align:center;color:#d9bd8d}
+.ff-room-card-num{font-size:9px;letter-spacing:2px;color:#f3b84c}.ff-room-card:active{transform:scale(.96)}
+.ff-room-card.used{opacity:.35;cursor:not-allowed}
+.ff-room-back,.ff-change-card{border:1px solid #ffffff28;background:#ffffff0b;color:#eee;border-radius:9px;padding:10px 14px;font-size:11px;font-weight:800}
+.ff-selected-scratch-wrap{max-width:420px;margin:16px auto;text-align:center}.ff-selected-scratch-wrap .ff-scratch-card-visual{width:100%;height:220px}
+.ff-selected-scratch-wrap .ff-scratch-card-visual strong{font-size:25px}.ff-selected-scratch-wrap .ff-scratch-card-visual small{font-size:10px}
+.ff-selected-scratch-wrap .ff-scratch-button{margin:14px 0}
+@media(max-width:760px){.ff-reward-actions-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.ff-reward-action{min-height:205px;padding:10px}.ff-reward-action h2{font-size:14px}.ff-reward-action p{font-size:10px}.ff-scratch-card-collection{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:15px 0}.ff-room-card{border-radius:8px;padding:4px;gap:5px}.ff-room-card b{font-size:10px}.ff-room-card small{font-size:6px}.ff-room-card-num{font-size:7px}.ff-scratch-card-visual{width:125px;height:95px}}
