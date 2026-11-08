@@ -1,34 +1,40 @@
 <!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#101714"><title>Aliyankee Pay · TM App</title>
-<link rel="stylesheet" href="./aliyankee-pay.css?v=4">
+<meta name="theme-color" content="#0d1511"><title>Aliyankee Pay · TM App</title>
+<link rel="stylesheet" href="./aliyankee-pay.css?v=5">
 </head><body>
 <div class="ap-shell">
-<header class="ap-top"><a class="ap-brand" href="./"><span class="ap-logo">A</span><span><b>Aliyankee Pay</b><small>TM ACCOUNT TRANSFER</small></span></a><a class="ap-back" href="./">Back to TM App</a></header>
+<header class="ap-top"><a class="ap-brand" href="./"><span class="ap-logo">A</span><span><b>Aliyankee Pay</b><small>TM ACCOUNT TRANSFER</small></span></a><a class="ap-back" href="./">Back</a></header>
 <main>
-<section class="ap-hero"><div><span class="ap-eyebrow">TM VIRTUAL ACCOUNT</span><h1>Send credits<br><em>to a TM user.</em></h1><p>Enter their email. Their registered name and TM account number will appear automatically.</p></div><div class="ap-balance"><small>YOUR AVAILABLE BALANCE</small><strong id="ap-balance">—</strong><span id="ap-wallet-label">TM virtual credits</span></div></section>
-<section class="ap-transfer">
-<div class="ap-step"><span>01</span><div><h2>Recipient details</h2><p>Enter the email linked to their TM account.</p></div></div>
-<div class="ap-field"><label for="recipient-email">Recipient email</label><input id="recipient-email" type="email" autocomplete="email" placeholder="name@example.com" required></div>
-<div id="recipient-status" class="ap-status" aria-live="polite">Recipient details will appear here after you enter an email.</div>
-<div class="ap-recipient-grid">
-<div class="ap-field"><label>Account name</label><input id="recipient-name" readonly placeholder="Automatically filled"></div>
-<div class="ap-field"><label>TM account number</label><input id="recipient-number" readonly placeholder="Automatically filled"></div>
-</div>
-<div class="ap-divider"></div>
-<div class="ap-step"><span>02</span><div><h2>Transfer amount</h2><p>Choose how much TM virtual credit to send.</p></div></div>
-<div class="ap-field"><label for="transfer-amount">Amount</label><input id="transfer-amount" type="number" min="0.01" step="0.01" placeholder="0.00"></div>
+<section class="ap-hero"><div><span class="ap-eyebrow">TM VIRTUAL ACCOUNT</span><h1>Send credits<br><em>simply and securely.</em></h1><p>Send TM virtual credits to another registered TM member.</p></div><div class="ap-balance"><small>AVAILABLE BALANCE</small><strong id="ap-balance">—</strong><span id="ap-wallet-label">TM virtual credits</span></div></section>
+<div class="ap-progress" aria-label="Transfer progress"><div class="ap-progress-item active" data-progress="1"><i>1</i><span>Recipient</span></div><b></b><div class="ap-progress-item" data-progress="2"><i>2</i><span>Amount</span></div><b></b><div class="ap-progress-item" data-progress="3"><i>3</i><span>Payment</span></div></div>
+<section class="ap-card">
+<section class="ap-panel" id="step-recipient">
+<div class="ap-step-title"><span>STEP 01</span><h2>Who are you sending to?</h2><p>Enter the email connected to their TM account.</p></div>
+<div class="ap-field"><label for="recipient-email">Recipient email</label><input id="recipient-email" type="email" autocomplete="email" placeholder="name@example.com"></div>
+<div id="recipient-status" class="ap-status">Enter an email address to find the TM account.</div>
+<div id="recipient-card" class="ap-recipient" hidden><div class="ap-avatar" id="recipient-avatar">TM</div><div><small>TM ACCOUNT HOLDER</small><strong id="recipient-name">—</strong><span id="recipient-number">—</span></div><span class="ap-verified">✓ Verified</span></div>
+<button id="continue-recipient" class="ap-primary" type="button" disabled>Continue <span>→</span></button>
+</section>
+<section class="ap-panel" id="step-amount" hidden>
+<div class="ap-step-title"><span>STEP 02</span><h2>Choose transfer amount</h2><p>Enter the amount of TM virtual credits to send.</p></div>
+<div class="ap-mini-recipient" id="amount-recipient"></div>
+<div class="ap-field"><label for="transfer-amount">Amount</label><input id="transfer-amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="0.00"></div>
 <div class="ap-field"><label for="transfer-currency">Currency</label><select id="transfer-currency"><option value="NGN">NGN · Nigerian naira</option><option value="USD">USD · US dollar</option><option value="GBP">GBP · British pound</option><option value="EUR">EUR · Euro</option><option value="GHS">GHS · Ghanaian cedi</option><option value="KES">KES · Kenyan shilling</option><option value="ZAR">ZAR · South African rand</option><option value="CAD">CAD · Canadian dollar</option></select></div>
-<div class="ap-field"><label for="transfer-note">Note (optional)</label><textarea id="transfer-note" rows="2" maxlength="120" placeholder="Add a message"></textarea></div>
-<div class="ap-divider"></div>
-<div class="ap-step"><span>03</span><div><h2>Payment PIN</h2><p>Enter your separate 4-digit Aliyankee Pay PIN.</p></div></div>
-<div id="pin-setup" class="ap-pin-setup" hidden><p>You haven't created a payment PIN yet. Set it up once to continue.</p><div class="ap-field"><label for="new-pin">Create 4-digit payment PIN</label><input id="new-pin" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" autocomplete="new-password"></div><div class="ap-field"><label for="confirm-pin">Confirm payment PIN</label><input id="confirm-pin" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" autocomplete="new-password"></div><button id="save-pin" class="ap-secondary" type="button">Save payment PIN</button></div>
-<div class="ap-field"><label for="payment-pin">Payment PIN</label><input id="payment-pin" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" autocomplete="off" placeholder="••••"></div>
-<button id="send-transfer" class="ap-primary" type="button" disabled>Confirm and transfer credits</button>
-<p class="ap-disclaimer">TM virtual credits are transferred within the TM App. This does not send money to a bank, PayPal or Cash App.</p>
+<div class="ap-field"><label for="transfer-note">Message <small>(optional)</small></label><textarea id="transfer-note" rows="3" maxlength="120" placeholder="Add a message for the recipient"></textarea></div>
+<div class="ap-actions"><button id="back-amount" class="ap-secondary" type="button">Back</button><button id="continue-amount" class="ap-primary" type="button" disabled>Continue <span>→</span></button></div>
+</section>
+<section class="ap-panel" id="step-payment" hidden>
+<div class="ap-step-title"><span>STEP 03</span><h2>Confirm your transfer</h2><p>Review the details and enter your 4-digit payment PIN.</p></div>
+<div class="ap-summary"><div><span>Sending to</span><strong id="summary-name">—</strong><small id="summary-number">—</small></div><div><span>Transfer amount</span><strong id="summary-amount">—</strong></div><div><span>Transfer type</span><strong>TM virtual credits</strong></div><div id="summary-note-row" hidden><span>Message</span><strong id="summary-note"></strong></div></div>
+<div id="pin-setup" class="ap-pin-setup" hidden><p><b>Create your payment PIN</b><br>You need a 4-digit PIN to protect transfers. This is separate from your TM login password.</p><div class="ap-field"><label for="new-pin">Create 4-digit PIN</label><input id="new-pin" type="password" inputmode="numeric" maxlength="4" autocomplete="new-password" placeholder="••••"></div><div class="ap-field"><label for="confirm-pin">Confirm PIN</label><input id="confirm-pin" type="password" inputmode="numeric" maxlength="4" autocomplete="new-password" placeholder="••••"></div><button id="save-pin" class="ap-secondary ap-save-pin" type="button">Save payment PIN</button></div>
+<div class="ap-field" id="payment-pin-wrap"><label for="payment-pin">Payment PIN</label><input id="payment-pin" type="password" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="Enter your 4-digit PIN"></div>
+<p class="ap-disclaimer">This transfer moves TM virtual credits inside TM App. It is not a bank, PayPal or Cash App payment.</p>
+<div class="ap-actions"><button id="back-payment" class="ap-secondary" type="button">Back</button><button id="send-transfer" class="ap-primary" type="button" disabled>Pay now</button></div>
 </section>
 <section id="receipt" class="ap-receipt" hidden></section>
+</section>
 <section class="ap-history"><div class="ap-history-head"><div><span class="ap-eyebrow">ACCOUNT ACTIVITY</span><h2>Recent transfers</h2></div><button id="refresh-wallet" class="ap-secondary" type="button">Refresh</button></div><div id="ap-transactions">Loading transactions…</div></section>
 </main><footer>ALIYANKEYE PAY · TM APP</footer></div><div id="ap-toast" role="status" aria-live="polite"></div>
-<script src="./aliyankee-pay.js?v=4"></script></body></html>
+<script src="./aliyankee-pay.js?v=5"></script></body></html>
