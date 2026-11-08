@@ -13,3 +13,4 @@ jobs:
           node-version: 22
       - run: node --check main.js
       - run: node --check tm-money.js
+      - run: node --check aliyankee-pay.js
