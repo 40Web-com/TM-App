@@ -1,4 +1,4 @@
-const CACHE_NAME = "tm-app-pages-v80";
+const CACHE_NAME = "tm-app-pages-v81";
 const APP_SHELL = ["./", "./index.html", "./style.css", "./auth.css", "./main.js", "./tm-money.js", "./tm-money.css", "./manifest.webmanifest", "./logo.svg"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)));
