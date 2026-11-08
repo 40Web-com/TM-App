@@ -1,33 +1,34 @@
 <!doctype html>
-<html lang="en">
-<head>
+<html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#101714"><meta name="description" content="Aliyankee Pay — TM account transfers">
-<title>Aliyankee Pay · TM App</title>
-<link rel="stylesheet" href="./aliyankee-pay.css?v=1">
-</head>
-<body>
+<meta name="theme-color" content="#101714"><title>Aliyankee Pay · TM App</title>
+<link rel="stylesheet" href="./aliyankee-pay.css?v=4">
+</head><body>
 <div class="ap-shell">
-<header class="ap-top">
-<a class="ap-brand" href="./"><span class="ap-logo">A</span><span><b>Aliyankee</b><small>PAY · TM APP</small></span></a>
-<div class="ap-topright"><span class="ap-sim"><i></i> TM PAY</span><button id="ap-theme" class="icon-btn" aria-label="Toggle theme">☾</button><button id="ap-back" class="icon-btn" aria-label="Back to TM">↗</button></div>
-</header>
+<header class="ap-top"><a class="ap-brand" href="./"><span class="ap-logo">A</span><span><b>Aliyankee Pay</b><small>TM ACCOUNT TRANSFER</small></span></a><a class="ap-back" href="./">Back to TM App</a></header>
 <main>
-<div class="ap-warning"><b>Aliyankee Pay</b><span>Send TM account credits to another person. External recipients receive an email notification.</span></div>
-<section class="ap-welcome"><div><small>WELCOME TO ALIYANKEYE PAY</small><h1>Send money.<br><em>Simply.</em></h1><p>Transfer from your account to someone else.</p></div><div class="ap-globe">₳</div></section>
-<section class="ap-balance-card">
-<div class="ap-bal-top"><span>ACCOUNT BALANCE</span><button id="ap-hide-balance" aria-label="Hide balance">◉</button></div>
-<div class="ap-bal-amount"><strong id="ap-balance">—</strong><select id="ap-wallet-currency" aria-label="Wallet currency"></select></div>
-<div class="ap-bal-bottom"><span id="ap-wallet-label">Aliyankee Pay account</span></div>
-<div class="ap-actions"><button class="ap-action" data-open="send"><span>↗</span> Send</button><button class="ap-action" data-open="receive"><span>↓</span> Receive</button><button class="ap-action" data-open="history"><span>◷</span> History</button></div>
-</section>
-<div class="ap-shortcuts"><button data-open="send"><span class="shortcut-icon">↗</span><b>Transfer</b><small>Send by email</small></button><button data-open="receive"><span class="shortcut-icon">＋</span><b>Receive</b><small>Account credits</small></button><button data-open="currencies"><span class="shortcut-icon">◎</span><b>Currencies</b><small>Global list</small></button><button data-open="history"><span class="shortcut-icon">▤</span><b>Activity</b><small>Transaction log</small></button></div>
-<section class="ap-section"><div class="ap-section-head"><div><small>YOUR ACTIVITY</small><h2>Recent transactions</h2></div><button class="ap-text-btn" data-open="history">View all →</button></div><div id="ap-transactions" class="ap-transactions"><div class="ap-empty"><span>▤</span><b>No activity yet</b><p>Transfers will appear here.</p></div></div></section>
-<section class="ap-section ap-services"><div class="ap-section-head"><div><small>ALIYANKEYE TOOLS</small><h2>Explore your wallet</h2></div></div><div class="ap-service-grid"><button data-open="send"><span>↗</span><b>Send money</b><small>TM accounts or email recipients</small></button><button data-open="currencies"><span>🌐</span><b>Global currencies</b><small>Browse currency codes & symbols</small></button><button data-open="settings"><span>⚙</span><b>Wallet settings</b><small>Display preferences</small></button></div></section>
-</main>
-<nav class="ap-bottom"><a href="./"><span>⌂</span>TM App</a><button class="active" data-open="wallet"><span>▣</span>Wallet</button><button data-open="send"><span>↗</span>Transfer</button><button data-open="history"><span>◷</span>Activity</button><button data-open="settings"><span>⚙</span>Settings</button></nav>
+<section class="ap-hero"><div><span class="ap-eyebrow">TM VIRTUAL ACCOUNT</span><h1>Send credits<br><em>to a TM user.</em></h1><p>Enter their email. Their registered name and TM account number will appear automatically.</p></div><div class="ap-balance"><small>YOUR AVAILABLE BALANCE</small><strong id="ap-balance">—</strong><span id="ap-wallet-label">TM virtual credits</span></div></section>
+<section class="ap-transfer">
+<div class="ap-step"><span>01</span><div><h2>Recipient details</h2><p>Enter the email linked to their TM account.</p></div></div>
+<div class="ap-field"><label for="recipient-email">Recipient email</label><input id="recipient-email" type="email" autocomplete="email" placeholder="name@example.com" required></div>
+<div id="recipient-status" class="ap-status" aria-live="polite">Recipient details will appear here after you enter an email.</div>
+<div class="ap-recipient-grid">
+<div class="ap-field"><label>Account name</label><input id="recipient-name" readonly placeholder="Automatically filled"></div>
+<div class="ap-field"><label>TM account number</label><input id="recipient-number" readonly placeholder="Automatically filled"></div>
 </div>
-<div id="ap-modal" class="ap-modal" hidden><div class="ap-modal-scrim" data-close></div><section class="ap-modal-panel" role="dialog" aria-modal="true"><header><div><small id="ap-modal-kicker">ALIYANKEYE PAY</small><h2 id="ap-modal-title">Transfer</h2></div><button class="icon-btn" data-close aria-label="Close">×</button></header><div id="ap-modal-content"></div></section></div>
-<div id="ap-toast" class="ap-toast" role="status" aria-live="polite"></div>
-<script src="./aliyankee-pay.js?v=3"></script>
-</body></html>
+<div class="ap-divider"></div>
+<div class="ap-step"><span>02</span><div><h2>Transfer amount</h2><p>Choose how much TM virtual credit to send.</p></div></div>
+<div class="ap-field"><label for="transfer-amount">Amount</label><input id="transfer-amount" type="number" min="0.01" step="0.01" placeholder="0.00"></div>
+<div class="ap-field"><label for="transfer-currency">Currency</label><select id="transfer-currency"><option value="NGN">NGN · Nigerian naira</option><option value="USD">USD · US dollar</option><option value="GBP">GBP · British pound</option><option value="EUR">EUR · Euro</option><option value="GHS">GHS · Ghanaian cedi</option><option value="KES">KES · Kenyan shilling</option><option value="ZAR">ZAR · South African rand</option><option value="CAD">CAD · Canadian dollar</option></select></div>
+<div class="ap-field"><label for="transfer-note">Note (optional)</label><textarea id="transfer-note" rows="2" maxlength="120" placeholder="Add a message"></textarea></div>
+<div class="ap-divider"></div>
+<div class="ap-step"><span>03</span><div><h2>Payment PIN</h2><p>Enter your separate 4-digit Aliyankee Pay PIN.</p></div></div>
+<div id="pin-setup" class="ap-pin-setup" hidden><p>You haven't created a payment PIN yet. Set it up once to continue.</p><div class="ap-field"><label for="new-pin">Create 4-digit payment PIN</label><input id="new-pin" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" autocomplete="new-password"></div><div class="ap-field"><label for="confirm-pin">Confirm payment PIN</label><input id="confirm-pin" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" autocomplete="new-password"></div><button id="save-pin" class="ap-secondary" type="button">Save payment PIN</button></div>
+<div class="ap-field"><label for="payment-pin">Payment PIN</label><input id="payment-pin" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" autocomplete="off" placeholder="••••"></div>
+<button id="send-transfer" class="ap-primary" type="button" disabled>Confirm and transfer credits</button>
+<p class="ap-disclaimer">TM virtual credits are transferred within the TM App. This does not send money to a bank, PayPal or Cash App.</p>
+</section>
+<section id="receipt" class="ap-receipt" hidden></section>
+<section class="ap-history"><div class="ap-history-head"><div><span class="ap-eyebrow">ACCOUNT ACTIVITY</span><h2>Recent transfers</h2></div><button id="refresh-wallet" class="ap-secondary" type="button">Refresh</button></div><div id="ap-transactions">Loading transactions…</div></section>
+</main><footer>ALIYANKEYE PAY · TM APP</footer></div><div id="ap-toast" role="status" aria-live="polite"></div>
+<script src="./aliyankee-pay.js?v=4"></script></body></html>
