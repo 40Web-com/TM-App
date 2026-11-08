@@ -630,3 +630,13 @@ body.tm-chat-open .chat-messages>.message-row{flex:0 0 auto}
 .ff-selected-scratch-wrap .ff-scratch-card-visual strong{font-size:25px}.ff-selected-scratch-wrap .ff-scratch-card-visual small{font-size:10px}
 .ff-selected-scratch-wrap .ff-scratch-button{margin:14px 0}
 @media(max-width:760px){.ff-reward-actions-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.ff-reward-action{min-height:205px;padding:10px}.ff-reward-action h2{font-size:14px}.ff-reward-action p{font-size:10px}.ff-scratch-card-collection{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:15px 0}.ff-room-card{border-radius:8px;padding:4px;gap:5px}.ff-room-card b{font-size:10px}.ff-room-card small{font-size:6px}.ff-room-card-num{font-size:7px}.ff-scratch-card-visual{width:125px;height:95px}}
+
+/* Scratch room reward-type card faces */
+.ff-room-card{background:linear-gradient(145deg,#32220e,#120d0b 60%,#3a2411);border-color:#d7a23b;position:relative;overflow:hidden}
+.ff-room-card:before{content:"✦";position:absolute;top:8px;right:10px;color:#f3c45f66;font-size:14px}
+.ff-room-card b{color:#ffe0a1;text-shadow:0 2px 10px #e6a42c35}
+.ff-room-card:nth-child(4n+1){border-color:#d7a23b}
+.ff-room-card:nth-child(4n+2){border-color:#58a9ff}
+.ff-room-card:nth-child(4n+3){border-color:#e55b4e}
+.ff-room-card:nth-child(4n){border-color:#bb8aff}
+.ff-scratch-under strong{font-size:clamp(14px,2vw,23px);line-height:1.55;color:#fff0c5}
