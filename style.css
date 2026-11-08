@@ -675,3 +675,15 @@ body.tm-free-fire-zap #app{height:100dvh;min-height:100dvh;overflow:hidden;paddi
 .notification-full-body img,.notification-full-body iframe,.notification-full-body table{max-width:100%;box-sizing:border-box}
 .notification-room-item.expanded{align-items:start}
 @media(max-width:560px){.page-content{min-width:0;max-width:100%;overflow-x:hidden}.notification-room{padding:0 1px}.notification-room-item{grid-template-columns:28px minmax(0,1fr) 5px;gap:7px;padding:9px 8px;border-radius:11px}.notification-room-icon{width:27px;height:27px;flex-basis:27px;font-size:15px}.notification-expand strong{font-size:12px}.notification-preview{font-size:11px}.notification-full-body{padding:8px;font-size:11px}}
+
+
+/* TM game-zap menu branding */
+.game-zap-coming{display:flex!important;align-items:center;gap:10px;min-height:54px;padding:9px 12px!important;opacity:.96;cursor:default!important;border-radius:12px;margin:3px 0;background:linear-gradient(100deg,rgba(112,42,190,.12),rgba(18,12,30,.05));}
+.game-zap-logo{display:inline-flex;align-items:center;justify-content:center;flex:0 0 38px;width:38px;height:38px;border-radius:10px;background:linear-gradient(145deg,#241039,#10091c);border:1px solid #9d4edd;color:#f3e8ff;font-weight:900;font-size:12px;letter-spacing:-.5px;box-shadow:0 0 12px rgba(168,85,247,.2);}
+.game-zap-freefire{background:linear-gradient(145deg,#7f1d1d,#190a0a);color:#ff5b35;font-size:22px;}
+.game-zap-cod{color:#f5f5f5;font-family:Impact,Arial,sans-serif;font-size:10px;}
+.game-zap-roblox{font-size:24px;color:#fff;font-weight:950;}
+.game-zap-pubg{font-size:9px;color:#ffc857;border-color:#c18b27;}
+.game-zap-ml{color:#9ccaff;font-size:15px;}
+.game-zap-name{flex:1;min-width:0;font-size:13px;font-weight:650;}
+.coming-soon-badge{font-size:8px!important;font-weight:800!important;letter-spacing:.4px;color:#cda5ff!important;background:rgba(123,63,228,.16);border:1px solid rgba(168,85,247,.35);padding:4px 6px;border-radius:5px;white-space:nowrap;}
