@@ -33,6 +33,22 @@ Deno.serve(async(req:Request)=>{
   if(!["Aliyankee Pay Account","TM Account"].includes(bank)||!/^[0-9]{6,20}$/.test(account))return out(400,{error:"Select an account type and enter a valid account number."});if(!/^[A-Z]{3}$/.test(currency)||!Number.isFinite(amount)||amount<=0||amount>100000000)return out(400,{error:"Enter a valid currency and amount."});
   const result=await db.rpc("aliyankeyye_virtual_transfer",{p_sender:u.id,p_email:email,p_name:name,p_bank:bank,p_account:account,p_currency:currency,p_amount:amount,p_memo:memo});if(result.error)return out(400,{error:result.error.message||"Transfer failed."});
   const tx=result.data.transaction,recipientName=name||email;
+  // Create in-app payment notifications for both sides of every TM-to-TM transfer.
+  const {data:storedTx}=await db.from("aliyankeyye_transactions").select("recipient_user_id").eq("id",tx.id).maybeSingle();
+  const noticeRows:any[]=[{
+   user_id:u.id,
+   title:"Payment sent",
+   body:`You sent ${amount.toLocaleString()} ${currency} to ${recipientName}. Reference: ${tx.reference}.`
+  }];
+  if(storedTx?.recipient_user_id){
+   noticeRows.push({
+    user_id:storedTx.recipient_user_id,
+    title:"Payment received",
+    body:`You received ${amount.toLocaleString()} ${currency} from ${u.display_name||u.tm_number}. Reference: ${tx.reference}.`
+   });
+  }
+  const {error:noticeError}=await db.from("notifications").insert(noticeRows);
+  if(noticeError)console.error("Aliyankee Pay in-app notification error",noticeError);
   const recipientEmailStatus=await emailNotice(email,recipientName,bank,account,amount,currency,tx.reference,u.display_name||u.tm_number,memo);
   const senderEmailStatus=u.email
    ? await emailNotice(String(u.email),recipientName,bank,account,amount,currency,tx.reference,u.display_name||u.tm_number,memo)
