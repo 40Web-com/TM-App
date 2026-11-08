@@ -4,7 +4,7 @@ const SUPABASE_KEY="sb_publishable_rkR-lAksyaDc9dNU4fgkZg_MNoN5RGb";
 const ACCOUNT_API=SUPABASE_URL+"/functions/v1/tm-account";
 const TM_AI_API=SUPABASE_URL+"/functions/v1/tm-ai";
 let voiceRecorder=null,voiceChunks=[],voiceStream=null,voicePressPending=false,discoverLoading=false,discoverDecisionBusy=false,discoverTotalProfiles=0;
-let deviceId=localStorage.getItem("tm_device_id");if(!deviceId){deviceId=crypto.randomUUID();localStorage.setItem("tm_device_id",deviceId);}
+let deviceId="";try{deviceId=localStorage.getItem("tm_device_id")||"";}catch{}if(!deviceId){try{deviceId=crypto.randomUUID();}catch{deviceId="tmdev-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2);}try{localStorage.setItem("tm_device_id",deviceId);}catch{}}
 const savedTm=localStorage.getItem("tm_saved_tm")||"";
 let googleAccessToken=null,googleProfile=null;let activePage=localStorage.getItem("tm_active_page")||"home",authView="welcome",recoveryMode="tm_id",recoveredTm=null,guest=false,session=null,accountUser=null,showCode=null,formError="",busy=false,activeChat=null,chatList=[],chatMessages=[],chatLoading=false,chatListLoading=false,discoverProfiles=[],discoverMatches=[],discoverNotifications=[],discoverNotice=null,activeDatingMatchId=null;
 try{session=localStorage.getItem("tm_session");accountUser=JSON.parse(localStorage.getItem("tm_user")||"null");guest=localStorage.getItem("tm_guest")==="1";}catch{}
