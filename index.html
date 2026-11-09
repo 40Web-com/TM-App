@@ -3,21 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
-  <meta name="theme-color" content="#FFFFFF">
-  <meta name="description" content="TM AI Studio — AI photo, video and creative tools.">
-  <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="icon" type="image/svg+xml" href="./logo.svg">
-  <link rel="stylesheet" href="./style.css?v=116">
+  <meta name="theme-color" content="#16062f">
+  <meta name="description" content="TM App — your mobile home for gaming tools, AI features, and more.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="TM App">
+  <link rel="manifest" href="./manifest.webmanifest?v=2">
+  <link rel="icon" type="image/svg+xml" href="./logo.svg?v=2">
+  <link rel="apple-touch-icon" href="./logo.svg?v=2">
+  <link rel="stylesheet" href="./style.css?v=117">
   <link rel="stylesheet" href="./auth.css?v=8">
-  <title>TM AI Studio — Create something extraordinary</title>
+  <title>TM App — Game Hub</title>
   <link rel="stylesheet" href="./discover.css?v=6">
   <link rel="stylesheet" href="./google-auth.css?v=1">
+  <style>
+    #tm-install-app{position:fixed;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);z-index:2147483000;display:none;align-items:center;gap:9px;padding:12px 17px;border:1px solid rgba(255,255,255,.32);border-radius:999px;background:linear-gradient(110deg,#ed168f,#7628ee);color:#fff;font:700 14px/1.1 system-ui,-apple-system,sans-serif;box-shadow:0 8px 28px #9b25f477;cursor:pointer}
+    #tm-install-app img{width:25px;height:25px;border-radius:8px}
+    #tm-install-help{position:fixed;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 76px);z-index:2147483000;display:none;max-width:min(310px,calc(100vw - 32px));padding:13px 15px;border:1px solid #a855f7;border-radius:14px;background:#120923;color:#fff;font:13px/1.5 system-ui,-apple-system,sans-serif;box-shadow:0 8px 28px #0008}
+  </style>
 </head>
 <body>
-  <div id="app" aria-live="polite"><div class="app-loading"><img src="./logo.svg" alt=""><span>Loading TM App…</span></div></div>
+  <div id="app" aria-live="polite"><div class="app-loading"><img src="./logo.svg" alt="TM App"><span>Loading TM App…</span></div></div>
+  <button id="tm-install-app" type="button"><img src="./logo.svg" alt="">Install TM App</button>
+  <div id="tm-install-help" role="status">To install: open Chrome’s ⋮ menu, then choose <b>Install app</b> or <b>Add to Home screen</b>.</div>
+  <script>
+    (function(){
+      const button=document.getElementById("tm-install-app");
+      const help=document.getElementById("tm-install-help");
+      let installEvent=null;
+      const standalone=()=>window.matchMedia("(display-mode: standalone)").matches||window.navigator.standalone===true;
+      if(!standalone()) button.style.display="inline-flex";
+      window.addEventListener("beforeinstallprompt",event=>{
+        event.preventDefault();installEvent=event;button.style.display="inline-flex";
+      });
+      button.addEventListener("click",async()=>{
+        if(installEvent){
+          installEvent.prompt();
+          await installEvent.userChoice;
+          installEvent=null;
+          if(standalone())button.style.display="none";
+        }else{
+          help.style.display=help.style.display==="block"?"none":"block";
+        }
+      });
+      window.addEventListener("appinstalled",()=>{button.style.display="none";help.style.display="none";});
+    })();
+  </script>
   <script>window.addEventListener("error",function(e){const a=document.querySelector("#app");if(a){a.innerHTML="<div style=\"padding:24px;font:16px system-ui;color:#b42318\"><h2>TM App startup error</h2><p>"+String(e.message||"Script failed").replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))+"</p><small>Reload after fixing this error.</small></div>";}});window.addEventListener("unhandledrejection",function(e){console.error("TM startup promise:",e.reason);});</script>
-  <script src="./main.js?v=128" defer></script>
+  <script src="./main.js?v=129" defer></script>
   <script src="./pay-menu.js?v=4"></script>
-  <script>if ("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));</script>
+  <script>if ("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=147").catch(()=>{}));</script>
 </body>
 </html>
