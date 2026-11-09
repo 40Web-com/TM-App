@@ -1,10 +1,21 @@
 {
-  "name": "TM App",
-  "short_name": "TM",
-  "description": "Connect, chat, discover people, and explore AI Studio.",
-  "start_url": "./",
+  "id": "./",
+  "name": "TM App — Game Hub",
+  "short_name": "TM App",
+  "description": "Your mobile home for TM Game Hub, gaming tools, and AI features.",
+  "start_url": "./?source=pwa",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#FFFFFF",
-  "theme_color": "#FFFFFF",
-  "scope": "./"
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#09051c",
+  "theme_color": "#16062f",
+  "icons": [
+    {
+      "src": "./logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
 }
