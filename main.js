@@ -1,4 +1,6 @@
 const app=document.querySelector("#app");
+try{const p=new URLSearchParams(location.search);if(p.get("tm_companion")==="connected"){localStorage.setItem("tm_android_companion",JSON.stringify({status:"connected",connectedAt:Number(p.get("tm_companion_time"))||Date.now()}));history.replaceState({},document.title,location.pathname+location.hash);}}catch(e){console.warn("TM companion callback could not be stored",e);}
+
 const SUPABASE_URL="https://swfawduoosskffbuniks.supabase.co";
 const SUPABASE_KEY="sb_publishable_rkR-lAksyaDc9dNU4fgkZg_MNoN5RGb";
 const ACCOUNT_API=SUPABASE_URL+"/functions/v1/tm-account";
