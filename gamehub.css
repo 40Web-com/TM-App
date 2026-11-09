@@ -144,3 +144,5 @@ html,body{width:100%!important;max-width:100%!important;overflow-x:hidden!import
 .gh-device-results{font-size:12px;line-height:1.5;color:#655675;margin-top:12px}
 .gh-device-tips{font-size:12px;line-height:1.9;color:#655675}
 @media(max-width:620px){.gh-mastery-list,.gh-notes-panel{grid-template-columns:1fr}.gh-rank-top{align-items:flex-start}.gh-timer-settings>*{width:100%}.gh-floating-timer{width:170px;right:10px;bottom:12px}.gh-utility-room .gh-pagehead{flex-wrap:wrap}}
+
+.gh-android-companion{margin:14px 0;border-color:rgba(82,232,255,.32);background:linear-gradient(115deg,rgba(21,35,57,.98),rgba(20,18,43,.96))}.gh-android-companion>p{max-width:760px;line-height:1.7}.gh-companion-actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 8px}.gh-apk-link{text-decoration:none;display:inline-flex;align-items:center}.gh-android-companion .gh-smallnote{display:block;line-height:1.6}@media(max-width:520px){.gh-companion-actions>*{width:100%}}
