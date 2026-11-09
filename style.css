@@ -746,10 +746,79 @@ body.menu-open{overflow:hidden}
 .tm-game-slide{overflow:hidden;background:linear-gradient(110deg,#241a30,#382747 55%,#20172b)!important}.tm-game-slide:before{opacity:.18!important;background-image:linear-gradient(90deg,#241a30 0%,#2d203e99 45%,#20172b55 100%),var(--hero-art)!important}.tm-game-slide-art{align-self:stretch;position:relative;justify-content:flex-end;padding-bottom:12px;overflow:visible}.tm-game-art-orb{width:clamp(150px,30vw,310px)!important;height:100%!important;position:absolute;bottom:0;right:0;display:flex;align-items:flex-end;justify-content:center;background:radial-gradient(ellipse at 50% 75%,rgba(151,86,190,.18),transparent 70%)!important;overflow:visible!important}.tm-hero-character{width:100%!important;height:100%!important;max-height:100%;object-fit:contain!important;object-position:center bottom!important;display:block!important;filter:drop-shadow(0 5px 9px rgba(10,4,16,.25))!important}.tm-game-art-label,.tm-game-art-sub{position:relative;z-index:2;text-align:right;margin-left:auto;margin-right:8px}.tm-game-slide-copy{z-index:3;max-width:58%}.tm-game-slide-copy h1 em{color:#c77ce7}@media(max-width:650px){.tm-game-slide{grid-template-columns:1.1fr .8fr!important;padding:14px 10px!important}.tm-game-slide-copy{max-width:100%}.tm-game-slide-copy h1{font-size:clamp(19px,5vw,28px)!important}.tm-game-slide-copy p{max-width:210px}.tm-game-art-orb{width:clamp(105px,38vw,170px)!important}.tm-game-art-label{font-size:13px;margin-right:0}.tm-game-art-sub{font-size:6px;margin-right:0}}
 
 
-/* TM center navigation: retains the original TM App visual system */
-.tm-center-nav{position:fixed;z-index:80;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;justify-content:center;gap:8px;padding:8px;background:rgba(255,255,255,.94);border:1px solid rgba(25,35,55,.12);border-radius:18px;box-shadow:0 12px 38px rgba(18,28,48,.16);backdrop-filter:blur(18px);}
-.tm-center-nav button{border:0;background:transparent;color:var(--text,#20232b);display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;font:inherit;cursor:pointer;white-space:nowrap;}
-.tm-center-nav button:hover{background:rgba(90,100,140,.09);}
-.tm-center-nav button span{font-size:20px;line-height:1;color:var(--accent,#6d5dfc);}
-.tm-center-nav button b{font-size:13px;font-weight:650;}
-@media(max-width:680px){.tm-center-nav{bottom:calc(76px + env(safe-area-inset-bottom));gap:2px;padding:6px;border-radius:16px;max-width:calc(100vw - 20px)}.tm-center-nav button{padding:9px 12px;gap:5px}.tm-center-nav button b{font-size:12px}}
+/* TM App bottom action navigation — original brand, real phone dock layout */
+.tm-center-nav{
+  position:fixed;
+  z-index:80;
+  left:250px;
+  right:0;
+  bottom:0;
+  transform:none;
+  width:auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(12px,3vw,42px);
+  min-height:66px;
+  box-sizing:border-box;
+  padding:9px 24px;
+  background:#fff;
+  border:0;
+  border-top:1px solid var(--border-pink,#E8C8D3);
+  border-radius:0;
+  box-shadow:0 -6px 22px rgba(55,15,29,.08);
+}
+.tm-center-nav button{
+  flex:0 1 190px;
+  min-width:0;
+  min-height:46px;
+  border:0;
+  background:transparent;
+  color:var(--deep,#241018);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  padding:9px 14px;
+  border-radius:11px;
+  font:inherit;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.tm-center-nav button:hover,.tm-center-nav button:focus-visible{background:var(--blush,#FFF5F8);outline-color:var(--oxblood,#4A0E1B)}
+.tm-center-nav button span{font-size:21px;line-height:1;color:var(--oxblood,#8B2946)}
+.tm-center-nav button b{font-size:14px;font-weight:700;color:var(--deep,#241018)}
+/* The three requested actions replace the older duplicate mobile tabs. */
+.mobile-nav{display:none!important}
+.page-content{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+
+/* The Free Fire rewards room is fitted between the TM header and bottom actions.
+   Its own iframe scrolls, so the fixed dock never hides reward cards or buttons. */
+body.tm-free-fire-zap #app{height:100dvh;min-height:100dvh;overflow:hidden}
+body.tm-free-fire-zap .main-content{height:100dvh;min-height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+body.tm-free-fire-zap .page-content{flex:1 1 auto;min-height:0;max-width:none;width:100%;margin:0;padding:0 0 calc(66px + env(safe-area-inset-bottom))!important;overflow:hidden;box-sizing:border-box}
+body.tm-free-fire-zap .tm-embedded-app{height:100%;min-height:0;max-height:100%;margin:0;overflow:hidden;border:0;border-radius:0}
+body.tm-free-fire-zap .tm-embedded-frame{height:0;min-height:0;flex:1 1 auto}
+
+@media(max-width:760px){
+  .tm-center-nav{
+    left:0;
+    right:0;
+    bottom:0;
+    width:100%;
+    min-height:62px;
+    gap:2px;
+    padding:6px 8px calc(6px + env(safe-area-inset-bottom));
+    background:#fff;
+    border-top:1px solid var(--border-pink,#E8C8D3);
+    box-shadow:0 -5px 18px rgba(55,15,29,.10);
+  }
+  .tm-center-nav button{flex:1 1 0;min-width:0;min-height:48px;gap:6px;padding:7px 4px;border-radius:9px}
+  .tm-center-nav button span{font-size:20px}
+  .tm-center-nav button b{font-size:13px}
+  .mobile-nav{display:none!important}
+  .page-content{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+  body.tm-free-fire-zap .page-content{padding:0 0 calc(62px + env(safe-area-inset-bottom))!important}
+  body.tm-free-fire-zap .tm-embedded-app{height:100%;min-height:0}
+  body.tm-free-fire-zap .tm-embedded-app-head{flex:0 0 auto}
+}
