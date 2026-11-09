@@ -1016,3 +1016,9 @@ body.menu-open{overflow:hidden}
 .gamer-save-button{min-height:52px;border:0;border-radius:13px;background:linear-gradient(100deg,#246bd5,#6558dc);color:#fff;font-weight:900;letter-spacing:.8px;box-shadow:0 9px 24px #4357c833}
 .gamer-logout-inline{background:#fff;color:#be123c}
 @media(max-width:640px){.game-settings-grid{grid-template-columns:1fr}.game-settings-hero,.gamer-profile-hero{padding:19px;border-radius:17px}.game-settings-player{gap:9px}.game-settings-online{font-size:8px}.game-settings-card,.gamer-profile-section{padding:16px}.gamer-fields{grid-template-columns:1fr}.gamer-card-main{gap:10px;padding:12px}.gamer-card-status{font-size:8px}}
+
+/* TM Game Hub identity: keep the app mark visible in the actual signed-in interface. */
+.tm-topbar-brand{display:flex;align-items:center;gap:10px;flex:0 0 auto;color:#21103a;text-decoration:none;font-size:19px;font-weight:800;letter-spacing:-.5px;white-space:nowrap}
+.tm-topbar-brand .brand-logo{width:42px;height:42px;object-fit:contain;border-radius:12px;box-shadow:0 3px 14px #7d2cff26}
+.tm-topbar-brand b{font-weight:800;background:linear-gradient(100deg,#ffb51b,#f04480,#7b35ec);-webkit-background-clip:text;background-clip:text;color:transparent}
+@media(max-width:700px){.tm-topbar-brand{font-size:17px;gap:8px}.tm-topbar-brand .brand-logo{width:36px;height:36px}}
