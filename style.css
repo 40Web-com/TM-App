@@ -796,9 +796,9 @@ body.menu-open{overflow:hidden}
    Its own iframe scrolls, so the fixed dock never hides reward cards or buttons. */
 body.tm-free-fire-zap #app{height:100dvh;min-height:100dvh;overflow:hidden}
 body.tm-free-fire-zap .main-content{height:100dvh;min-height:100dvh;display:flex;flex-direction:column;overflow:hidden}
-body.tm-free-fire-zap .page-content{flex:1 1 auto;min-height:0;max-width:none;width:100%;margin:0;padding:0 0 calc(66px + env(safe-area-inset-bottom))!important;overflow:hidden;box-sizing:border-box}
-body.tm-free-fire-zap .tm-embedded-app{height:100%;min-height:0;max-height:100%;margin:0;overflow:hidden;border:0;border-radius:0}
-body.tm-free-fire-zap .tm-embedded-frame{height:0;min-height:0;flex:1 1 auto}
+body.tm-free-fire-zap .page-content{display:flex;flex:1 1 auto;flex-direction:column;min-height:0;max-width:none;width:100%;margin:0;padding:0 0 calc(66px + env(safe-area-inset-bottom))!important;overflow:hidden;box-sizing:border-box}
+body.tm-free-fire-zap .tm-embedded-app{display:flex;flex:1 1 auto;height:100%;min-height:0;max-height:100%;margin:0;overflow:hidden;border:0;border-radius:0}
+body.tm-free-fire-zap .tm-embedded-frame{display:block;height:0;min-height:0;flex:1 1 auto}
 
 @media(max-width:760px){
   .tm-center-nav{
