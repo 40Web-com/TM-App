@@ -4,3 +4,22 @@
 @media(max-width:1050px){.gh-layout{grid-template-columns:190px minmax(0,1fr)}.gh-main{padding:0 18px 25px}.gh-feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.gh-hero-copy{padding:24px}.gh-hero-art>img{right:12%}.gh-training-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:720px){.gh-top{height:60px;padding:0 13px}.gh-platform{display:none}.gh-layout{display:block}.gh-side{position:fixed;z-index:30;bottom:0;top:auto;left:0;right:0;width:100%;height:62px;min-height:0;padding:5px 4px calc(5px + env(safe-area-inset-bottom));border:0;border-top:1px solid #28354d;background:rgba(8,12,21,.96);backdrop-filter:blur(15px);display:flex;flex-direction:row;justify-content:space-around}.gh-side-label,.gh-side-bottom{display:none}.gh-nav{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;justify-content:center;padding:5px 2px;margin:0;border-radius:7px;font-size:8px}.gh-navico{font-size:16px}.gh-nav.selected{box-shadow:inset 0 2px var(--cyan)}.gh-main{padding:0 12px 82px}.gh-status{font-size:7px;letter-spacing:.6px}.gh-hero{grid-template-columns:1fr;min-height:0;margin-top:14px}.gh-hero-copy{padding:22px 20px 18px}.gh-hero h1{font-size:40px}.gh-hero-art{min-height:170px}.gh-hero-art>img{height:230px;right:25%;bottom:-25px}.gh-art-glow{width:180px;height:180px;right:25%}.gh-art-label{right:10px;bottom:12px}.gh-art-label b{font-size:26px}.chip-a{top:20px}.chip-b{bottom:25px}.gh-hero-foot{margin-top:17px}.gh-sectionhead h2,.gh-panel h2{font-size:20px}.gh-toggle-grid{grid-template-columns:1fr}.gh-feature-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.gh-feature{padding:12px}.gh-feature b{font-size:17px}.gh-feature p{font-size:9px;min-height:52px}.gh-feature-top{margin-bottom:10px}.gh-lower{grid-template-columns:1fr}.gh-two-col{grid-template-columns:1fr}.gh-pagehead{margin:20px 0 15px}.gh-pagehead h1{font-size:36px}.gh-pagehead p{font-size:10px}.gh-panel{padding:15px}.gh-training-grid{grid-template-columns:1fr}.gh-assistant-status{align-items:flex-start;flex-direction:column}.gh-footer{font-size:7px;letter-spacing:.5px}.gh-hero-actions .gh-primary,.gh-hero-actions .gh-secondary{font-size:9px;padding:10px}.gh-topright{gap:8px}.gh-brand b{font-size:14px}.gh-brand small{font-size:7px}.gh-logo{font-size:24px}}
 @media(max-width:390px){.gh-nav{font-size:7px}.gh-navico{font-size:14px}.gh-hero h1{font-size:34px}.gh-feature-grid{grid-template-columns:1fr}.gh-feature p{min-height:0}.gh-status span:last-child{display:none}.gh-hero-actions{gap:6px}.gh-hero-actions>*{flex:1}}
+
+/* Embedded TM Game Hub occupies the full iframe, and uses only TM's bottom dock */
+html,body{width:100%;height:100%;min-height:0;margin:0;overflow:hidden}
+.gh-app{width:100%;height:100%;min-height:0;overflow:hidden}
+.gh-layout{display:block;width:100%;height:calc(100% - 72px);max-width:none;margin:0;overflow:hidden}
+.gh-side{display:none!important}
+.gh-main{height:100%;min-height:0;overflow-y:auto;overflow-x:hidden;padding:0 clamp(12px,2.5vw,32px) 20px}
+.gh-top{position:relative;top:auto;flex:0 0 72px}
+.gh-page{width:100%;max-width:none}
+.gh-footer{padding-bottom:10px}
+@media(max-width:720px){.gh-layout{height:calc(100% - 60px)}.gh-top{height:60px;min-height:60px;flex-basis:60px}.gh-main{padding:0 10px 14px}.gh-footer{display:none}}
+/* Extra readable crosshair presets: ring-dot, open cross, chevron and four-point */
+.gh-crosshair.ringdot{border:2px solid var(--cross-color);border-radius:50%}
+.gh-crosshair.ringdot:after{content:"";position:absolute;left:50%;top:50%;width:22%;height:22%;border-radius:50%;background:var(--cross-color);transform:translate(-50%,-50%)}
+.gh-crosshair.open{background:linear-gradient(var(--cross-color),var(--cross-color)) center top/2px 28% no-repeat,linear-gradient(var(--cross-color),var(--cross-color)) center bottom/2px 28% no-repeat,linear-gradient(var(--cross-color),var(--cross-color)) left center/28% 2px no-repeat,linear-gradient(var(--cross-color),var(--cross-color)) right center/28% 2px no-repeat}
+.gh-crosshair.chevron:before{content:"⌄";font-size:calc(var(--cross-size)*.9);line-height:var(--cross-size);font-weight:900;color:var(--cross-color);position:absolute;left:0;top:0;width:100%;text-align:center}
+.gh-crosshair.fourpoint:before,.gh-crosshair.fourpoint:after{content:"";position:absolute;background:var(--cross-color);left:50%;top:50%;transform:translate(-50%,-50%)}
+.gh-crosshair.fourpoint:before{width:2px;height:100%}.gh-crosshair.fourpoint:after{height:2px;width:100%}
+.gh-aim-preview{min-height:300px}
