@@ -10,7 +10,10 @@ const APP_SHELL = [
   "./logo.svg",
   "./aliyankee-pay.html",
   "./aliyankee-pay.css",
-  "./aliyankee-pay.js"
+  "./aliyankee-pay.js",
+  "./gamehub.html",
+  "./gamehub.css",
+  "./gamehub.js"
 ];
 self.addEventListener("install", event => {
   event.waitUntil(
