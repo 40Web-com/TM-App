@@ -94,6 +94,8 @@ class ScreenCaptureService : Service() {
                     x += 12
                 }
                 val averageLuma = if (count > 0) total / count else 0
+                val metrics = getSharedPreferences("tm_capture_metrics", MODE_PRIVATE)
+                metrics.edit().putLong("last_sample_at", now).putLong("average_luma", averageLuma).putLong("sample_count", metrics.getLong("sample_count", 0L) + 1L).apply()
                 val update = Intent("com.tm.gamecompanion.FRAME_SAMPLE").setPackage(packageName)
                     .putExtra("timestamp", now).putExtra("average_luma", averageLuma)
                 sendBroadcast(update)
