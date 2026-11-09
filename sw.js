@@ -1,4 +1,4 @@
-const CACHE_NAME = "tm-app-pages-v147";
+const CACHE_NAME = "tm-app-pages-v148";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -8,6 +8,8 @@ const APP_SHELL = [
   "./pay-menu.js",
   "./manifest.webmanifest",
   "./logo.svg",
+  "./icons/icon-192.png",
+  "./icons/icon-512.png",
   "./aliyankee-pay.html",
   "./aliyankee-pay.css",
   "./aliyankee-pay.js",
