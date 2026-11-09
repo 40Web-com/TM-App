@@ -22,7 +22,7 @@ let html = await fs.readFile(indexPath, "utf8");
 html = html.replace(/<script src="\.\/main\.js[^"]*" defer><\/script>/, '<script type="module" src="./assets/native-entry.js"></script>');
 html = html.replace(/<script>if \("serviceWorker" in navigator\)[\s\S]*?<\/script>/, "");
 html = html.replace(/<button id="tm-install-app"[\s\S]*?<\/button>\s*<div id="tm-install-help"[\s\S]*?<\/div>/, "");
-html = html.replace(/<script>\\s*\\(function\\(\\)\\{\\s*const button=document.getElementById\\("tm-install-app"\\);[\\s\\S]*?<\\/script>/, "");
+html = html.replace(/<script>\s*\(function\(\)\{\s*const button=document.getElementById\("tm-install-app"\);[\s\S]*?<\/script>/, "");
 await fs.writeFile(indexPath, html);
 const svg = await fs.readFile(path.join(root, "logo.svg"));
 await fs.mkdir(path.join(root, "resources"), { recursive: true });
