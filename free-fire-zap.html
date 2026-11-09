@@ -51,3 +51,8 @@ async function loadAdminClaims(){const el=document.querySelector("#adminclaims")
 nav.addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(b){if(b.dataset.tab==="uid"){changeUid();return;}tab=b.dataset.tab;render()}});
 load();verifyPaystackReturn();
 </script></body></html>
+/* Improve readability: deep black text for brown labels */
+body,body *:not(button):not(.active){text-shadow:none!important}
+body{color:#100d14!important}
+main,main section,main article,main .card,main .stat,main .item,main p,main small,main label,main h1,main h2,main h3,main .muted,main .eyebrow,main .hero p,main .hero h2{color:#100d14!important}
+main .muted,main small,main p{color:#211a26!important}
