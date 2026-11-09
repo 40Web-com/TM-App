@@ -71,3 +71,8 @@ html,body{width:100%!important;max-width:100%!important;overflow-x:hidden!import
 @media(max-width:420px){.gh-aim-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}.gh-aim-controls{grid-template-columns:1fr!important}.gh-aim-controls .gh-colors,.gh-aim-controls .gh-primary{grid-column:auto}.gh-hud-import>*{width:100%!important}.gh-hud-actions{display:grid!important;grid-template-columns:1fr!important}}
 
 .gh-aim-grid{max-height:390px!important;overflow-y:auto!important;overscroll-behavior:contain!important;padding:2px 4px 8px 2px!important;scrollbar-width:thin!important;scrollbar-color:#b79acb #f4ecfa!important}
+
+/* Improve readability: replace brown/sepia room copy with deep black */
+.gh-app,.gh-app .gh-page,.gh-app .gh-panel,.gh-app .gh-pagehead,.gh-app .gh-sectionhead,.gh-app .gh-kicker,.gh-app h1,.gh-app h2,.gh-app h3,.gh-app p,.gh-app label,.gh-app small,.gh-app .gh-smallnote,.gh-app .gh-aim-preset,.gh-app .gh-aim-preset b,.gh-app .gh-aim-preset small,.gh-app .gh-hud-placeholder,.gh-app .gh-hud-upload-name,.gh-app .gh-pill{color:#100d14!important}
+.gh-app .gh-pagehead p,.gh-app .gh-sectionhead p,.gh-app .gh-smallnote,.gh-app .gh-hud-upload-name,.gh-app label{color:#211a26!important}
+.gh-app button.gh-secondary,.gh-app .gh-aim-preset{color:#100d14!important}
