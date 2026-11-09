@@ -966,3 +966,53 @@ body:has(.tm-global-bottom-nav) .page-content{padding-bottom:calc(86px + env(saf
 .duel-delete-event{margin-top:7px;background:#fff0f2!important;color:#b72c4c!important;border:1px solid #f2b7c4!important}
 .duel-activities-room{padding:16px;border-radius:18px;border:1px solid #e7d6f4;background:linear-gradient(145deg,#fff,#faf3ff)}
 @media(max-width:600px){.duel-daily-emote{gap:8px;padding:9px}.duel-daily-art{width:52px;height:52px;flex-basis:52px}.duel-daily-copy b{font-size:12px}.duel-daily-copy small{font-size:9px}.duel-daily-button{padding:10px 9px;font-size:9px}.duel-hero-emblem{display:none!important}}
+
+/* TM gaming account refresh: stable drawer, visible logout and gamer-first settings */
+.right-menu{z-index:120!important;padding:calc(18px + env(safe-area-inset-top)) 18px calc(18px + env(safe-area-inset-bottom))!important;overflow:hidden;gap:16px!important}
+.menu-backdrop{z-index:119!important}
+.right-menu .menu-head{flex:0 0 auto}
+.right-menu .menu-user{flex:0 0 auto}
+.right-menu nav{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:2px 0 12px}
+.right-menu .menu-logout{display:flex!important;flex:0 0 auto;align-items:center;justify-content:center;min-height:54px;margin:0!important;position:relative;z-index:2;border:1px solid #fb7185!important;background:linear-gradient(110deg,#fff1f2,#ffe4e6)!important;color:#9f1239!important;box-shadow:0 8px 22px #9f12391a}
+.menu-toggle{position:relative;z-index:121;touch-action:manipulation}
+body.menu-open{overflow:hidden}
+.game-settings-page,.gamer-profile-page{max-width:1040px;margin:0 auto;color:#eaf2ff}
+.game-settings-hero,.gamer-profile-hero{position:relative;overflow:hidden;padding:26px;border:1px solid #273d69;border-radius:22px;background:radial-gradient(circle at 90% 10%,#243d79 0,transparent 38%),linear-gradient(125deg,#0b1428,#111f3e 58%,#171a3c);color:#edf4ff}
+.game-settings-kicker,.game-settings-index{display:block;color:#69d5ff;font-size:10px;font-weight:900;letter-spacing:1.7px}
+.game-settings-hero h1,.gamer-profile-hero h1{margin:10px 0;color:#f3f7ff;font-size:clamp(30px,6vw,44px);letter-spacing:1px}
+.game-settings-hero h1 em,.gamer-profile-hero h1 em{color:#8d8cff;font-style:normal}
+.game-settings-hero p,.gamer-profile-hero p{margin:0;color:#b6c8e8;font-size:13px}
+.game-settings-player{display:flex;align-items:center;gap:12px;margin-top:22px;padding:13px;border:1px solid #344a77;border-radius:15px;background:#101d38}
+.game-settings-avatar{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#1a8dbd,#6948ca);font-size:23px}
+.game-settings-player>span:nth-child(2){display:grid;gap:4px;min-width:0}.game-settings-player b{color:#fff}.game-settings-player small{color:#93a9cf;font-size:10px;letter-spacing:.6px}
+.game-settings-online{margin-left:auto;color:#65e6ba;font-size:9px;font-weight:900;white-space:nowrap}
+.game-settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:16px}
+.game-settings-card,.gamer-profile-section{min-width:0;padding:19px;border:1px solid #dce6f5;border-radius:17px;background:linear-gradient(150deg,#fff,#f5f8ff);box-shadow:0 8px 26px #12264a0a}
+.game-settings-card h2,.gamer-profile-section h2{margin:7px 0;color:#14233e;font-size:19px}
+.game-settings-card>p,.gamer-profile-section>p{margin:0 0 13px;color:#687a96;font-size:12px;line-height:1.5}
+.game-setting-row{display:flex;width:100%;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border:0;border-top:1px solid #e8eef7;background:transparent;text-align:left;color:#152540}
+.game-setting-row span,.game-setting-toggle span{display:grid;gap:4px;min-width:0}.game-setting-row strong,.game-setting-toggle strong{font-size:13px}.game-setting-row small,.game-setting-toggle small{color:#72819a;font-size:11px;line-height:1.4}.game-setting-row b{font-size:23px;color:#7187ad}
+.game-setting-toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid #e8eef7;color:#152540}
+.game-setting-toggle input{width:20px;height:20px;accent-color:#5b63e6;flex:0 0 auto}
+.game-settings-danger{border-color:#fecdd3}.game-logout-button,.gamer-logout-inline{width:100%;min-height:49px;border:1px solid #fecdd3;border-radius:12px;background:#fff1f2;color:#be123c;font-weight:900;letter-spacing:.6px}
+.game-settings-foot{text-align:center;color:#8798b2;font-size:9px;letter-spacing:1.5px;margin:20px 0}
+.gamer-profile-hero{margin-bottom:15px}
+.gamer-card-preview{margin-top:20px;overflow:hidden;border:1px solid #3c5485;border-radius:17px;background:#101c36}
+.gamer-card-cover{display:flex;justify-content:space-between;padding:18px;background:linear-gradient(105deg,#176eaa,#5343b7 65%,#a33f99);color:#fff;font-size:10px;font-weight:900;letter-spacing:1px}
+.gamer-card-main{display:flex;align-items:center;gap:13px;padding:15px;color:#fff}
+.gamer-avatar-wrap{position:relative;display:grid;place-items:center;width:62px;height:62px;flex:0 0 62px;border:2px solid #66d8ff;border-radius:16px;background:#203b65;color:#fff;font-size:28px;overflow:visible}
+.gamer-avatar-wrap img{width:100%;height:100%;object-fit:cover;border-radius:14px}.gamer-avatar-wrap label{position:absolute;right:-7px;bottom:-7px;width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:#6b62e8;color:white;cursor:pointer}
+.gamer-card-main h2{margin:0;color:#fff;font-size:17px}.gamer-card-main p{margin:4px 0;color:#b8c9e8;font-size:11px}.gamer-card-main small{color:#8ea5ce;font-size:9px}
+.gamer-card-status{margin-left:auto;color:#6ee7b7;font-size:9px;font-weight:900;white-space:nowrap}
+.gamer-profile-form{display:grid;gap:13px}
+.gamer-profile-section{padding:19px}
+.gamer-profile-section>label,.gamer-fields label{display:grid;gap:7px;color:#263a5b;font-size:12px;font-weight:750}
+.gamer-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.gamer-fields input,.gamer-fields select,.gamer-profile-section textarea,.gamer-profile-section>label input{width:100%;min-width:0;min-height:45px;padding:10px 12px;border:1px solid #d5deec;border-radius:10px;background:#fff;color:#172842;font:inherit}
+.gamer-profile-section textarea{resize:vertical;min-height:96px}
+.gamer-upload-row{display:flex;align-items:center;gap:12px;margin:12px 0;padding:13px;border:1px solid #dce6f5;border-radius:12px;background:#f7f9ff;color:#263a5b;cursor:pointer}
+.gamer-upload-icon{font-size:23px}.gamer-upload-row span:nth-child(2){display:grid;gap:4px;flex:1}.gamer-upload-row small{color:#7585a0;font-size:11px}.gamer-upload-row>strong{color:#5358ce;font-size:10px}
+.gamer-profile-status{margin:0;color:#526684;font-size:12px}
+.gamer-save-button{min-height:52px;border:0;border-radius:13px;background:linear-gradient(100deg,#246bd5,#6558dc);color:#fff;font-weight:900;letter-spacing:.8px;box-shadow:0 9px 24px #4357c833}
+.gamer-logout-inline{background:#fff;color:#be123c}
+@media(max-width:640px){.game-settings-grid{grid-template-columns:1fr}.game-settings-hero,.gamer-profile-hero{padding:19px;border-radius:17px}.game-settings-player{gap:9px}.game-settings-online{font-size:8px}.game-settings-card,.gamer-profile-section{padding:16px}.gamer-fields{grid-template-columns:1fr}.gamer-card-main{gap:10px;padding:12px}.gamer-card-status{font-size:8px}}
