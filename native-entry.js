@@ -7,11 +7,13 @@ window.TMNative = {
   openBrowser: (url) => Browser.open({ url, presentationStyle: "popover" })
 };
 
-App.addListener("appUrlOpen", ({ url }) => {
-  if (url && url.startsWith("tmapp://auth/callback")) {
-    window.dispatchEvent(new CustomEvent("tm-native-oauth-callback", { detail: { url } }));
-  }
-});
+function deliverOAuthUrl(url) {
+  if (!url || !url.startsWith("tmapp://auth/callback")) return;
+  window.__TM_PENDING_OAUTH_URL = url;
+  window.dispatchEvent(new CustomEvent("tm-native-oauth-callback", { detail: { url } }));
+}
+App.addListener("appUrlOpen", ({ url }) => deliverOAuthUrl(url));
+App.getLaunchUrl().then(result => deliverOAuthUrl(result?.url)).catch(() => {});
 
 function startTM() {
   if (document.querySelector('script[data-tm-main]')) return;
