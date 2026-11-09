@@ -1,4 +1,4 @@
-const CACHE_NAME = "tm-app-pages-v146";
+const CACHE_NAME = "tm-app-pages-v147";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -13,7 +13,9 @@ const APP_SHELL = [
   "./aliyankee-pay.js",
   "./gamehub.html",
   "./gamehub.css",
-  "./gamehub.js"
+  "./gamehub.js",
+  "./discover.css",
+  "./google-auth.css"
 ];
 self.addEventListener("install", event => {
   event.waitUntil(
