@@ -1,10 +1,11 @@
-name: Build and Publish TM Android Companion
+name: Build and Publish TM Game Hub Android App
 
 on:
   workflow_dispatch:
   push:
     paths:
       - 'android-companion/**'
+      - 'gamehub.js'
       - '.github/workflows/build-android-companion.yml'
 
 permissions:
@@ -13,6 +14,7 @@ permissions:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,18 +25,24 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android 35 platform and build tools
+        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
 
-      - name: Build debug APK
-        run: gradle -p android-companion :app:assembleDebug
+      - name: Build TM Game Hub APK
+        run: gradle -p android-companion --no-daemon --stacktrace :app:assembleDebug
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: tm-game-companion-debug-apk
+          name: tm-game-hub-android-apk
           path: android-companion/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
@@ -42,8 +50,8 @@ jobs:
       - name: Publish APK to GitHub Releases
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: tm-companion-build-${{ github.run_number }}
-          name: TM Android Companion build ${{ github.run_number }}
+          tag_name: tm-game-hub-build-${{ github.run_number }}
+          name: TM Game Hub Android build ${{ github.run_number }}
           prerelease: true
           generate_release_notes: true
           files: android-companion/app/build/outputs/apk/debug/app-debug.apk
