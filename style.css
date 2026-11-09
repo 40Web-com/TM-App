@@ -860,3 +860,13 @@ body:has(.tm-gamehub-embedded) .main-content{min-width:0}
 body:has(.tm-gamehub-embedded) .page-content{max-width:none!important;width:100%!important;margin:0!important;padding:0!important;overflow:hidden}
 body:has(.tm-gamehub-embedded) .tm-center-nav{z-index:95}
 @media(max-width:760px){body:has(.tm-gamehub-embedded) .page-content{padding:0 0 calc(62px + env(safe-area-inset-bottom))!important}}
+
+/* TM Game Hub embedded room sizing and TM-brand shell */
+.tm-gamehub-embedded{height:calc(100dvh - 144px)!important;min-height:0!important;max-height:none!important;overflow:hidden!important;background:#fff!important;border:0!important;border-radius:0!important;display:flex!important;flex-direction:column!important;width:100%!important;margin:0!important}
+.tm-gamehub-embedded>header{flex:0 0 46px!important;min-height:46px!important;padding:6px 14px!important;background:#4A0E1B!important;color:#fff!important;border:0!important;gap:12px!important}
+.tm-gamehub-embedded>header button{background:#6A2034!important;color:#fff!important;border:1px solid #8B2946!important;border-radius:22px!important;padding:7px 12px!important;min-height:36px!important}
+.tm-gamehub-embedded>header strong{color:#fff!important;font-size:13px!important;font-weight:700!important}
+.tm-gamehub-embedded iframe{flex:1 1 auto!important;display:block!important;width:100%!important;height:0!important;min-height:0!important;border:0!important;background:#fff!important}
+body:has(.tm-gamehub-embedded) .main-content{height:calc(100dvh - 68px)!important;min-height:0!important;overflow:hidden!important;display:flex!important;flex-direction:column!important}
+body:has(.tm-gamehub-embedded) .page-content{flex:1 1 auto!important;height:0!important;min-height:0!important;max-height:none!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;padding:0!important;margin:0!important;width:100%!important;max-width:none!important}
+@media(max-width:760px){.tm-gamehub-embedded{height:calc(100dvh - 124px - env(safe-area-inset-top) - env(safe-area-inset-bottom))!important}.tm-gamehub-embedded>header{flex-basis:42px!important;min-height:42px!important;padding:4px 8px!important}.tm-gamehub-embedded>header button{min-height:34px!important;padding:6px 9px!important;font-size:12px!important}.tm-gamehub-embedded>header strong{font-size:11px!important}body:has(.tm-gamehub-embedded) .main-content{height:calc(100dvh - 62px - env(safe-area-inset-top))!important}body:has(.tm-gamehub-embedded) .page-content{padding:0!important}}
