@@ -9,9 +9,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="TM App">
   <link rel="manifest" href="./manifest.webmanifest?v=3">
-  <link rel="icon" type="image/svg+xml" href="./logo.svg?v=2">
+  <link rel="icon" type="image/svg+xml" href="./logo.svg?v=3">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
-  <link rel="stylesheet" href="./style.css?v=117">
+  <link rel="stylesheet" href="./style.css?v=118">
   <link rel="stylesheet" href="./auth.css?v=8">
   <title>TM App — Game Hub</title>
   <link rel="stylesheet" href="./discover.css?v=6">
@@ -23,7 +23,7 @@
   </style>
 </head>
 <body>
-  <div id="app" aria-live="polite"><div class="app-loading"><img src="./logo.svg" alt="TM App"><span>Loading TM App…</span></div></div>
+  <div id="app" aria-live="polite"><div class="app-loading"><img src="./logo.svg?v=3" alt="TM App"><span>Loading TM App…</span></div></div>
   <button id="tm-install-app" type="button"><img src="./icons/icon-192.png" alt="">Install TM App</button>
   <div id="tm-install-help" role="status">To install: open Chrome’s ⋮ menu, then choose <b>Install app</b> or <b>Add to Home screen</b>.</div>
   <script>
@@ -50,7 +50,7 @@
     })();
   </script>
   <script>window.addEventListener("error",function(e){const a=document.querySelector("#app");if(a){a.innerHTML="<div style=\"padding:24px;font:16px system-ui;color:#b42318\"><h2>TM App startup error</h2><p>"+String(e.message||"Script failed").replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))+"</p><small>Reload after fixing this error.</small></div>";}});window.addEventListener("unhandledrejection",function(e){console.error("TM startup promise:",e.reason);});</script>
-  <script src="./main.js?v=129" defer></script>
+  <script src="./main.js?v=130" defer></script>
   <script src="./pay-menu.js?v=4"></script>
   <script>if ("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=148").catch(()=>{}));</script>
 </body>
