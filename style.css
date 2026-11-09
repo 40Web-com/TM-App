@@ -909,3 +909,30 @@ body:has(.tm-ref-home) .tm-center-nav,body:has(.tm-ref-home) .mobile-nav{display
 body:has(.tm-global-bottom-nav) .page-content{padding-bottom:calc(86px + env(safe-area-inset-bottom))!important}body:has(.tm-global-bottom-nav) .main-content{padding-bottom:0!important}.tm-ref-home{padding-bottom:calc(100px + env(safe-area-inset-bottom))!important}
 .tm-ref-head-action{display:grid;place-items:center;border:1px solid #eee4f4!important}.tm-ref-head-action .tm-head-icon{font-size:18px;color:#654184}.tm-ref-head-action i{right:6px;top:5px}
 @media(min-width:700px){.tm-global-bottom-nav{max-width:560px!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important;border:1px solid #eee2f5!important;border-radius:22px 22px 0 0!important}.tm-global-bottom-nav .tm-global-topup{margin-top:-18px!important}}
+
+
+/* Game Hub embedded-room visibility repair */
+.tm-gamehub-embedded{
+  display:flex!important;
+  flex-direction:column!important;
+  height:auto!important;
+  min-height:calc(100dvh - 150px)!important;
+  overflow:visible!important;
+}
+.tm-gamehub-embedded iframe{
+  display:block!important;
+  flex:0 0 auto!important;
+  width:100%!important;
+  height:calc(100dvh - 190px)!important;
+  min-height:480px!important;
+  border:0!important;
+}
+@media(max-width:760px){
+  .tm-gamehub-embedded{
+    min-height:calc(100dvh - 110px)!important;
+  }
+  .tm-gamehub-embedded iframe{
+    height:calc(100dvh - 170px)!important;
+    min-height:500px!important;
+  }
+}
