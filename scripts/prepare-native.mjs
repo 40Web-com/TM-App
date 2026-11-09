@@ -26,5 +26,6 @@ await fs.writeFile(indexPath, html);
 const svg = await fs.readFile(path.join(root, "logo.svg"));
 await fs.mkdir(path.join(root, "resources"), { recursive: true });
 await sharp(svg).resize(1024, 1024, { fit: "contain", background: "#100626" }).png().toFile(path.join(root, "resources/icon.png"));
-const splashSvg = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512"><rect width="512" height="512" fill="#100626"/><image href="data:image/svg+xml;base64,${svg.toString("base64")}" x="112" y="72" width="288" height="288"/><text x="256" y="426" fill="#fff" font-family="Arial,sans-serif" font-size="42" font-weight="700" text-anchor="middle">TM APP</text></svg>`);\nawait sharp(splashSvg).png().toFile(path.join(root, "resources/splash.png"));
+const splashSvg = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512"><rect width="512" height="512" fill="#100626"/><image href="data:image/svg+xml;base64,${svg.toString("base64")}" x="112" y="72" width="288" height="288"/><text x="256" y="426" fill="#fff" font-family="Arial,sans-serif" font-size="42" font-weight="700" text-anchor="middle">TM APP</text></svg>`);
+await sharp(splashSvg).png().toFile(path.join(root, "resources/splash.png"));
 console.log("Prepared bundled TM App assets and launcher artwork.");
