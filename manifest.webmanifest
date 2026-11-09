@@ -1,10 +1,11 @@
 {
-  "name": "TM App",
-  "short_name": "TM",
-  "description": "Connect, chat, discover people, and explore AI Studio.",
+  "name": "TM Game Hub",
+  "short_name": "TM Game Hub",
+  "description": "Free Fire training, aim setup, HUD customization, sensitivity and gaming utilities.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#FFFFFF",
-  "theme_color": "#FFFFFF",
-  "scope": "./"
+  "background_color": "#080B14",
+  "theme_color": "#080B14",
+  "scope": "./",
+  "orientation": "any"
 }
