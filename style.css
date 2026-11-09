@@ -838,3 +838,19 @@ body.tm-free-fire-zap .tm-embedded-frame{display:block;height:0;min-height:0;fle
 .right-menu nav{flex:0 1 auto;min-height:0;overflow-y:auto}
 .menu-logout{position:sticky;bottom:0;z-index:2;flex:0 0 auto;margin-top:auto!important;margin-bottom:env(safe-area-inset-bottom);width:100%;min-height:48px}
 @media(max-width:760px){.tm-gamehub-embedded{height:calc(100dvh - 150px);min-height:430px;margin:0 -10px;border-radius:12px}.tm-tools-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}.tm-gamehub-embedded>header{padding:8px 10px}.tm-gamehub-embedded>header strong{font-size:12px}}
+
+/* Repair Free Fire tools section grid and card spacing */
+.tm-game-tools-room{clear:both;display:block!important;width:100%;box-sizing:border-box;margin-top:20px}
+.tm-game-tools-room .tm-game-zaps-head{margin-bottom:14px}
+.tm-game-tool-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;width:100%;align-items:stretch}
+.tm-game-tool-card{position:relative;display:flex;align-items:center;gap:14px;min-width:0;min-height:150px;padding:12px;border:1px solid rgba(180,140,220,.28);border-radius:18px;background:linear-gradient(135deg,#28163b,#35204a 60%,#20152f);color:#fff;text-align:left;overflow:hidden;cursor:pointer;box-shadow:0 5px 15px rgba(34,12,52,.12)}
+.tm-game-tool-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(34,12,52,.20)}
+.tm-game-tool-art{position:relative;flex:0 0 84px;width:84px;height:124px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:12px;background:linear-gradient(145deg,#41265d,#191126)}
+.tm-game-tool-art img{width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 5px 8px rgba(0,0,0,.25))}
+.tm-game-tool-art span{position:absolute;top:7px;left:7px;background:#7c35b7;color:#fff;font-size:18px;font-weight:900;border-radius:7px;padding:4px 6px}
+.tm-game-tool-copy{display:flex;flex-direction:column;gap:8px;min-width:0;flex:1}
+.tm-game-tool-copy strong{font-size:clamp(14px,1.5vw,18px);line-height:1.2}
+.tm-game-tool-copy small{font-size:12px;line-height:1.35;color:#d6c8e5}
+.tm-game-tool-copy em{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.07em;color:#e5b7ff;margin-top:auto}
+@media(max-width:760px){.tm-game-tool-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.tm-game-tool-card{min-height:132px;padding:8px;gap:8px;border-radius:13px}.tm-game-tool-art{flex-basis:64px;width:64px;height:112px}.tm-game-tool-art span{font-size:14px;top:4px;left:4px;padding:3px}.tm-game-tool-copy{gap:5px}.tm-game-tool-copy strong{font-size:13px}.tm-game-tool-copy small{font-size:10px}.tm-game-tool-copy em{font-size:9px}}
+@media(max-width:360px){.tm-game-tool-card{flex-direction:column;align-items:stretch}.tm-game-tool-art{width:100%;height:100px;flex-basis:auto}}
