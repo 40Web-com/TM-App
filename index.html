@@ -1,23 +1,18 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
-  <meta name="theme-color" content="#FFFFFF">
-  <meta name="description" content="TM AI Studio — AI photo, video and creative tools.">
-  <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="icon" type="image/svg+xml" href="./logo.svg">
-  <link rel="stylesheet" href="./style.css?v=92">
-  <link rel="stylesheet" href="./auth.css?v=8">
-  <title>TM AI Studio — Create something extraordinary</title>
-  <link rel="stylesheet" href="./discover.css?v=6">
-  <link rel="stylesheet" href="./google-auth.css?v=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080b14">
+<meta name="description" content="TM Game Hub — Free Fire training, aim setup, HUD customization, sensitivity and gaming utilities.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="./logo.svg">
+<link rel="stylesheet" href="./gamehub.css?v=1">
+<title>TM Game Hub — Prepare. Activate. Play.</title>
 </head>
 <body>
-  <div id="app" aria-live="polite"><div class="app-loading"><img src="./logo.svg" alt=""><span>Loading TM App…</span></div></div>
-  <script>window.addEventListener("error",function(e){const a=document.querySelector("#app");if(a){a.innerHTML="<div style=\"padding:24px;font:16px system-ui;color:#b42318\"><h2>TM App startup error</h2><p>"+String(e.message||"Script failed").replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))+"</p><small>Reload after fixing this error.</small></div>";}});window.addEventListener("unhandledrejection",function(e){console.error("TM startup promise:",e.reason);});</script>
-  <script src="./main.js?v=137" defer></script>
-  <script src="./pay-menu.js?v=4"></script>
-  <script>if ("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));</script>
+<div id="app"><div style="padding:24px;color:#fff;font:14px system-ui">Loading TM Game Hub…</div></div>
+<script src="./gamehub.js?v=1" defer></script>
+<script>if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));</script>
 </body>
 </html>
