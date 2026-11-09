@@ -1,0 +1,11 @@
+{
+  "appId": "com.tmgamehub.app",
+  "appName": "TM App",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": false,
+    "captureInput": false,
+    "webContentsDebuggingEnabled": false
+  }
+}
