@@ -1,10 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
-<title id="title">TM App gamer mascot logo</title>
-<defs><linearGradient id="purple" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f3c7ff"/><stop offset=".35" stop-color="#a855f7"/><stop offset=".72" stop-color="#6d28d9"/><stop offset="1" stop-color="#28104f"/></linearGradient><linearGradient id="fire" x1="0" y1="1" x2="0" y2="0"><stop stop-color="#5b21b6"/><stop offset=".55" stop-color="#a855f7"/><stop offset="1" stop-color="#e9b7ff"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-<path d="M126 10 147 44 181 19 178 58 221 45 203 82 238 99 204 120 225 153 186 151 177 190 147 166 128 206 109 166 79 190 70 151 31 153 52 120 18 99 53 82 35 45 78 58 75 19 109 44Z" fill="url(#fire)" stroke="#d8a5ff" stroke-width="4" filter="url(#glow)"/>
-<path d="M54 92 71 60 99 77 128 57 157 77 185 60 202 92 192 145 171 177 128 194 85 177 64 145Z" fill="#10091e" stroke="#b86cff" stroke-width="5"/>
-<path d="M80 112 97 90 128 85 159 90 176 112 165 146 128 164 91 146Z" fill="url(#purple)" stroke="#e6c7ff" stroke-width="3"/>
-<path d="M72 114 104 104 119 116 108 129 84 127Z M184 114 152 104 137 116 148 129 172 127Z" fill="#0a0613" stroke="#e5d0ff" stroke-width="3"/>
-<path d="M115 139 128 133 141 139 128 150Z" fill="#d9b4ff"/>
-<path d="M98 170 128 181 158 170 151 194 128 207 105 194Z" fill="#1a0c2e" stroke="#9c4dff" stroke-width="4"/>
-<text x="128" y="238" text-anchor="middle" font-family="Arial,sans-serif" font-weight="900" font-size="26" fill="#fff" stroke="#5b21b6" stroke-width="1">TM GAMING</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+<title id="title">TM App linked hearts crown logo</title>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#09051c"/><stop offset=".55" stop-color="#16062f"/><stop offset="1" stop-color="#080b27"/></linearGradient>
+  <linearGradient id="pink" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff75d5"/><stop offset=".48" stop-color="#ff168f"/><stop offset="1" stop-color="#b500e9"/></linearGradient>
+  <linearGradient id="violet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e9a0ff"/><stop offset=".45" stop-color="#9b39ff"/><stop offset="1" stop-color="#5415c8"/></linearGradient>
+  <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff0a3"/><stop offset=".5" stop-color="#ffc928"/><stop offset="1" stop-color="#e58b00"/></linearGradient>
+  <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="512" height="512" rx="112" fill="url(#bg)"/>
+<circle cx="256" cy="260" r="190" fill="#28104d" opacity=".22"/>
+<path d="M256 132 292 70 320 124 382 100 367 165 420 184 367 210 256 190 145 210 92 184 145 165 130 100 192 124 220 70Z" fill="url(#gold)" stroke="#ffe28a" stroke-width="7" stroke-linejoin="round" filter="url(#glow)"/>
+<path d="M256 172c-29-46-111-55-145-5-43 63 3 128 145 246 142-118 188-183 145-246-34-50-116-41-145 5Z" fill="url(#pink)" stroke="#ffb4e9" stroke-width="8" stroke-linejoin="round" filter="url(#glow)"/>
+<path d="M303 225c-21-34-82-41-107-4-31 46 2 93 107 178 105-85 138-132 107-178-25-37-86-30-107 4Z" fill="url(#violet)" stroke="#d9b1ff" stroke-width="7" stroke-linejoin="round"/>
+<path d="M76 315c89 88 260 108 365-11" fill="none" stroke="#ff70d9" stroke-width="13" stroke-linecap="round" filter="url(#glow)"/>
+<path d="M94 335c101 60 232 54 322-26" fill="none" stroke="#a65cff" stroke-width="6" stroke-linecap="round"/>
+</svg>
