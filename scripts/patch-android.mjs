@@ -25,4 +25,8 @@ for (const [folder,size] of Object.entries(densities)) {
   await fs.writeFile(path.join(dir,"ic_launcher.png"),png);
   await fs.writeFile(path.join(dir,"ic_launcher_round.png"),png);
 }
-console.log("Configured TM launcher icons and tmapp://auth/callback deep link.");
+const splash = await sharp({ create: { width: 512, height: 512, channels: 4, background: "#100626" } }).composite([{ input: await sharp(svg).resize(300,300,{fit:"contain"}).png().toBuffer(), left:106, top:74 }]).png().toBuffer();
+const drawable = path.join("android/app/src/main/res","drawable");
+await fs.mkdir(drawable,{recursive:true});
+await fs.writeFile(path.join(drawable,"splash.png"),splash);
+console.log("Configured TM launcher icons, splash screen and tmapp://auth/callback deep link.");
