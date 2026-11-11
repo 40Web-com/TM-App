@@ -176,3 +176,5 @@ body{background:linear-gradient(180deg,#fff 0%,#fbf9ff 100%)!important}
 .vb-toast{box-shadow:0 10px 32px #38204b22}
 @media(max-width:900px){.vb-markets{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.vb-shell.vb-full-room{padding:10px 10px 34px}.vb-arena-top{gap:8px;padding:0 10px;font-size:8px}.vb-markets{grid-template-columns:1fr}.vb-market{padding:12px}.vb-fighters{gap:7px;padding:12px 8px}.vb-fighter{grid-template-columns:44px 1fr;gap:7px}.vb-avatar{width:42px;height:42px}.vb-fighter-meta strong{font-size:12px}.vb-fighter-meta span{font-size:8px}.vb-vs{font-size:10px}}
+
+.vb-avatar img{display:block;width:100%;height:100%;object-fit:cover;border-radius:13px;filter:saturate(1.08)}
