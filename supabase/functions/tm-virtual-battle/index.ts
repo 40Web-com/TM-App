@@ -207,8 +207,10 @@ Deno.serve(async (req: Request) => {
 
       const { data: fighters, error: fighterError } = await db.from("tmvb_fighters").select("*").order("fighter_id");
       if (fighterError || !fighters || fighters.length < 2) return out(500, { error: "Fighter roster is not ready." });
-      const a = applyForm(fighters.find((f: any) => f.fighter_id === "nova") || fighters[0]);
-      const b = applyForm(fighters.find((f: any) => f.fighter_id === "vex") || fighters[1]);
+      const { count: completedCount } = await db.from("tmvb_matches").select("id", { count: "exact", head: true }).eq("status", "completed");
+      const pairIndex = ((completedCount || 0) * 2) % fighters.length;
+      const a = applyForm(fighters[pairIndex]);
+      const b = applyForm(fighters[(pairIndex + 1) % fighters.length]);
       const seed = randomSeed();
       const seedHash = await digest(seed);
       const { events, result } = simulate(seed, a, b);
@@ -254,16 +256,18 @@ Deno.serve(async (req: Request) => {
       matches = refreshed || matches || [];
       const ids = matches.map((m: any) => m.id);
       const today = new Date().toISOString().slice(0, 10);
-      const [{ data: markets }, { data: predictions }, { data: wallet }, { data: dailyGrant }] = await Promise.all([
+      const [{ data: markets }, { data: predictions }, { data: wallet }, { data: dailyGrant }, { data: roster }] = await Promise.all([
         ids.length ? db.from("tmvb_markets").select("*").in("match_id", ids) : Promise.resolve({ data: [] }),
         ids.length ? db.from("tmvb_predictions").select("id,match_id,market_id,selection,stake,odds,potential_return,status,created_at,settled_at").eq("user_id", userId).in("match_id", ids) : Promise.resolve({ data: [] }),
         db.from("tmvb_wallets").select("balance").eq("user_id", userId).single(),
         db.from("tmvb_daily_grants").select("id").eq("user_id", userId).eq("grant_date", today).maybeSingle(),
+        db.from("tmvb_fighters").select("fighter_id,display_name,call_sign,accent,matches_played,wins,losses,total_headshots").order("display_name"),
       ]);
       return out(200, {
         ok: true, balance: wallet?.balance ?? Number(balance.data ?? 1000),
         daily_claimed: Boolean(dailyGrant),
         matches: (matches || []).map((m: any) => publicMatch(m, markets || [], predictions || [])),
+        fighters: (roster || []).map((f: any) => ({ ...f, win_rate: f.matches_played ? Number((f.wins / f.matches_played * 100).toFixed(1)) : 50 })),
         user_id: userId,
       });
     }
