@@ -45,7 +45,7 @@ const bg=ctx.createLinearGradient(0,0,0,h);bg.addColorStop(0,"#101d34");bg.addCo
 ctx.strokeStyle="#223958";ctx.lineWidth=1;for(let x=0;x<w;x+=48){ctx.globalAlpha=.35;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}for(let y=0;y<h;y+=42){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}ctx.globalAlpha=1;
 ctx.fillStyle="#14243c";for(let i=0;i<12;i++){const x=i*88+12,ht=65+(i*37)%100;ctx.fillRect(x,h-ht-55,52,ht);ctx.fillStyle="#294364";for(let j=0;j<3;j++)ctx.fillRect(x+9+j*13,h-ht-42,5,5);ctx.fillStyle="#14243c";}
 ctx.strokeStyle="#37608a";ctx.globalAlpha=.55;ctx.beginPath();ctx.moveTo(0,h-54);ctx.lineTo(w,h-54);ctx.stroke();ctx.globalAlpha=1;
-const now=performance.now(),running=m?.status==="running",t=m?.elapsed_sec||0,pulse=running?Math.sin(now*.012):0;
+const now=performance.now(),running=m?.status==="running",startMs=m?new Date(m.scheduled_start_at).getTime():0,t=m?Math.min(60,Math.max(0,(Date.now()-startMs)/1000)):0,pulse=running?Math.sin(now*.012):0;if(m?.status==="scheduled"){const left=Math.max(0,Math.ceil((startMs-Date.now())/1000));setText("vb-clock","00:"+String(left).padStart(2,"0"));}else if(running){setText("vb-clock","00:"+String(Math.max(0,60-Math.floor(t))).padStart(2,"0"));}
 const ax=180+Math.sin(now*.0018)*13,bx=780-Math.sin(now*.0018)*13;let recoilA=0,recoilB=0;
 for(const item of visualEvents){const age=now-item.at;if(age<260){const amount=1-age/260;if(item.event.actor_id===m?.fighter_a?.fighter_id)recoilA=Math.max(recoilA,amount);if(item.event.actor_id===m?.fighter_b?.fighter_id)recoilB=Math.max(recoilB,amount);}}
 fighterDraw(ax,h-55,1,"#55b9ff",now,0,recoilA);fighterDraw(bx,h-55,-1,"#c28aff",now,0,recoilB);
