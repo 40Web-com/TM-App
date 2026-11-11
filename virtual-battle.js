@@ -38,12 +38,12 @@ renderMarkets(m);renderLiveFeed(m);draw();
 }
 function renderMarkets(m){
  const host=$("vb-markets");if(!host)return;
- if(m.status!=="scheduled"){host.innerHTML='<div class="vb-loading">'+(m.status==="running"?"Markets are locked for this battle. Watch the live action.":"This battle is complete. The next match is preparing automatically.")+'</div>';return;}
+ const accepting=m.status==="scheduled";
  const markets=m.markets||[];if(!markets.length){host.innerHTML='<div class="vb-loading">Loading markets…</div>';return;}
  host.innerHTML=markets.map(market=>{
   const mine=(m.predictions||[]).find(p=>p.market_id===market.id);
   const options=Object.entries(market.selections||{});
-  return '<article class="vb-market"><div class="vb-market-heading"><h3>'+esc(market.label)+'</h3><small>'+options.length+' OUTCOMES</small></div><div class="vb-market-options">'+options.map(([key,label])=>'<button class="vb-option '+(selected?.market?.id===market.id&&selected.selection===key?'selected':'')+'" data-market="'+market.id+'" data-selection="'+esc(key)+'" '+(mine?'disabled':'')+'><span>'+esc(label)+'</span><b>'+Number(market.odds?.[key]||1).toFixed(2)+'×</b></button>').join('')+'</div>'+(mine?'<p class="vb-market-locked">Your prediction is submitted for this market.</p>':'')+'</article>';
+  const locked=!accepting||market.status!=="open"||Boolean(mine); return '<article class="vb-market"><div class="vb-market-heading"><h3>'+esc(market.label)+'</h3><small>'+(locked?'LOCKED · ':'OPEN · ')+options.length+' OUTCOMES</small></div><div class="vb-market-options">'+options.map(([key,label])=>'<button class="vb-option '+(selected?.market?.id===market.id&&selected.selection===key?'selected':'')+'" data-market="'+market.id+'" data-selection="'+esc(key)+'" '+(locked?'disabled':'')+'><span>'+esc(label)+'</span><b>'+Number(market.odds?.[key]||1).toFixed(2)+'×</b></button>').join('')+'</div>'+(mine?'<p class="vb-market-locked">Your prediction is submitted for this market.</p>':locked?'<p class="vb-market-locked">Predictions are closed. Odds remain visible.</p>':'')+'</article>';
  }).join('');
  host.querySelectorAll("[data-market]").forEach(btn=>btn.addEventListener("click",()=>{
   const market=markets.find(x=>x.id===btn.dataset.market),selection=btn.dataset.selection;
