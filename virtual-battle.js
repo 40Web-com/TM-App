@@ -11,7 +11,7 @@ async function api(action,payload={}){const res=await fetch(API_URL,{method:"POS
 function latestMatch(){return state?.matches?.[0]||null;}
 function activeMatch(){return state?.matches?.find(m=>m.status==="scheduled"||m.status==="running")||latestMatch();}
 function portraitData(fighter,side){
- const source=String(fighter?.fighter_id||fighter?.display_name||side);let h=2166136261;for(let i=0;i<source.length;i++)h=Math.imul(h^source.charCodeAt(i),16777619);const pick=Math.abs(h>>>0)%8+1;return "./assets/virtual-battle/fighters/tm-fighter-"+String(pick).padStart(2,"0")+".svg";
+ const source=String(fighter?.fighter_id||fighter?.display_name||side);let h=2166136261;for(let i=0;i<source.length;i++)h=Math.imul(h^source.charCodeAt(i),16777619);const base=fighter?.country==="Nigeria"?0:4;const pick=base+(Math.abs(h>>>0)%4)+1;return "./assets/virtual-battle/fighters/tm-fighter-"+String(pick).padStart(2,"0")+".svg";
 }
 function setFighterPortrait(id,fighter,side){
  const host=$(id);if(!host)return;
