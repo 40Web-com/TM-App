@@ -91,12 +91,12 @@ function simulate(seed: string, a: any, b: any) {
         if(ms%1000===0){const move=rand();if(move<0.10){actor.hideUntil=ms/1000+1.5;actor.x=Math.max(40,Math.min(920,actor.x-dir*36));totalHides++;push(ms/1000,round,"hide",actor,target);}else if(move<0.22){actor.x=Math.max(40,Math.min(920,actor.x+dir*65));actor.y=(rand()-.5)*48;totalFlanks++;push(ms/1000,round,"flank",actor,target);}else if(move<0.32&&actor.stamina>15){actor.stamina-=15;actor.x=Math.max(40,Math.min(920,actor.x-dir*62));totalSlides++;push(ms/1000,round,"slide",actor,target);}else if(dist>330){actor.x+=dir*22;actor.stamina=Math.max(0,actor.stamina-1);totalChases++;push(ms/1000,round,"chase",actor,target);}else if(dist<190){actor.x-=dir*18;actor.y=(rand()-.5)*40;}else{actor.y=Math.sin(ms/3000+actor.id.length)*30;}actor.x=Math.max(40,Math.min(920,actor.x));if(rand()<0.16){totalJumps++;push(ms/1000,round,"jump",actor,target);}push(ms/1000,round,"move",actor,target,0,false,{actor_x:actor.x,actor_y:actor.y});}
         if(actor.hideUntil>ms/1000)continue;
         const weapon=weaponData[actor.weapon];actor.nextShot=ms+weapon.interval;
-        if(rand()<0.14){totalDodges++;if(!firstDodge)firstDodge=actor.id;actor.x=Math.max(40,Math.min(920,actor.x-dir*58));push(ms/1000,round,"dodge",actor,target);continue;}
-        const wallBlocked=rand()<0.09;if(wallBlocked){totalGlooBlocks++;if(!firstGloo)firstGloo=actor.id;push(ms/1000,round,"gloo_wall",actor,target,0,false,{wall_x:(actor.x+target.x)/2});}
+        if(rand()<0.14){totalDodges++;if(!firstDodge)firstDodge=target.id;target.x=Math.max(40,Math.min(920,target.x+dir*58));push(ms/1000,round,"dodge",target,actor);continue;}
+        const wallBlocked=rand()<0.09;if(wallBlocked){totalGlooBlocks++;if(!firstGloo)firstGloo=target.id;push(ms/1000,round,"gloo_wall",target,actor,0,false,{wall_x:(actor.x+target.x)/2});}
         if(Math.abs(actor.x-target.x)<120&&rand()<0.12){const meleeDamage=10+Math.floor(rand()*9);target.hp-=meleeDamage;totalMelee++;totalHits++;push(ms/1000,round,"melee",actor,target,meleeDamage);}
         if(rand()<0.03){totalGrenades++;push(ms/1000,round,"grenade",actor,target,0,false,{impact_x:target.x});}if(rand()<0.06){totalCrouches++;push(ms/1000,round,"crouch",actor,target);}if(rand()<0.05){totalReloads++;push(ms/1000,round,"reload",actor,target);}
         if(rand()>actor.accuracy){intents.push({actor,target,type:"miss",damage:0,headshot:false});totalMisses++;continue;}
-        const headshot=rand()<actor.headRate,fireball=rand()<0.08,damage=Math.round((weapon.damage*(headshot?weapon.head:1)+(fireball?12:0))*(wallBlocked?0.28:1));
+        const headshot=rand()<actor.headRate,fireball=rand()<0.08,damage=Math.round((weapon.damage*(headshot?weapon.head:1)+(fireball?12:0))*(wallBlocked?0.28:1)*(target.hideUntil>ms/1000?0.2:1));
         intents.push({actor,target,type:fireball?"fireball":headshot?"headshot":"hit",damage,headshot});totalHits++;if(!firstAttack)firstAttack=actor.id;if(fireball)totalFireballs++;
         if(headshot){actor.headshots++;if(!firstHeadshot){firstHeadshot=actor.id;firstHeadshotTime=ms/1000;}}
       }
