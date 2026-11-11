@@ -139,3 +139,5 @@ body{background:radial-gradient(ellipse at 50% -20%,#42145c 0,#0a0611 62%);color
 @media(max-width:380px){.vb-round-results{gap:4px}.vb-round-result{padding:6px}}
 
 .vb-stake-control{display:grid;grid-template-columns:48px minmax(0,1fr) 48px;gap:8px;margin-top:8px}.vb-stake-control button{border:1px solid #8e3ba9;border-radius:10px;background:#2b153b;color:#fff;font-size:24px;font-weight:900;min-height:46px}.vb-stake-control input{width:100%;min-width:0;box-sizing:border-box;text-align:center}.vb-winner-market .vb-market-options{grid-template-columns:repeat(2,minmax(0,1fr))}.vb-winner-market .vb-option{min-height:72px}.vb-winner-market .vb-option b{font-size:19px}
+
+.vb-market-locked{color:#d9b6ff;font-size:11px;font-weight:800;letter-spacing:.05em}.vb-option.selected{border-color:#f15bc2;background:linear-gradient(135deg,rgba(143,54,181,.34),rgba(241,91,194,.18));box-shadow:0 0 0 1px #f15bc2 inset}.vb-slip #vb-submit:disabled{opacity:.45;cursor:not-allowed}
