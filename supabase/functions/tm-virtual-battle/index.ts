@@ -224,6 +224,12 @@ Deno.serve(async (req: Request) => {
       return out(200, { ok: true, match_id: match.id, reused: false });
     }
 
+    if (action === "claim_daily") {
+      const { data, error } = await db.rpc("tmvb_claim_daily_points", { p_user_id: userId });
+      if (error) return out(400, { error: error.message });
+      return out(200, { ok: true, ...data });
+    }
+
     if (action === "state") {
       const balance = await db.rpc("tmvb_ensure_wallet", { p_user_id: userId });
       if (balance.error) throw balance.error;
@@ -235,13 +241,16 @@ Deno.serve(async (req: Request) => {
         .order("created_at", { ascending: false }).limit(12);
       matches = refreshed || matches || [];
       const ids = matches.map((m: any) => m.id);
-      const [{ data: markets }, { data: predictions }, { data: wallet }] = await Promise.all([
+      const today = new Date().toISOString().slice(0, 10);
+      const [{ data: markets }, { data: predictions }, { data: wallet }, { data: dailyGrant }] = await Promise.all([
         ids.length ? db.from("tmvb_markets").select("*").in("match_id", ids) : Promise.resolve({ data: [] }),
         ids.length ? db.from("tmvb_predictions").select("id,match_id,market_id,selection,stake,odds,potential_return,status,created_at,settled_at").eq("user_id", userId).in("match_id", ids) : Promise.resolve({ data: [] }),
         db.from("tmvb_wallets").select("balance").eq("user_id", userId).single(),
+        db.from("tmvb_daily_grants").select("id").eq("user_id", userId).eq("grant_date", today).maybeSingle(),
       ]);
       return out(200, {
         ok: true, balance: wallet?.balance ?? Number(balance.data ?? 1000),
+        daily_claimed: Boolean(dailyGrant),
         matches: (matches || []).map((m: any) => publicMatch(m, markets || [], predictions || [])),
         user_id: userId,
       });
