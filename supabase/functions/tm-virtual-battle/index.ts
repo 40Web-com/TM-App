@@ -47,6 +47,18 @@ function makeRandom(seed: string) {
   };
 }
 
+function applyForm(fighter: any) {
+  const winRate = fighter.matches_played > 0 ? fighter.wins / fighter.matches_played : 0.5;
+  const form = Math.max(-0.05, Math.min(0.05, (winRate - 0.5) * 0.1));
+  return {
+    ...fighter,
+    accuracy: Math.max(0.5, Math.min(0.82, Number(fighter.accuracy) + form)),
+    headshot_rate: Math.max(0.1, Math.min(0.35, Number(fighter.headshot_rate) + form * 0.5)),
+    reaction_ms: Math.max(170, Math.round(Number(fighter.reaction_ms) - form * 350)),
+    win_rate: Number((winRate * 100).toFixed(1)),
+  };
+}
+
 function simulate(seed: string, a: any, b: any) {
   const rand = makeRandom(seed);
   const fighters = [
@@ -195,8 +207,8 @@ Deno.serve(async (req: Request) => {
 
       const { data: fighters, error: fighterError } = await db.from("tmvb_fighters").select("*").order("fighter_id");
       if (fighterError || !fighters || fighters.length < 2) return out(500, { error: "Fighter roster is not ready." });
-      const a = fighters.find((f: any) => f.fighter_id === "nova") || fighters[0];
-      const b = fighters.find((f: any) => f.fighter_id === "vex") || fighters[1];
+      const a = applyForm(fighters.find((f: any) => f.fighter_id === "nova") || fighters[0]);
+      const b = applyForm(fighters.find((f: any) => f.fighter_id === "vex") || fighters[1]);
       const seed = randomSeed();
       const seedHash = await digest(seed);
       const { events, result } = simulate(seed, a, b);
