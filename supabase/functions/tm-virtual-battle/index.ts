@@ -292,7 +292,7 @@ Deno.serve(async (req: Request) => {
         ids.length ? db.from("tmvb_bet_legs").select("bet_id,market_id,selection,odds").in("bet_id", (await db.from("tmvb_bets").select("id").eq("user_id",userId).in("match_id",ids)).data?.map((b:any)=>b.id)||[]) : Promise.resolve({data:[]}),
         db.from("tmvb_wallets").select("balance").eq("user_id", userId).single(),
         db.from("tmvb_daily_grants").select("id").eq("user_id", userId).eq("grant_date", today).maybeSingle(),
-        db.from("tmvb_fighters").select("fighter_id,display_name,call_sign,accent,matches_played,wins,losses,total_headshots").order("display_name"),
+        db.from("tmvb_fighters").select("fighter_id,display_name,call_sign,accent,country,matches_played,wins,losses,total_headshots").order("display_name"),
       ]);
       return out(200, {
         ok: true, balance: wallet?.balance ?? Number(balance.data ?? 1000),
