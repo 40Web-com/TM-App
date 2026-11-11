@@ -1,4 +1,4 @@
-const CACHE_NAME = "tm-app-pages-v160";
+const CACHE_NAME = "tm-app-pages-v161";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -21,7 +21,15 @@ const APP_SHELL = [
   "./adminhub.css",
   "./virtual-battle.html",
   "./virtual-battle.css",
-  "./virtual-battle.js"
+  "./virtual-battle.js",
+  "./assets/virtual-battle/fighters/tm-fighter-01.svg",
+  "./assets/virtual-battle/fighters/tm-fighter-02.svg",
+  "./assets/virtual-battle/fighters/tm-fighter-03.svg",
+  "./assets/virtual-battle/fighters/tm-fighter-04.svg",
+  "./assets/virtual-battle/fighters/tm-fighter-05.svg",
+  "./assets/virtual-battle/fighters/tm-fighter-06.svg",
+  "./assets/virtual-battle/fighters/tm-fighter-07.svg",
+  "./assets/virtual-battle/fighters/tm-fighter-08.svg"
 ];
 self.addEventListener("install", event => {
   event.waitUntil(
