@@ -16,7 +16,7 @@
   </header>
   <section class="vb-intro">
     <div><span class="vb-kicker">SIMULATED ESPORTS · LONE WOLF</span><h1>ENTER THE <em>ARENA</em></h1><p>Predict the action. Watch the 60-second battle. Track every result.</p></div>
-    <div class="vb-live"><i></i><span id="vb-status">CONNECTING</span></div>
+    <div class="vb-live" id="vb-live"><i></i><span id="vb-status">CONNECTING</span></div>
   </section>
   <section class="vb-arena-card">
     <div class="vb-arena-top"><span id="vb-match-id">MATCH LOADING</span><span class="vb-countdown" id="vb-clock">--:--</span><span class="vb-version">TMVB 1.0</span></div>
@@ -38,7 +38,7 @@
     <div class="vb-event-line" id="vb-event-line">Battle events will appear here.</div>
   </section>
   <section class="vb-markets-section">
-    <div class="vb-section-head"><div><span class="vb-kicker">PREDICTION ROOM</span><h2>CHOOSE YOUR MARKET</h2></div><span class="vb-points-note">Virtual points only</span></div>
+    <div class="vb-section-head"><div><span class="vb-kicker">PREDICTION ROOM</span><h2>CHOOSE YOUR MARKET</h2></div><div class="vb-market-actions"><span class="vb-points-note">Virtual points only</span><button id="vb-next-match" class="vb-quiet" hidden>GENERATE NEXT BATTLE</button></div></div>
     <div id="vb-markets" class="vb-markets"><div class="vb-loading">Loading prediction markets…</div></div>
     <div class="vb-slip" id="vb-slip" hidden>
       <div class="vb-slip-head"><div><small>YOUR PREDICTION</small><strong id="vb-slip-title">Select an outcome</strong></div><button id="vb-slip-close" aria-label="Close">×</button></div>
