@@ -62,94 +62,76 @@ function applyForm(fighter: any) {
 function simulate(seed: string, a: any, b: any) {
   const rand = makeRandom(seed);
   const fighters = [
-    { id: a.fighter_id, name: a.display_name, hp: a.base_health, weapon: a.weapon_pool[Math.floor(rand() * a.weapon_pool.length)], headshots: 0, nextShot: Math.max(0, a.reaction_ms / 1000), accuracy: Number(a.accuracy), headRate: Number(a.headshot_rate) },
-    { id: b.fighter_id, name: b.display_name, hp: b.base_health, weapon: b.weapon_pool[Math.floor(rand() * b.weapon_pool.length)], headshots: 0, nextShot: Math.max(0, b.reaction_ms / 1000), accuracy: Number(b.accuracy), headRate: Number(b.headshot_rate) },
+    { id:a.fighter_id,name:a.display_name,hp:a.base_health,weapon:a.weapon_pool[Math.floor(rand()*a.weapon_pool.length)],headshots:0,nextShot:Math.max(0,a.reaction_ms/1000),accuracy:Number(a.accuracy),headRate:Number(a.headshot_rate) },
+    { id:b.fighter_id,name:b.display_name,hp:b.base_health,weapon:b.weapon_pool[Math.floor(rand()*b.weapon_pool.length)],headshots:0,nextShot:Math.max(0,b.reaction_ms/1000),accuracy:Number(b.accuracy),headRate:Number(b.headshot_rate) },
   ];
-  const events: any[] = [];
-  let firstHeadshot: string | null = null;
-  let firstEliminated: string | null = null;
-  let finalWeapon: string | null = null;
-  let duration = 60;
-  const push = (t: number, type: string, actor: any, target: any, damage = 0, headshot = false) => {
-    events.push({
-      time_sec: Math.max(0, Math.min(60, Number(t.toFixed(2)))),
-      type, actor_id: actor.id, actor_name: actor.name, target_id: target.id,
-      target_name: target.name, weapon: actor.weapon, weapon_label: weaponData[actor.weapon].label,
-      damage, headshot, target_hp: Math.max(0, Math.round(target.hp)),
-      text: type === "miss" ? actor.name + " missed a shot" :
-        type === "headshot" ? "HEADSHOT! " + actor.name + " hit " + target.name :
-        type === "hit" ? actor.name + " hit " + target.name :
-        type === "elimination" ? actor.name + " eliminated " + target.name : "",
-    });
+  const events:any[]=[];
+  let firstHeadshot:string|null=null,firstHeadshotTime:number|null=null;
+  let firstEliminated:string|null=null,finalWeapon:string|null=null,duration=60,totalHits=0,totalMisses=0;
+  const push=(t:number,type:string,actor:any,target:any,damage=0,headshot=false)=>{
+    events.push({time_sec:Math.max(0,Math.min(60,Number(t.toFixed(2)))),type,actor_id:actor.id,actor_name:actor.name,target_id:target.id,target_name:target.name,weapon:actor.weapon,weapon_label:weaponData[actor.weapon].label,damage,headshot,target_hp:Math.max(0,Math.round(target.hp)),text:type==="miss"?actor.name+" missed a shot":type==="headshot"?"HEADSHOT! "+actor.name+" hit "+target.name:type==="hit"?actor.name+" hit "+target.name:type==="elimination"?actor.name+" eliminated "+target.name:""});
   };
-  for (let ms = 0; ms <= 60000; ms += 100) {
-    for (let index = 0; index < 2; index++) {
-      const actor = fighters[index], target = fighters[1 - index];
-      if (actor.hp <= 0 || target.hp <= 0 || ms < actor.nextShot) continue;
-      const weapon = weaponData[actor.weapon];
-      actor.nextShot = ms + weapon.interval;
-      if (rand() > actor.accuracy) {
-        push(ms / 1000, "miss", actor, target);
-        continue;
-      }
-      const headshot = rand() < actor.headRate;
-      const damage = Math.round(weapon.damage * (headshot ? weapon.head : 1));
-      target.hp -= damage;
-      push(ms / 1000, headshot ? "headshot" : "hit", actor, target, damage, headshot);
-      if (headshot) {
-        actor.headshots++;
-        if (!firstHeadshot) firstHeadshot = actor.id;
-      }
-      if (target.hp <= 0) {
-        target.hp = 0;
-        firstEliminated = target.id;
-        finalWeapon = actor.weapon;
-        duration = Math.max(1, Math.ceil(ms / 1000));
-        push(ms / 1000, "elimination", actor, target, damage, headshot);
-        break;
-      }
+  for(let ms=0;ms<=60000;ms+=100){
+    const ready=fighters.filter(f=>f.hp>0&&ms>=f.nextShot);
+    if(!ready.length)continue;
+    for(let i=ready.length-1;i>0;i--){const j=Math.floor(rand()*(i+1));[ready[i],ready[j]]=[ready[j],ready[i]];}
+    const intents:any[]=[];
+    for(const actor of ready){
+      const target=fighters.find(f=>f.id!==actor.id)!;if(target.hp<=0)continue;
+      const weapon=weaponData[actor.weapon];actor.nextShot=ms+weapon.interval;
+      if(rand()>actor.accuracy){intents.push({actor,target,type:"miss",damage:0,headshot:false});totalMisses++;continue;}
+      const headshot=rand()<actor.headRate,damage=Math.round(weapon.damage*(headshot?weapon.head:1));
+      intents.push({actor,target,type:headshot?"headshot":"hit",damage,headshot});totalHits++;
+      if(headshot){actor.headshots++;if(!firstHeadshot){firstHeadshot=actor.id;firstHeadshotTime=ms/1000;}}
     }
-    if (fighters.some((f) => f.hp <= 0)) break;
+    for(const intent of intents)if(intent.damage)intent.target.hp-=intent.damage;
+    for(const intent of intents)push(ms/1000,intent.type,intent.actor,intent.target,intent.damage,intent.headshot);
+    const eliminated=fighters.filter(f=>f.hp<=0);
+    if(eliminated.length){
+      for(const target of eliminated)target.hp=0;
+      if(eliminated.length===2){firstEliminated="simultaneous";finalWeapon="simultaneous";for(const target of eliminated){const killer=intents.find(i=>i.target.id===target.id&&i.damage>0)?.actor;if(killer)push(ms/1000,"elimination",killer,target);}}
+      else {const target=eliminated[0],killer=intents.find(i=>i.target.id===target.id&&i.damage>0)?.actor;if(killer){firstEliminated=target.id;finalWeapon=killer.weapon;push(ms/1000,"elimination",killer,target);}}
+      duration=Math.max(1,Math.ceil(ms/1000));break;
+    }
   }
-  let winner: string | null = null;
-  if (fighters[0].hp > fighters[1].hp) winner = fighters[0].id;
-  else if (fighters[1].hp > fighters[0].hp) winner = fighters[1].id;
-  const totalHeadshots = fighters[0].headshots + fighters[1].headshots;
-  return {
-    events,
-    result: {
-      winner_id: winner,
-      is_draw: winner === null,
-      first_headshot_by: firstHeadshot,
-      first_elimination_id: firstEliminated,
-      final_weapon: finalWeapon,
-      duration_sec: duration,
-      total_headshots: totalHeadshots,
-      fighter_a_headshots: fighters[0].headshots,
-      fighter_b_headshots: fighters[1].headshots,
-      fighter_a_hp: Math.max(0, Math.round(fighters[0].hp)),
-      fighter_b_hp: Math.max(0, Math.round(fighters[1].hp)),
-      fighter_a_weapon: fighters[0].weapon,
-      fighter_b_weapon: fighters[1].weapon,
-    },
-  };
+  let winner:string|null=null;
+  if(fighters[0].hp>fighters[1].hp)winner=fighters[0].id;else if(fighters[1].hp>fighters[0].hp)winner=fighters[1].id;
+  const totalHeadshots=fighters[0].headshots+fighters[1].headshots,winnerFighter=fighters.find(f=>f.id===winner),eliminations=fighters.filter(f=>f.hp<=0).length;
+  return {events,result:{
+    winner_id:winner,is_draw:winner===null,first_headshot_by:firstHeadshot,first_headshot_time_sec:firstHeadshotTime,
+    first_headshot_time_outcome:firstHeadshotTime===null?"none":firstHeadshotTime<30?"under_30":"over_30",
+    first_elimination_id:firstEliminated,final_weapon:finalWeapon,duration_sec:duration,total_headshots:totalHeadshots,
+    fighter_a_headshots:fighters[0].headshots,fighter_b_headshots:fighters[1].headshots,
+    fighter_a_hp:Math.max(0,Math.round(fighters[0].hp)),fighter_b_hp:Math.max(0,Math.round(fighters[1].hp)),
+    fighter_a_weapon:fighters[0].weapon,fighter_b_weapon:fighters[1].weapon,
+    both_headshot:fighters[0].headshots>0&&fighters[1].headshots>0,total_eliminations:eliminations,total_hits:totalHits,total_misses:totalMisses,
+    winner_by:winner===null?"draw":eliminations>0?"elimination":"time",winner_remaining_health:winnerFighter?Math.max(0,Math.round(winnerFighter.hp)):null,
+    more_headshots:fighters[0].headshots>fighters[1].headshots?fighters[0].id:fighters[1].headshots>fighters[0].headshots?fighters[1].id:"tie"
+  }};
 }
 
-function makeMarkets(matchId: string, a: any, b: any, startAt: string) {
-  const skillA = Number(a.accuracy) * 0.55 + Number(a.headshot_rate) * 0.3 + (1 / Number(a.reaction_ms)) * 40;
-  const skillB = Number(b.accuracy) * 0.55 + Number(b.headshot_rate) * 0.3 + (1 / Number(b.reaction_ms)) * 40;
-  const pA = Math.max(0.38, Math.min(0.62, skillA / (skillA + skillB)));
-  const pB = 1 - pA;
-  const odds = (p: number) => Number(Math.max(1.15, Math.min(4.8, 0.92 / p)).toFixed(2));
-  const entries = [
-    { market_key: "winner", label: "Who wins the battle?", selections: { [a.fighter_id]: a.display_name, [b.fighter_id]: b.display_name, draw: "Draw" }, odds: { [a.fighter_id]: odds(pA * 0.88), [b.fighter_id]: odds(pB * 0.88), draw: 4.5 } },
-    { market_key: "first_headshot", label: "Who lands the first headshot?", selections: { [a.fighter_id]: a.display_name, [b.fighter_id]: b.display_name, none: "No headshot" }, odds: { [a.fighter_id]: 2.05, [b.fighter_id]: 2.05, none: 3.6 } },
-    { market_key: "headshots_total", label: "Total headshots", selections: { over_3_5: "Over 3.5", under_3_5: "Under 3.5" }, odds: { over_3_5: 1.95, under_3_5: 1.85 } },
-    { market_key: "first_elimination", label: "Who gets eliminated first?", selections: { [a.fighter_id]: a.display_name, [b.fighter_id]: b.display_name, none: "No elimination" }, odds: { [a.fighter_id]: 2.05, [b.fighter_id]: 2.05, none: 3.8 } },
-    { market_key: "final_weapon", label: "Weapon of the final elimination", selections: { ak47: "AK-47", mp40: "MP40", m1014: "M1014", m4a1: "M4A1", awm: "AWM", none: "No elimination" }, odds: { ak47: 2.7, mp40: 2.7, m1014: 3.1, m4a1: 3.0, awm: 3.8, none: 4.2 } },
-    { market_key: "duration", label: "How long does the battle last?", selections: { under_45: "Under 45 seconds", over_45: "45–60 seconds" }, odds: { under_45: 2.1, over_45: 1.72 } },
-  ];
-  return entries.map((m) => ({ ...m, match_id: matchId, closes_at: startAt, status: "open" }));
+function makeMarkets(matchId:string,a:any,b:any,startAt:string){
+ const skillA=Number(a.accuracy)*.55+Number(a.headshot_rate)*.3+(1/Number(a.reaction_ms))*40;
+ const skillB=Number(b.accuracy)*.55+Number(b.headshot_rate)*.3+(1/Number(b.reaction_ms))*40;
+ const pA=Math.max(.38,Math.min(.62,skillA/(skillA+skillB))),pB=1-pA;
+ const odds=(p:number)=>Number(Math.max(1.15,Math.min(4.8,.92/p)).toFixed(2));
+ const entries=[
+ {market_key:"winner",label:"Match winner",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,draw:"Draw"},odds:{[a.fighter_id]:odds(pA*.88),[b.fighter_id]:odds(pB*.88),draw:4.5}},
+ {market_key:"first_headshot",label:"First headshot",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,none:"No headshot"},odds:{[a.fighter_id]:2.05,[b.fighter_id]:2.05,none:3.6}},
+ {market_key:"headshots_total",label:"Total headshots",selections:{over_3_5:"Over 3.5",under_3_5:"Under 3.5"},odds:{over_3_5:1.95,under_3_5:1.85}},
+ {market_key:"first_elimination",label:"First fighter eliminated",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,none:"No elimination",simultaneous:"Both together"},odds:{[a.fighter_id]:2.05,[b.fighter_id]:2.05,none:3.8,simultaneous:8}},
+ {market_key:"final_weapon",label:"Final elimination weapon",selections:{ak47:"AK-47",mp40:"MP40",m1014:"M1014",m4a1:"M4A1",awm:"AWM",none:"No elimination",simultaneous:"Simultaneous"},odds:{ak47:2.7,mp40:2.7,m1014:3.1,m4a1:3,awm:3.8,none:4.2,simultaneous:9}},
+ {market_key:"duration",label:"Battle duration",selections:{under_45:"Under 45 sec",over_45:"45–60 sec"},odds:{under_45:2.1,over_45:1.72}},
+ {market_key:"both_headshot",label:"Will both fighters land a headshot?",selections:{yes:"Yes",no:"No"},odds:{yes:2.15,no:1.65}},
+ {market_key:"eliminations_total",label:"Total eliminations",selections:{zero:"0",one:"1",two_plus:"2"},odds:{zero:4.2,one:1.35,two_plus:12}},
+ {market_key:"first_headshot_time",label:"Time of first headshot",selections:{under_30:"Before 30 sec",over_30:"30 sec or later",none:"No headshot"},odds:{under_30:1.8,over_30:2.5,none:4.2}},
+ {market_key:"winner_method",label:"How is the winner decided?",selections:{elimination:"By elimination",time:"By time",draw:"Draw"},odds:{elimination:1.6,time:2.4,draw:6}},
+ {market_key:"winning_health",label:"Winner's remaining health",selections:{over_50:"Over 50 HP",under_50:"50 HP or less",draw:"Draw"},odds:{over_50:2.7,under_50:1.7,draw:6}},
+ {market_key:"more_headshots",label:"Who lands more headshots?",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,tie:"Tie"},odds:{[a.fighter_id]:2.15,[b.fighter_id]:2.15,tie:3.2}},
+ {market_key:"total_hits",label:"Total successful hits",selections:{over_12_5:"Over 12.5",under_12_5:"Under 12.5"},odds:{over_12_5:1.9,under_12_5:1.9}},
+ {market_key:"total_misses",label:"Total missed shots",selections:{over_20_5:"Over 20.5",under_20_5:"Under 20.5"},odds:{over_20_5:1.9,under_20_5:1.9}}
+ ];
+ return entries.map(m=>({...m,match_id:matchId,closes_at:startAt,status:"open"}));
 }
 
 async function settleExpired(matches: any[]) {
@@ -220,7 +202,7 @@ Deno.serve(async (req: Request) => {
         status: "scheduled", fighter_a_id: a.fighter_id, fighter_b_id: b.fighter_id,
         fighter_a_snapshot: a, fighter_b_snapshot: b, scheduled_start_at: startAt.toISOString(),
         ends_at: endAt.toISOString(), seed_hash: seedHash, seed_secret: seed,
-        simulation_version: "tmvb-1.0.0", events, result, created_by: userId,
+        simulation_version: "tmvb-1.1.0-fair-batch", events, result, created_by: userId,
       }).select("id").single();
       if (matchError) {
         const { data: existing } = await db.from("tmvb_matches").select("id")
