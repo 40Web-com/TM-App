@@ -72,7 +72,7 @@ function simulate(seed: string, a: any, b: any) {
   let totalHits=0,totalMisses=0,totalEliminations=0,totalGlooBlocks=0,totalDodges=0,totalJumps=0,totalFireballs=0,totalHides=0,totalChases=0,totalMelee=0,totalGrenades=0,totalSlides=0,totalCrouches=0,totalReloads=0,totalFlanks=0,roundA=0,roundB=0,roundEliminationWins=0;
   const roundScores:any[]=[];
   const push=(t:number,round:number,type:string,actor:any,target:any,damage=0,headshot=false)=>{
-    events.push({time_sec:Math.max(0,Math.min(75,Number(t.toFixed(2)))),round,type,actor_id:actor.id,actor_name:actor.name,target_id:target.id,target_name:target.name,weapon:actor.weapon,weapon_label:weaponData[actor.weapon].label,damage,headshot,target_hp:Math.max(0,Math.round(target.hp)),text:type==="miss"?actor.name+" missed a shot":type==="headshot"?"HEADSHOT! "+actor.name+" hit "+target.name:type==="hit"?actor.name+" hit "+target.name:type==="fireball"?"FIREBALL! "+actor.name+" scorched "+target.name:type==="gloo_wall"?target.name+" blocked the shot with a Gloo Wall":type==="dodge"?target.name+" dodged the incoming attack":type==="jump"?actor.name+" jumped to reposition":type==="elimination"?actor.name+" eliminated "+target.name:""});
+    events.push({time_sec:Math.max(0,Math.min(75,Number(t.toFixed(2)))),round,type,actor_id:actor.id,actor_name:actor.name,target_id:target.id,target_name:target.name,weapon:actor.weapon,weapon_label:weaponData[actor.weapon].label,damage,headshot,target_hp:Math.max(0,Math.round(target.hp)),actor_x:actor.x,actor_y:actor.y,target_x:target.x,target_y:target.y,text:type==="miss"?actor.name+" missed a shot":type==="headshot"?"HEADSHOT! "+actor.name+" hit "+target.name:type==="hit"?actor.name+" hit "+target.name:type==="fireball"?"FIREBALL! "+actor.name+" scorched "+target.name:type==="gloo_wall"?actor.name+" raised a Gloo Wall":type==="dodge"?target.name+" dodged the incoming attack":type==="jump"?actor.name+" jumped to reposition":type==="hide"?actor.name+" hid behind cover":type==="chase"?actor.name+" chased "+target.name:type==="flank"?actor.name+" flanked "+target.name:type==="slide"?actor.name+" slid to evade":type==="melee"?actor.name+" landed a close-range attack":type==="grenade"?actor.name+" threw a grenade":type==="reload"?actor.name+" reloaded":type==="elimination"?actor.name+" eliminated "+target.name:""});
   };
   for(let round=1;round<=3;round++){
     for(let i=0;i<2;i++){fighters[i].hp=Number(base[i].hp)||100;fighters[i].nextShot=(round-1)*20000+Math.max(0,Number(i===0?a.reaction_ms:b.reaction_ms));}
@@ -158,7 +158,24 @@ function makeMarkets(matchId:string,a:any,b:any,startAt:string){
  {market_key:"gloo_wall_blocks",label:"Gloo Wall blocks",selections:{over_1_5:"Over 1.5",under_1_5:"Under 1.5"},odds:{over_1_5:2.05,under_1_5:1.72}},
  {market_key:"dodges_total",label:"Successful dodges",selections:{over_2_5:"Over 2.5",under_2_5:"Under 2.5"},odds:{over_2_5:2.1,under_2_5:1.75}},
  {market_key:"fireballs_total",label:"Fireball attacks",selections:{over_1_5:"Over 1.5",under_1_5:"Under 1.5"},odds:{over_1_5:2.25,under_1_5:1.65}},
- {market_key:"jump_actions",label:"Jump actions",selections:{over_3_5:"Over 3.5",under_3_5:"Under 3.5"},odds:{over_3_5:1.9,under_3_5:1.9}}
+ {market_key:"jump_actions",label:"Jump actions",selections:{over_3_5:"Over 3.5",under_3_5:"Under 3.5"},odds:{over_3_5:1.9,under_3_5:1.9}},
+
+ {market_key:"round_1_winner",label:"Round 1 winner",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,draw:"Draw"},odds:{[a.fighter_id]:1.9,[b.fighter_id]:1.9,draw:4.5}},
+ {market_key:"round_2_winner",label:"Round 2 winner",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,draw:"Draw"},odds:{[a.fighter_id]:1.9,[b.fighter_id]:1.9,draw:4.5}},
+ {market_key:"round_3_winner",label:"Round 3 winner",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,draw:"Draw"},odds:{[a.fighter_id]:1.9,[b.fighter_id]:1.9,draw:4.5}},
+ {market_key:"total_chases",label:"Total chase runs",selections:{over_8_5:"Over 8.5",under_8_5:"Under 8.5"},odds:{over_8_5:1.9,under_8_5:1.9}},
+ {market_key:"total_hides",label:"Successful hiding moves",selections:{over_2_5:"Over 2.5",under_2_5:"Under 2.5"},odds:{over_2_5:2.1,under_2_5:1.7}},
+ {market_key:"total_melee",label:"Close-range attacks",selections:{over_1_5:"Over 1.5",under_1_5:"Under 1.5"},odds:{over_1_5:2.2,under_1_5:1.65}},
+ {market_key:"total_grenades",label:"Grenades thrown",selections:{over_1_5:"Over 1.5",under_1_5:"Under 1.5"},odds:{over_1_5:2.15,under_1_5:1.7}},
+ {market_key:"total_slides",label:"Combat slides",selections:{over_2_5:"Over 2.5",under_2_5:"Under 2.5"},odds:{over_2_5:2.05,under_2_5:1.75}},
+ {market_key:"total_flanks",label:"Flanking moves",selections:{over_3_5:"Over 3.5",under_3_5:"Under 3.5"},odds:{over_3_5:2.05,under_3_5:1.75}},
+ {market_key:"total_reloads",label:"Reload actions",selections:{over_2_5:"Over 2.5",under_2_5:"Under 2.5"},odds:{over_2_5:1.95,under_2_5:1.85}},
+ {market_key:"first_dodge",label:"First successful dodge",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,none:"No dodge"},odds:{[a.fighter_id]:2.05,[b.fighter_id]:2.05,none:4}},
+ {market_key:"first_gloo_wall",label:"First Gloo Wall",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,none:"No Gloo Wall"},odds:{[a.fighter_id]:2.05,[b.fighter_id]:2.05,none:4}},
+ {market_key:"first_attack",label:"First successful attack",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,none:"No hit"},odds:{[a.fighter_id]:1.9,[b.fighter_id]:1.9,none:5}},
+ {market_key:"fireball_total_high",label:"Fireballs in the match",selections:{over_4_5:"Over 4.5",under_4_5:"Under 4.5"},odds:{over_4_5:2.2,under_4_5:1.65}},
+ {market_key:"jump_total_high",label:"Total jumps",selections:{over_9_5:"Over 9.5",under_9_5:"Under 9.5"},odds:{over_9_5:2.05,under_9_5:1.75}},
+ {market_key:"total_crouches",label:"Crouch / cover moves",selections:{over_3_5:"Over 3.5",under_3_5:"Under 3.5"},odds:{over_3_5:2.05,under_3_5:1.75}}
  ];
  return entries.map(m=>({...m,match_id:matchId,closes_at:startAt,status:"open"}));
 }
