@@ -140,10 +140,13 @@ function makeMarkets(matchId:string,a:any,b:any,startAt:string){
  const skillB=Number(b.accuracy)*.55+Number(b.headshot_rate)*.3+(1/Number(b.reaction_ms))*40;
  const pA=Math.max(.38,Math.min(.62,skillA/(skillA+skillB))),pB=1-pA;
  const odds=(p:number)=>Number(Math.max(1.15,Math.min(4.8,.92/p)).toFixed(2));
+ const ou=(expected:number,threshold:number)=>{const p=Math.max(.2,Math.min(.8,.5+(expected-threshold)*.06));return {over:odds(p),under:odds(1-p)};};
+ const avgAcc=(Number(a.accuracy)+Number(b.accuracy))/2,avgHead=(Number(a.headshot_rate)+Number(b.headshot_rate))/2,avgReact=(Number(a.reaction_ms)+Number(b.reaction_ms))/2;
+ const chaseOU=ou(10+(1-avgAcc)*18,8.5),hideOU=ou(3.2+(1-avgAcc)*2,2.5),meleeOU=ou(1.8+(1-avgReact/1500),1.5),grenadeOU=ou(2.1,1.5),slideOU=ou(3.2,2.5),flankOU=ou(4.4,3.5),reloadOU=ou(3.4,2.5),fireballOU=ou(5.5,4.5),jumpOU=ou(10.5,9.5),crouchOU=ou(4.4,3.5),headOU=ou(4+avgHead*8,3.5),hitOU=ou(16*avgAcc,12.5),missOU=ou(16*(1-avgAcc),20.5),glooOU=ou(2.7,1.5),dodgeOU=ou(3.8,2.5);
  const entries=[
  {market_key:"winner",label:"Match winner",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,draw:"Draw"},odds:{[a.fighter_id]:odds(pA*.88),[b.fighter_id]:odds(pB*.88),draw:4.5}},
- {market_key:"first_headshot",label:"First headshot",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,none:"No headshot"},odds:{[a.fighter_id]:2.05,[b.fighter_id]:2.05,none:3.6}},
- {market_key:"headshots_total",label:"Total headshots",selections:{over_3_5:"Over 3.5",under_3_5:"Under 3.5"},odds:{over_3_5:1.95,under_3_5:1.85}},
+ {market_key:"first_headshot",label:"First headshot",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,none:"No headshot"},odds:{[a.fighter_id]:odds(pA*.82),[b.fighter_id]:odds(pB*.82),none:3.6}},
+ {market_key:"headshots_total",label:"Total headshots",selections:{over_3_5:"Over 3.5",under_3_5:"Under 3.5"},odds:{over_3_5:headOU.over,under_3_5:headOU.under}},
  {market_key:"first_elimination",label:"First fighter eliminated",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,none:"No elimination",simultaneous:"Both together"},odds:{[a.fighter_id]:2.05,[b.fighter_id]:2.05,none:3.8,simultaneous:8}},
  {market_key:"final_weapon",label:"Final elimination weapon",selections:{ak47:"AK-47",mp40:"MP40",m1014:"M1014",m4a1:"M4A1",awm:"AWM",none:"No elimination",simultaneous:"Simultaneous"},odds:{ak47:2.7,mp40:2.7,m1014:3.1,m4a1:3,awm:3.8,none:4.2,simultaneous:9}},
  {market_key:"duration",label:"Battle duration",selections:{under_60:"Under 60 sec",over_60:"60–75 sec"},odds:{under_60:2.1,over_60:1.72}},
@@ -153,29 +156,29 @@ function makeMarkets(matchId:string,a:any,b:any,startAt:string){
  {market_key:"winner_method",label:"How is the winner decided?",selections:{elimination:"By elimination",time:"By time",draw:"Draw"},odds:{elimination:1.6,time:2.4,draw:6}},
  {market_key:"winning_health",label:"Winner's remaining health",selections:{over_50:"Over 50 HP",under_50:"50 HP or less",draw:"Draw"},odds:{over_50:2.7,under_50:1.7,draw:6}},
  {market_key:"more_headshots",label:"Who lands more headshots?",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,tie:"Tie"},odds:{[a.fighter_id]:2.15,[b.fighter_id]:2.15,tie:3.2}},
- {market_key:"total_hits",label:"Total successful hits",selections:{over_12_5:"Over 12.5",under_12_5:"Under 12.5"},odds:{over_12_5:1.9,under_12_5:1.9}},
- {market_key:"total_misses",label:"Total missed shots",selections:{over_20_5:"Over 20.5",under_20_5:"Under 20.5"},odds:{over_20_5:1.9,under_20_5:1.9}},
- {market_key:"gloo_wall_blocks",label:"Gloo Wall blocks",selections:{over_1_5:"Over 1.5",under_1_5:"Under 1.5"},odds:{over_1_5:2.05,under_1_5:1.72}},
- {market_key:"dodges_total",label:"Successful dodges",selections:{over_2_5:"Over 2.5",under_2_5:"Under 2.5"},odds:{over_2_5:2.1,under_2_5:1.75}},
+ {market_key:"total_hits",label:"Total successful hits",selections:{over_12_5:"Over 12.5",under_12_5:"Under 12.5"},odds:{over_12_5:hitOU.over,under_12_5:hitOU.under}},
+ {market_key:"total_misses",label:"Total missed shots",selections:{over_20_5:"Over 20.5",under_20_5:"Under 20.5"},odds:{over_20_5:missOU.over,under_20_5:missOU.under}},
+ {market_key:"gloo_wall_blocks",label:"Gloo Wall blocks",selections:{over_1_5:"Over 1.5",under_1_5:"Under 1.5"},odds:{over_1_5:glooOU.over,under_1_5:glooOU.under}},
+ {market_key:"dodges_total",label:"Successful dodges",selections:{over_2_5:"Over 2.5",under_2_5:"Under 2.5"},odds:{over_2_5:dodgeOU.over,under_2_5:dodgeOU.under}},
  {market_key:"fireballs_total",label:"Fireball attacks",selections:{over_1_5:"Over 1.5",under_1_5:"Under 1.5"},odds:{over_1_5:2.25,under_1_5:1.65}},
  {market_key:"jump_actions",label:"Jump actions",selections:{over_3_5:"Over 3.5",under_3_5:"Under 3.5"},odds:{over_3_5:1.9,under_3_5:1.9}},
 
- {market_key:"round_1_winner",label:"Round 1 winner",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,draw:"Draw"},odds:{[a.fighter_id]:1.9,[b.fighter_id]:1.9,draw:4.5}},
+ {market_key:"round_1_winner",label:"Round 1 winner",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,draw:"Draw"},odds:{[a.fighter_id]:odds(pA*.9),[b.fighter_id]:odds(pB*.9),draw:4.5}},
  {market_key:"round_2_winner",label:"Round 2 winner",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,draw:"Draw"},odds:{[a.fighter_id]:1.9,[b.fighter_id]:1.9,draw:4.5}},
  {market_key:"round_3_winner",label:"Round 3 winner",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,draw:"Draw"},odds:{[a.fighter_id]:1.9,[b.fighter_id]:1.9,draw:4.5}},
- {market_key:"total_chases",label:"Total chase runs",selections:{over_8_5:"Over 8.5",under_8_5:"Under 8.5"},odds:{over_8_5:1.9,under_8_5:1.9}},
- {market_key:"total_hides",label:"Successful hiding moves",selections:{over_2_5:"Over 2.5",under_2_5:"Under 2.5"},odds:{over_2_5:2.1,under_2_5:1.7}},
- {market_key:"total_melee",label:"Close-range attacks",selections:{over_1_5:"Over 1.5",under_1_5:"Under 1.5"},odds:{over_1_5:2.2,under_1_5:1.65}},
- {market_key:"total_grenades",label:"Grenades thrown",selections:{over_1_5:"Over 1.5",under_1_5:"Under 1.5"},odds:{over_1_5:2.15,under_1_5:1.7}},
- {market_key:"total_slides",label:"Combat slides",selections:{over_2_5:"Over 2.5",under_2_5:"Under 2.5"},odds:{over_2_5:2.05,under_2_5:1.75}},
- {market_key:"total_flanks",label:"Flanking moves",selections:{over_3_5:"Over 3.5",under_3_5:"Under 3.5"},odds:{over_3_5:2.05,under_3_5:1.75}},
- {market_key:"total_reloads",label:"Reload actions",selections:{over_2_5:"Over 2.5",under_2_5:"Under 2.5"},odds:{over_2_5:1.95,under_2_5:1.85}},
+ {market_key:"total_chases",label:"Total chase runs",selections:{over_8_5:"Over 8.5",under_8_5:"Under 8.5"},odds:{over_8_5:chaseOU.over,under_8_5:chaseOU.under}},
+ {market_key:"total_hides",label:"Successful hiding moves",selections:{over_2_5:"Over 2.5",under_2_5:"Under 2.5"},odds:{over_2_5:hideOU.over,under_2_5:hideOU.under}},
+ {market_key:"total_melee",label:"Close-range attacks",selections:{over_1_5:"Over 1.5",under_1_5:"Under 1.5"},odds:{over_1_5:meleeOU.over,under_1_5:meleeOU.under}},
+ {market_key:"total_grenades",label:"Grenades thrown",selections:{over_1_5:"Over 1.5",under_1_5:"Under 1.5"},odds:{over_1_5:grenadeOU.over,under_1_5:grenadeOU.under}},
+ {market_key:"total_slides",label:"Combat slides",selections:{over_2_5:"Over 2.5",under_2_5:"Under 2.5"},odds:{over_2_5:slideOU.over,under_2_5:slideOU.under}},
+ {market_key:"total_flanks",label:"Flanking moves",selections:{over_3_5:"Over 3.5",under_3_5:"Under 3.5"},odds:{over_3_5:flankOU.over,under_3_5:flankOU.under}},
+ {market_key:"total_reloads",label:"Reload actions",selections:{over_2_5:"Over 2.5",under_2_5:"Under 2.5"},odds:{over_2_5:reloadOU.over,under_2_5:reloadOU.under}},
  {market_key:"first_dodge",label:"First successful dodge",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,none:"No dodge"},odds:{[a.fighter_id]:2.05,[b.fighter_id]:2.05,none:4}},
  {market_key:"first_gloo_wall",label:"First Gloo Wall",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,none:"No Gloo Wall"},odds:{[a.fighter_id]:2.05,[b.fighter_id]:2.05,none:4}},
  {market_key:"first_attack",label:"First successful attack",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,none:"No hit"},odds:{[a.fighter_id]:1.9,[b.fighter_id]:1.9,none:5}},
- {market_key:"fireball_total_high",label:"Fireballs in the match",selections:{over_4_5:"Over 4.5",under_4_5:"Under 4.5"},odds:{over_4_5:2.2,under_4_5:1.65}},
- {market_key:"jump_total_high",label:"Total jumps",selections:{over_9_5:"Over 9.5",under_9_5:"Under 9.5"},odds:{over_9_5:2.05,under_9_5:1.75}},
- {market_key:"total_crouches",label:"Crouch / cover moves",selections:{over_3_5:"Over 3.5",under_3_5:"Under 3.5"},odds:{over_3_5:2.05,under_3_5:1.75}}
+ {market_key:"fireball_total_high",label:"Fireballs in the match",selections:{over_4_5:"Over 4.5",under_4_5:"Under 4.5"},odds:{over_4_5:fireballOU.over,under_4_5:fireballOU.under}},
+ {market_key:"jump_total_high",label:"Total jumps",selections:{over_9_5:"Over 9.5",under_9_5:"Under 9.5"},odds:{over_9_5:jumpOU.over,under_9_5:jumpOU.under}},
+ {market_key:"total_crouches",label:"Crouch / cover moves",selections:{over_3_5:"Over 3.5",under_3_5:"Under 3.5"},odds:{over_3_5:crouchOU.over,under_3_5:crouchOU.under}}
  ];
  return entries.map(m=>({...m,match_id:matchId,closes_at:startAt,status:"open"}));
 }
