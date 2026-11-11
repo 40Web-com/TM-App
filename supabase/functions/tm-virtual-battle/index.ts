@@ -68,18 +68,18 @@ function simulate(seed: string, a: any, b: any) {
   const fighters = base.map(f=>({...f}));
   const events:any[]=[];
   let firstHeadshot:string|null=null,firstHeadshotTime:number|null=null;
-  let firstEliminated:string|null=null,finalWeapon:string|null=null;
+  let firstEliminated:string|null=null,firstDodge:string|null=null,firstGloo:string|null=null,firstAttack:string|null=null,finalWeapon:string|null=null;
   let totalHits=0,totalMisses=0,totalEliminations=0,totalGlooBlocks=0,totalDodges=0,totalJumps=0,totalFireballs=0,totalHides=0,totalChases=0,totalMelee=0,totalGrenades=0,totalSlides=0,totalCrouches=0,totalReloads=0,totalFlanks=0,roundA=0,roundB=0,roundEliminationWins=0;
   const roundScores:any[]=[];
   const push=(t:number,round:number,type:string,actor:any,target:any,damage=0,headshot=false)=>{
     events.push({time_sec:Math.max(0,Math.min(75,Number(t.toFixed(2)))),round,type,actor_id:actor.id,actor_name:actor.name,target_id:target.id,target_name:target.name,weapon:actor.weapon,weapon_label:weaponData[actor.weapon].label,damage,headshot,target_hp:Math.max(0,Math.round(target.hp)),actor_x:actor.x,actor_y:actor.y,target_x:target.x,target_y:target.y,text:type==="miss"?actor.name+" missed a shot":type==="headshot"?"HEADSHOT! "+actor.name+" hit "+target.name:type==="hit"?actor.name+" hit "+target.name:type==="fireball"?"FIREBALL! "+actor.name+" scorched "+target.name:type==="gloo_wall"?actor.name+" raised a Gloo Wall":type==="dodge"?target.name+" dodged the incoming attack":type==="jump"?actor.name+" jumped to reposition":type==="hide"?actor.name+" hid behind cover":type==="chase"?actor.name+" chased "+target.name:type==="flank"?actor.name+" flanked "+target.name:type==="slide"?actor.name+" slid to evade":type==="melee"?actor.name+" landed a close-range attack":type==="grenade"?actor.name+" threw a grenade":type==="reload"?actor.name+" reloaded":type==="elimination"?actor.name+" eliminated "+target.name:""});
   };
   for(let round=1;round<=3;round++){
-    for(let i=0;i<2;i++){fighters[i].hp=Number(base[i].hp)||100;fighters[i].nextShot=(round-1)*20000+Math.max(0,Number(i===0?a.reaction_ms:b.reaction_ms));}
-    events.push({time_sec:(round-1)*20,round,type:"round_start",text:"ROUND "+round+" START"});
+    for(let i=0;i<2;i++){fighters[i].hp=Number(base[i].hp)||100;fighters[i].x=i===0?110:850;fighters[i].y=0;fighters[i].hideUntil=0;fighters[i].stamina=100;fighters[i].nextShot=(round-1)*25000+Math.max(0,Number(i===0?a.reaction_ms:b.reaction_ms));}
+    events.push({time_sec:(round-1)*25,round,type:"round_start",text:"ROUND "+round+" START"});
     const roundStartHits=totalHits,roundStartElims=totalEliminations;
     let roundWinner:string|null=null,endedByElimination=false;
-    for(let ms=(round-1)*20000;ms<round*20000;ms+=100){
+    for(let ms=(round-1)*25000;ms<round*25000;ms+=100){
       const ready=fighters.filter(f=>f.hp>0&&ms>=f.nextShot);
       if(!ready.length)continue;
       for(let i=ready.length-1;i>0;i--){const j=Math.floor(rand()*(i+1));[ready[i],ready[j]]=[ready[j],ready[i]];}
@@ -91,13 +91,13 @@ function simulate(seed: string, a: any, b: any) {
         if(ms%1000===0){const move=rand();if(move<0.10){actor.hideUntil=ms/1000+1.5;actor.x=Math.max(40,Math.min(920,actor.x-dir*36));totalHides++;push(ms/1000,round,"hide",actor,target);}else if(move<0.22){actor.x=Math.max(40,Math.min(920,actor.x+dir*(actor.id===fighters[0].id?1:-1)*65));actor.y=(rand()-.5)*48;totalFlanks++;push(ms/1000,round,"flank",actor,target);}else if(move<0.32&&actor.stamina>15){actor.stamina-=15;actor.x=Math.max(40,Math.min(920,actor.x-dir*62));totalSlides++;push(ms/1000,round,"slide",actor,target);}else if(dist>330){actor.x+=dir*22;actor.stamina=Math.max(0,actor.stamina-1);totalChases++;push(ms/1000,round,"chase",actor,target);}else if(dist<190){actor.x-=dir*18;actor.y=(rand()-.5)*40;}else{actor.y=Math.sin(ms/3000+actor.id.length)*30;}actor.x=Math.max(40,Math.min(920,actor.x));if(rand()<0.16){totalJumps++;push(ms/1000,round,"jump",actor,target);}push(ms/1000,round,"move",actor,target,0,false,{actor_x:actor.x,actor_y:actor.y});}
         if(actor.hideUntil>ms/1000)continue;
         const weapon=weaponData[actor.weapon];actor.nextShot=ms+weapon.interval;
-        if(rand()<0.14){totalDodges++;actor.x=Math.max(40,Math.min(920,actor.x-dir*58));push(ms/1000,round,"dodge",actor,target);continue;}
-        const wallBlocked=rand()<0.09;if(wallBlocked){totalGlooBlocks++;push(ms/1000,round,"gloo_wall",actor,target,0,false,{wall_x:(actor.x+target.x)/2});}
+        if(rand()<0.14){totalDodges++;if(!firstDodge)firstDodge=actor.id;actor.x=Math.max(40,Math.min(920,actor.x-dir*58));push(ms/1000,round,"dodge",actor,target);continue;}
+        const wallBlocked=rand()<0.09;if(wallBlocked){totalGlooBlocks++;if(!firstGloo)firstGloo=actor.id;push(ms/1000,round,"gloo_wall",actor,target,0,false,{wall_x:(actor.x+target.x)/2});}
         if(Math.abs(actor.x-target.x)<120&&rand()<0.12){const meleeDamage=10+Math.floor(rand()*9);target.hp-=meleeDamage;totalMelee++;totalHits++;push(ms/1000,round,"melee",actor,target,meleeDamage);}
-        if(rand()<0.03){totalGrenades++;push(ms/1000,round,"grenade",actor,target,0,false,{impact_x:target.x});}
+        if(rand()<0.03){totalGrenades++;push(ms/1000,round,"grenade",actor,target,0,false,{impact_x:target.x});}if(rand()<0.06){totalCrouches++;push(ms/1000,round,"crouch",actor,target);}if(rand()<0.05){totalReloads++;push(ms/1000,round,"reload",actor,target);}
         if(rand()>actor.accuracy){intents.push({actor,target,type:"miss",damage:0,headshot:false});totalMisses++;continue;}
         const headshot=rand()<actor.headRate,fireball=rand()<0.08,damage=Math.round((weapon.damage*(headshot?weapon.head:1)+(fireball?12:0))*(wallBlocked?0.28:1));
-        intents.push({actor,target,type:fireball?"fireball":headshot?"headshot":"hit",damage,headshot});totalHits++;if(fireball)totalFireballs++;
+        intents.push({actor,target,type:fireball?"fireball":headshot?"headshot":"hit",damage,headshot});totalHits++;if(!firstAttack)firstAttack=actor.id;if(fireball)totalFireballs++;
         if(headshot){actor.headshots++;if(!firstHeadshot){firstHeadshot=actor.id;firstHeadshotTime=ms/1000;}}
       }
       for(const intent of intents)if(intent.damage)intent.target.hp-=intent.damage;
@@ -114,7 +114,7 @@ function simulate(seed: string, a: any, b: any) {
     if(roundWinner===fighters[0].id)roundA++;else if(roundWinner===fighters[1].id)roundB++;
     if(endedByElimination&&roundWinner)roundEliminationWins++;
     roundScores.push({round,winner_id:roundWinner,fighter_a_hp:Math.max(0,Math.round(fighters[0].hp)),fighter_b_hp:Math.max(0,Math.round(fighters[1].hp)),hits:totalHits-roundStartHits,eliminations:totalEliminations-roundStartElims});
-    events.push({time_sec:round*20,round,type:"round_end",text:"ROUND "+round+" COMPLETE"+(roundWinner?" · "+(roundWinner===fighters[0].id?fighters[0].name:fighters[1].name)+" TAKES THE ROUND":" · ROUND DRAW")});
+    events.push({time_sec:round*25,round,type:"round_end",text:"ROUND "+round+" COMPLETE"+(roundWinner?" · "+(roundWinner===fighters[0].id?fighters[0].name:fighters[1].name)+" TAKES THE ROUND":" · ROUND DRAW")});
   }
   let winner:string|null=null;
   if(roundA>roundB)winner=fighters[0].id;else if(roundB>roundA)winner=fighters[1].id;
@@ -122,12 +122,12 @@ function simulate(seed: string, a: any, b: any) {
   const totalHeadshots=fighters[0].headshots+fighters[1].headshots,winnerFighter=fighters.find(f=>f.id===winner);
   return {events,result:{
     winner_id:winner,is_draw:winner===null,first_headshot_by:firstHeadshot,first_headshot_time_sec:firstHeadshotTime,
-    first_headshot_time_outcome:firstHeadshotTime===null?"none":firstHeadshotTime<30?"under_30":"over_30",
+    first_headshot_time_outcome:firstHeadshotTime===null?"none":firstHeadshotTime<37?"under_37":"over_37",
     first_elimination_id:firstEliminated,final_weapon:finalWeapon,duration_sec:75,total_headshots:totalHeadshots,
     fighter_a_headshots:fighters[0].headshots,fighter_b_headshots:fighters[1].headshots,
     fighter_a_hp:Math.max(0,Math.round(fighters[0].hp)),fighter_b_hp:Math.max(0,Math.round(fighters[1].hp)),
     fighter_a_weapon:fighters[0].weapon,fighter_b_weapon:fighters[1].weapon,
-    gloo_wall_blocks:totalGlooBlocks,dodges:totalDodges,jumps:totalJumps,fireballs:totalFireballs,hides:totalHides,chases:totalChases,melee:totalMelee,grenades:totalGrenades,slides:totalSlides,crouches:totalCrouches,reloads:totalReloads,flanks:totalFlanks,
+    gloo_wall_blocks:totalGlooBlocks,dodges:totalDodges,jumps:totalJumps,fireballs:totalFireballs,first_dodge_by:firstDodge,first_gloo_by:firstGloo,first_attack_by:firstAttack,hides:totalHides,chases:totalChases,melee:totalMelee,grenades:totalGrenades,slides:totalSlides,crouches:totalCrouches,reloads:totalReloads,flanks:totalFlanks,
     both_headshot:fighters[0].headshots>0&&fighters[1].headshots>0,total_eliminations:totalEliminations,total_hits:totalHits,total_misses:totalMisses,
     winner_by:winner===null?"draw":roundEliminationWins>0?"elimination":"time",
     winner_remaining_health:winnerFighter?Math.max(0,Math.round(winnerFighter.hp)):null,
@@ -146,10 +146,10 @@ function makeMarkets(matchId:string,a:any,b:any,startAt:string){
  {market_key:"headshots_total",label:"Total headshots",selections:{over_3_5:"Over 3.5",under_3_5:"Under 3.5"},odds:{over_3_5:1.95,under_3_5:1.85}},
  {market_key:"first_elimination",label:"First fighter eliminated",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,none:"No elimination",simultaneous:"Both together"},odds:{[a.fighter_id]:2.05,[b.fighter_id]:2.05,none:3.8,simultaneous:8}},
  {market_key:"final_weapon",label:"Final elimination weapon",selections:{ak47:"AK-47",mp40:"MP40",m1014:"M1014",m4a1:"M4A1",awm:"AWM",none:"No elimination",simultaneous:"Simultaneous"},odds:{ak47:2.7,mp40:2.7,m1014:3.1,m4a1:3,awm:3.8,none:4.2,simultaneous:9}},
- {market_key:"duration",label:"Battle duration",selections:{under_45:"Under 45 sec",over_45:"45–60 sec"},odds:{under_45:2.1,over_45:1.72}},
+ {market_key:"duration",label:"Battle duration",selections:{under_60:"Under 60 sec",over_60:"60–75 sec"},odds:{under_60:2.1,over_60:1.72}},
  {market_key:"both_headshot",label:"Will both fighters land a headshot?",selections:{yes:"Yes",no:"No"},odds:{yes:2.15,no:1.65}},
  {market_key:"eliminations_total",label:"Total eliminations",selections:{zero:"0",one:"1",two_plus:"2"},odds:{zero:4.2,one:1.35,two_plus:12}},
- {market_key:"first_headshot_time",label:"Time of first headshot",selections:{under_30:"Before 30 sec",over_30:"30 sec or later",none:"No headshot"},odds:{under_30:1.8,over_30:2.5,none:4.2}},
+ {market_key:"first_headshot_time",label:"Time of first headshot",selections:{under_37:"Before 37 sec",over_37:"37 sec or later",none:"No headshot"},odds:{under_37:1.8,over_37:2.5,none:4.2}},
  {market_key:"winner_method",label:"How is the winner decided?",selections:{elimination:"By elimination",time:"By time",draw:"Draw"},odds:{elimination:1.6,time:2.4,draw:6}},
  {market_key:"winning_health",label:"Winner's remaining health",selections:{over_50:"Over 50 HP",under_50:"50 HP or less",draw:"Draw"},odds:{over_50:2.7,under_50:1.7,draw:6}},
  {market_key:"more_headshots",label:"Who lands more headshots?",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,tie:"Tie"},odds:{[a.fighter_id]:2.15,[b.fighter_id]:2.15,tie:3.2}},
