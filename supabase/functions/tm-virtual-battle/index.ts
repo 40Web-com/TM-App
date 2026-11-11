@@ -159,7 +159,7 @@ async function settleExpired(matches: any[]) {
   }
 }
 
-function publicMatch(match: any, markets: any[], predictions: any[]) {
+function publicMatch(match: any, markets: any[], predictions: any[], bets: any[]) {
   const now = Date.now();
   const start = new Date(match.scheduled_start_at).getTime();
   const end = new Date(match.ends_at).getTime();
@@ -174,6 +174,7 @@ function publicMatch(match: any, markets: any[], predictions: any[]) {
     result: status === "completed" ? match.result : null,
     markets: markets.filter((m) => m.match_id === match.id),
     predictions: predictions.filter((p) => p.match_id === match.id),
+    bets: bets.filter((b) => b.match_id === match.id),
     created_at: match.created_at,
   };
 }
@@ -255,9 +256,11 @@ Deno.serve(async (req: Request) => {
       matches = refreshed || matches || [];
       const ids = matches.map((m: any) => m.id);
       const today = new Date().toISOString().slice(0, 10);
-      const [{ data: markets }, { data: predictions }, { data: wallet }, { data: dailyGrant }, { data: roster }] = await Promise.all([
+      const [{ data: markets }, { data: predictions }, { data: bets }, { data: betLegs }, { data: wallet }, { data: dailyGrant }, { data: roster }] = await Promise.all([
         ids.length ? db.from("tmvb_markets").select("*").in("match_id", ids) : Promise.resolve({ data: [] }),
         ids.length ? db.from("tmvb_predictions").select("id,match_id,market_id,selection,stake,odds,potential_return,status,created_at,settled_at").eq("user_id", userId).in("match_id", ids) : Promise.resolve({ data: [] }),
+        ids.length ? db.from("tmvb_bets").select("id,match_id,stake,combined_odds,potential_return,status,created_at,settled_at").eq("user_id",userId).in("match_id",ids) : Promise.resolve({data:[]}),
+        ids.length ? db.from("tmvb_bet_legs").select("bet_id,market_id,selection,odds").in("bet_id", (await db.from("tmvb_bets").select("id").eq("user_id",userId).in("match_id",ids)).data?.map((b:any)=>b.id)||[]) : Promise.resolve({data:[]}),
         db.from("tmvb_wallets").select("balance").eq("user_id", userId).single(),
         db.from("tmvb_daily_grants").select("id").eq("user_id", userId).eq("grant_date", today).maybeSingle(),
         db.from("tmvb_fighters").select("fighter_id,display_name,call_sign,accent,matches_played,wins,losses,total_headshots").order("display_name"),
@@ -265,7 +268,7 @@ Deno.serve(async (req: Request) => {
       return out(200, {
         ok: true, balance: wallet?.balance ?? Number(balance.data ?? 1000),
         daily_claimed: Boolean(dailyGrant),
-        matches: (matches || []).map((m: any) => publicMatch(m, markets || [], predictions || [])),
+        matches: (matches || []).map((m: any) => publicMatch(m, markets || [], predictions || [], (bets || []).map((b:any)=>({...b,legs:(betLegs||[]).filter((l:any)=>l.bet_id===b.id)})))),
         fighters: (roster || []).map((f: any) => ({ ...f, win_rate: f.matches_played ? Number((f.wins / f.matches_played * 100).toFixed(1)) : 50 })),
         user_id: userId,
       });
