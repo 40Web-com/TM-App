@@ -118,3 +118,17 @@ body{background:radial-gradient(ellipse at 50% -20%,#42145c 0,#0a0611 62%);color
 .vb-wallet{margin-left:auto}
 .vb-toast{background:#fce7f3!important;color:#4a1238!important}
 @media(max-width:480px){.vb-header{flex-wrap:wrap}.vb-brand{flex:1 1 auto}.vb-refresh{order:3;flex:1 1 100%;margin:5px 0 0}.vb-wallet{margin-left:auto}}
+
+.vb-results-section{margin:14px 0;padding:14px;border:1px solid #51285f;border-radius:16px;background:linear-gradient(145deg,#21132f,#100a19)}
+.vb-results-section h2{font-size:16px;margin:5px 0}.vb-results-section h3{font-size:11px;letter-spacing:1px;margin:14px 0 8px;color:#ff9bd1}
+.vb-result-winner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;border:1px solid #a13ab8;border-radius:12px;background:#32133f}
+.vb-result-winner strong{display:block;font-size:19px}.vb-result-winner small{display:block;color:#d5b5e4;font-size:9px;margin-top:4px}
+.vb-result-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:9px}
+.vb-result-stats .vb-stat{padding:9px;border-radius:9px;background:#190f24;border:1px solid #43234f}
+.vb-stat small{display:block;font-size:8px;color:#b49abd}.vb-stat b{display:block;font-size:12px;margin-top:4px;overflow-wrap:anywhere}
+.vb-prediction-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid #43234f;font-size:11px}
+.vb-prediction-row small{color:#b49abd;font-size:9px}.vb-pill.won{color:#a6ffd0}.vb-pill.lost{color:#ff9bb7}
+.vb-result-empty,.vb-predictions-empty{padding:12px;color:#b49abd;font-size:10px}
+#vb-clock-label{font-size:8px;letter-spacing:.8px;color:#d9a9e8;margin-right:4px}#vb-round{color:#ff9bd1!important;font-weight:900}
+.vb-refresh{display:none!important}
+@media(max-width:480px){.vb-result-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.vb-result-winner strong{font-size:15px}}
