@@ -73,7 +73,7 @@ function resizeCanvas(){if(!canvas)return;const w=canvas.clientWidth||960;canvas
 function fighterDraw(x,y,side,accent,frame,aim,recoil=0){ctx.save();ctx.translate(x,y);ctx.scale(side,1);ctx.globalAlpha=.25;ctx.fillStyle="#000";ctx.beginPath();ctx.ellipse(0,0,42,10,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
 const bob=Math.sin(frame*.006+(side<0?1:0))*4;ctx.translate(0,bob);
 ctx.fillStyle="#101b2e";ctx.fillRect(-17,-48,13,42);ctx.fillRect(5,-48,13,42);ctx.fillStyle=accent;ctx.fillRect(-21,-52,18,9);ctx.fillRect(4,-52,18,9);
-ctx.fillStyle=side>0?"#174c78":"#492b76";ctx.beginPath();ctx.moveTo(-25,-105);ctx.lineTo(22,-105);ctx.lineTo(27,-56);ctx.lineTo(-27,-56);ctx.closePath();ctx.fill();ctx.strokeStyle=accent;ctx.lineWidth=3;ctx.stroke();
+ctx.fillStyle=side>0?" #5b2678":"#492b76";ctx.beginPath();ctx.moveTo(-25,-105);ctx.lineTo(22,-105);ctx.lineTo(27,-56);ctx.lineTo(-27,-56);ctx.closePath();ctx.fill();ctx.strokeStyle=accent;ctx.lineWidth=3;ctx.stroke();
 ctx.fillStyle="#202f48";ctx.fillRect(-29,-99,12,35);ctx.fillRect(18,-99,12,35);
 ctx.fillStyle="#b7c7dc";ctx.beginPath();ctx.arc(0,-123,19,0,Math.PI*2);ctx.fill();ctx.fillStyle="#1b2940";ctx.fillRect(-20,-132,40,12);ctx.fillStyle=accent;ctx.fillRect(-14,-126,28,5);
 ctx.strokeStyle="#d4e4f7";ctx.lineWidth=8;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(17,-91);ctx.lineTo(38,-87);ctx.stroke();
