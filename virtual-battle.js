@@ -26,6 +26,7 @@ function setFighterPortrait(id,fighter,side){
  const img=document.createElement("img");img.alt=fighter.display_name+" portrait";img.src=portraitData(fighter,side);
  host.replaceChildren(img);const online=document.createElement("i");host.appendChild(online);
 }
+function updateMatchClock(m){if(!m)return;const now=Date.now(),start=Date.parse(m.scheduled_start_at||""),end=Date.parse(m.ends_at||"");let seconds=0,label="FINAL";if(m.status==="scheduled"&&Number.isFinite(start)){seconds=Math.max(0,Math.ceil((start-now)/1000));label="NEXT MATCH IN";}else if(m.status==="running"&&Number.isFinite(end)){seconds=Math.max(0,Math.ceil((end-now)/1000));label="TIME LEFT";}setText("vb-clock",String(Math.floor(seconds/60)).padStart(2,"0")+":"+String(seconds%60).padStart(2,"0"));setText("vb-clock-label",label);}
 function statusLabel(m){return m?.status==="scheduled"?"PREDICTIONS OPEN":m?.status==="running"?"BATTLE IN PROGRESS":m?.status==="completed"?"MATCH COMPLETED":"WAITING";}
 function setText(id,value){const el=$(id);if(el)el.textContent=value;}
 function render(){setText("vb-balance",fmt(state?.balance??0));if($("vb-claim-daily"))$("vb-claim-daily").disabled=Boolean(state?.daily_claimed);if($("vb-claim-daily"))$("vb-claim-daily").textContent=state?.daily_claimed?"CLAIMED TODAY":"CLAIM +250";currentMatch=activeMatch();const m=currentMatch;if(!m){setText("vb-status","NO MATCH");$("vb-markets").innerHTML='<div class="vb-loading">No match is available. Generate the first battle.</div>';return;}
@@ -33,10 +34,7 @@ if(visualMatchId!==m.id){visualMatchId=m.id;visualEvents=[];seenEventKeys.clear(
 const roundNow=m.status==="running"?Math.min(3,Math.floor(m.elapsed_sec/20)+1):m.status==="completed"?3:0;
 setText("vb-round",m.status==="scheduled"?"NEXT MATCH":m.status==="completed"?"MATCH COMPLETE":"ROUND "+roundNow+" / 3");const live=$("vb-live");if(live)live.classList.toggle("active",m.status==="running");setText("vb-a-name",m.fighter_a.display_name);setText("vb-b-name",m.fighter_b.display_name);setFighterPortrait("vb-avatar-a",m.fighter_a,"a");setFighterPortrait("vb-avatar-b",m.fighter_b,"b");setText("vb-a-call",m.fighter_a.call_sign);setText("vb-b-call",m.fighter_b.call_sign);setText("vb-a-record",`${m.fighter_a.matches_played||0} MATCHES · ${m.fighter_a.win_rate??50}% WIN RATE · ${m.fighter_a.total_headshots||0} HS`);setText("vb-b-record",`${m.fighter_b.matches_played||0} MATCHES · ${m.fighter_b.win_rate??50}% WIN RATE · ${m.fighter_b.total_headshots||0} HS`);const aWeapon=m.result?.fighter_a_weapon||(m.events||[]).find(e=>e.actor_id===m.fighter_a.fighter_id)?.weapon||"—";const bWeapon=m.result?.fighter_b_weapon||(m.events||[]).find(e=>e.actor_id===m.fighter_b.fighter_id)?.weapon||"—";setText("vb-a-weapon","WEAPON · "+aWeapon.toUpperCase());setText("vb-b-weapon","WEAPON · "+bWeapon.toUpperCase());
 const aHp=m.result?.fighter_a_hp??(m.events?.filter(e=>e.target_id===m.fighter_a.fighter_id).slice(-1)[0]?.target_hp??100);const bHp=m.result?.fighter_b_hp??(m.events?.filter(e=>e.target_id===m.fighter_b.fighter_id).slice(-1)[0]?.target_hp??100);setText("vb-a-hp",aHp);setText("vb-b-hp",bHp);$("vb-a-health").style.width=Math.max(0,aHp)+"%";$("vb-b-health").style.width=Math.max(0,bHp)+"%";
-const nowMs=Date.now(),startAtMs=Date.parse(m.scheduled_start_at||""),endAtMs=Date.parse(m.ends_at||"");
-const countdown=m.status==="scheduled"&&Number.isFinite(startAtMs)?Math.max(0,Math.ceil((startAtMs-nowMs)/1000)):m.status==="running"&&Number.isFinite(endAtMs)?Math.max(0,Math.ceil((endAtMs-nowMs)/1000)):0;
-setText("vb-clock","00:"+String(Math.min(60,countdown)).padStart(2,"0"));
-setText("vb-clock-label",m.status==="scheduled"?"NEXT MATCH IN":m.status==="running"?"TIME LEFT":"FINAL");
+updateMatchClock(m);
 const overlay=$("vb-canvas-overlay");if(overlay){overlay.classList.toggle("hidden",m.status==="running"||m.status==="completed");const title=overlay.querySelector("strong"),hint=overlay.querySelector("small");if(title)title.textContent=m.status==="scheduled"?"BATTLE STARTS SOON":m.status==="completed"?"MATCH COMPLETED":"ARENA STANDBY";if(hint)hint.textContent=m.status==="scheduled"?"Predictions close when the countdown ends":m.status==="completed"?"View the verified match result below":"Waiting for battle sequence";}
 setText("vb-event-count",(m.events?.length||0)+" COMBAT EVENTS");const last=(m.events||[]).slice(-1)[0];setText("vb-event-line",last?.text|| (m.status==="scheduled"?"Predictions are open. Battle begins after the countdown.":"No combat event yet."));
 renderMarkets(m);renderLiveFeed(m);
@@ -47,19 +45,20 @@ draw();
 function renderMarkets(m){
  const host=$("vb-markets");if(!host)return;
  const accepting=m.status==="scheduled";
- const markets=m.markets||[];if(!markets.length){host.innerHTML='<div class="vb-loading">Loading markets…</div>';return;}
- host.innerHTML=markets.map(market=>{
-  const mine=(m.predictions||[]).find(p=>p.market_id===market.id);
-  const options=Object.entries(market.selections||{});
-  const locked=!accepting||market.status!=="open"||Boolean(mine); return '<article class="vb-market"><div class="vb-market-heading"><h3>'+esc(market.label)+'</h3><small>'+(locked?'LOCKED · ':'OPEN · ')+options.length+' OUTCOMES</small></div><div class="vb-market-options">'+options.map(([key,label])=>'<button class="vb-option '+(selected?.market?.id===market.id&&selected.selection===key?'selected':'')+'" data-market="'+market.id+'" data-selection="'+esc(key)+'" '+(locked?'disabled':'')+'><span>'+esc(label)+'</span><b>'+Number(market.odds?.[key]||1).toFixed(2)+'×</b></button>').join('')+'</div>'+(mine?'<p class="vb-market-locked">Your prediction is submitted for this market.</p>':locked?'<p class="vb-market-locked">Predictions are closed. Odds remain visible.</p>':'')+'</article>';
- }).join('');
+ const market=(m.markets||[]).find(x=>x.market_key==="winner")||(m.markets||[])[0];
+ if(!market){host.innerHTML='<div class="vb-loading">The next match odds are being prepared…</div>';return;}
+ const mine=(m.predictions||[]).find(p=>p.market_id===market.id);
+ const options=Object.entries(market.selections||{}).slice(0,2);
+ const locked=!accepting||market.status!=="open"||Boolean(mine);
+ host.innerHTML='<article class="vb-market vb-winner-market"><div class="vb-market-heading"><h3>WHO WILL WIN?</h3><small>'+(locked?'PREDICTIONS LOCKED':'CHOOSE ONE OF TWO OUTCOMES')+'</small></div><div class="vb-market-options">'+options.map(([key,label])=>'<button class="vb-option '+(selected?.market?.id===market.id&&selected.selection===key?'selected':'')+'" data-market="'+market.id+'" data-selection="'+esc(key)+'" '+(locked?'disabled':'')+'><span>'+esc(label)+' WINS</span><b>'+Number(market.odds?.[key]||1).toFixed(2)+'×</b></button>').join('')+'</div>'+(mine?'<p class="vb-market-locked">Your prediction has been submitted for this match.</p>':locked?'<p class="vb-market-locked">Predictions close when the match starts.</p>':'<p class="vb-market-locked">Odds are published before the battle. Select one outcome to predict.</p>')+'</article>';
  host.querySelectorAll("[data-market]").forEach(btn=>btn.addEventListener("click",()=>{
-  const market=markets.find(x=>x.id===btn.dataset.market),selection=btn.dataset.selection;
+  const selection=btn.dataset.selection;
   selected={market,selection,label:market.selections[selection],odds:Number(market.odds[selection])};
-  $("vb-slip").hidden=false;setText("vb-slip-title",market.label+" · "+selected.label);updatePotential();
+  $("vb-slip").hidden=false;setText("vb-slip-title",selected.label+" wins");updatePotential();
   host.querySelectorAll(".vb-option").forEach(x=>x.classList.toggle("selected",x===btn));
  }));
 }
+
 function renderRoster(){
  const host=$("vb-roster");if(!host)return;
  const fighters=state?.fighters||[];
@@ -68,6 +67,7 @@ function renderRoster(){
  host.innerHTML=fighters.map(f=>'<article class="vb-roster-card '+(active.has(f.fighter_id)?'active':'')+'"><span class="vb-roster-mark" style="--fighter-accent:'+esc(f.accent||"#7b61ff")+'">'+esc((f.display_name||"?").slice(0,1))+'</span><span class="vb-roster-info"><b>'+esc(f.display_name)+'</b><small>'+esc(f.call_sign||"TM FIGHTER")+'</small><small>'+Number(f.matches_played||0)+' MATCHES · '+Number(f.win_rate??50)+'% WIN</small></span><span class="vb-roster-tag">'+(active.has(f.fighter_id)?"IN MATCH":"ROSTER")+'</span></article>').join("");
 }
 function updatePotential(){const input=$("vb-stake");const stake=Math.max(0,Number(input?.value)||0);setText("vb-potential",fmt(Math.floor(stake*(selected?.odds||0)))+" pts");}
+function adjustStake(delta){const input=$("vb-stake");if(!input)return;const current=Math.max(100,Number(input.value)||100);input.value=String(Math.max(100,Math.min(5000,current+delta)));updatePotential();}
 function renderLiveFeed(m){
  const host=$("vb-event-feed");if(!host)return;
  const events=(m.events||[]).slice(-5).reverse();
@@ -113,8 +113,8 @@ if(m?.status==="completed"){ctx.fillStyle="#06101dcc";ctx.fillRect(0,0,w,h);ctx.
 async function refresh(force=false){if(refreshing){if(force)refreshQueued=true;return;}if(busy&&!force){refreshQueued=true;return;}refreshing=true;try{state=await api("state");let hasActive=Boolean(state.matches?.some(m=>m.status==="scheduled"||m.status==="running"));if(!hasActive){await api("create_match");state=await api("state");hasActive=Boolean(state.matches?.some(m=>m.status==="scheduled"||m.status==="running"));}render();}catch(e){toast(e.message);setText("vb-status","CONNECTION ERROR");}finally{refreshing=false;if(refreshQueued&&!busy){refreshQueued=false;setTimeout(()=>refresh(),0);}}}
 async function claimDaily(){if(busy||state?.daily_claimed)return;busy=true;$("vb-claim-daily").disabled=true;try{await api("claim_daily");busy=false;await refresh();toast("250 free points added to your balance.");}catch(e){toast(e.message);}finally{busy=false;}}
 async function createNext(){if(busy)return;busy=true;try{await api("create_match");selected=null;$("vb-slip").hidden=true;busy=false;await refresh();toast("Next battle is ready.");}catch(e){toast(e.message);}finally{busy=false;}}
-async function submitPrediction(){if(!selected||busy)return;const stake=Number($("vb-stake").value);if(!Number.isInteger(stake)||stake<10||stake>5000){toast("Enter a whole-number stake from 10 to 5,000 points.");return;}if(stake>Number(state?.balance||0)){toast("Not enough virtual points.");return;}busy=true;$("vb-submit").disabled=true;try{await api("place_prediction",{market_id:selected.market.id,selection:selected.selection,stake});selected=null;$("vb-slip").hidden=true;busy=false;await refresh();toast("Prediction submitted.");}catch(e){toast(e.message);}finally{busy=false;$("vb-submit").disabled=false;}}
-function startPolling(){clearInterval(pollTimer);pollTimer=setInterval(()=>{if(document.visibilityState==="visible")refresh();},1800);document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")refresh();});cancelAnimationFrame(raf);const loop=()=>{draw();raf=requestAnimationFrame(loop);};loop();}
-function boot(){if(!canvas)return;sessionToken=localStorage.getItem("tm_session")||"";if(!sessionToken){setText("vb-status","SIGN IN REQUIRED");$("vb-markets").innerHTML='<div class="vb-loading">Please sign in to your TM App account, then reopen Virtual Battle.</div>';return;}if($("vb-claim-daily"))$("vb-claim-daily").addEventListener("click",claimDaily);if($("vb-stake"))$("vb-stake").addEventListener("input",updatePotential);if($("vb-slip-close"))$("vb-slip-close").addEventListener("click",()=>{$("vb-slip").hidden=true;selected=null;});if($("vb-submit"))$("vb-submit").addEventListener("click",submitPrediction);refresh().then(startPolling);window.addEventListener("resize",resizeCanvas);resizeCanvas();}
+async function submitPrediction(){if(!selected||busy)return;const stake=Number($("vb-stake").value);if(!Number.isInteger(stake)||stake<100||stake>5000){toast("Enter a whole-number stake from 100 to 5,000 points.");return;}if(stake>Number(state?.balance||0)){toast("Not enough virtual points.");return;}busy=true;$("vb-submit").disabled=true;try{await api("place_prediction",{market_id:selected.market.id,selection:selected.selection,stake});selected=null;$("vb-slip").hidden=true;busy=false;await refresh();toast("Prediction submitted.");}catch(e){toast(e.message);}finally{busy=false;$("vb-submit").disabled=false;}}
+function startPolling(){clearInterval(pollTimer);pollTimer=setInterval(()=>{if(document.visibilityState==="visible"){updateMatchClock(activeMatch());refresh();}},1000);document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")refresh();});cancelAnimationFrame(raf);const loop=()=>{draw();raf=requestAnimationFrame(loop);};loop();}
+function boot(){if(!canvas)return;sessionToken=localStorage.getItem("tm_session")||"";if(!sessionToken){setText("vb-status","SIGN IN REQUIRED");$("vb-markets").innerHTML='<div class="vb-loading">Please sign in to your TM App account, then reopen Virtual Battle.</div>';return;}if($("vb-claim-daily"))$("vb-claim-daily").addEventListener("click",claimDaily);if($("vb-stake"))$("vb-stake").addEventListener("input",updatePotential);if($("vb-stake-minus"))$("vb-stake-minus").addEventListener("click",()=>adjustStake(-100));if($("vb-stake-plus"))$("vb-stake-plus").addEventListener("click",()=>adjustStake(100));if($("vb-slip-close"))$("vb-slip-close").addEventListener("click",()=>{$("vb-slip").hidden=true;selected=null;});if($("vb-submit"))$("vb-submit").addEventListener("click",submitPrediction);refresh().then(startPolling);window.addEventListener("resize",resizeCanvas);resizeCanvas();}
 boot();
 })();
