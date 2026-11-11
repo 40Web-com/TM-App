@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080d1c">
+<title>TM Virtual Battle</title>
+<link rel="stylesheet" href="./virtual-battle.css?v=1">
+</head>
+<body>
+<main class="vb-shell">
+  <header class="vb-header">
+    <a class="vb-back" id="vb-back" href="./">← TM App</a>
+    <div class="vb-brand"><span class="vb-mark">TM</span><span><b>VIRTUAL BATTLE</b><small>1V1 ARENA · FREE POINTS MODE</small></span></div>
+    <div class="vb-wallet"><small>YOUR POINTS</small><strong id="vb-balance">—</strong><button id="vb-claim-daily" class="vb-claim">CLAIM +250</button></div>
+  </header>
+  <section class="vb-intro">
+    <div><span class="vb-kicker">SIMULATED ESPORTS · LONE WOLF</span><h1>ENTER THE <em>ARENA</em></h1><p>Predict the action. Watch the 60-second battle. Track every result.</p></div>
+    <div class="vb-live" id="vb-live"><i></i><span id="vb-status">CONNECTING</span></div>
+  </section>
+  <section class="vb-arena-card">
+    <div class="vb-arena-top"><span id="vb-match-id">MATCH LOADING</span><span class="vb-countdown" id="vb-clock">--:--</span><span class="vb-version">TMVB 1.0</span></div>
+    <div class="vb-fighters">
+      <article class="vb-fighter vb-blue">
+        <div class="vb-avatar"><span class="vb-avatar-symbol">N</span><i></i></div>
+        <div class="vb-fighter-meta"><small>FIGHTER 01</small><strong id="vb-a-name">NOVA</strong><span id="vb-a-call">THE STRIKER</span><span id="vb-a-record">0 MATCHES · 50% WIN RATE</span></div>
+        <div class="vb-health"><div><span>HP</span><b id="vb-a-hp">100</b></div><span class="vb-health-track"><i id="vb-a-health"></i></span></div>
+      </article>
+      <div class="vb-vs">VS</div>
+      <article class="vb-fighter vb-purple">
+        <div class="vb-avatar"><span class="vb-avatar-symbol">V</span><i></i></div>
+        <div class="vb-fighter-meta"><small>FIGHTER 02</small><strong id="vb-b-name">VEX</strong><span id="vb-b-call">THE PHANTOM</span><span id="vb-b-record">0 MATCHES · 50% WIN RATE</span></div>
+        <div class="vb-health"><div><span>HP</span><b id="vb-b-hp">100</b></div><span class="vb-health-track"><i id="vb-b-health"></i></span></div>
+      </article>
+    </div>
+    <div class="vb-canvas-wrap"><canvas id="vb-canvas" width="960" height="430" aria-label="Animated virtual 1v1 battle arena"></canvas><div class="vb-canvas-overlay" id="vb-canvas-overlay"><span class="vb-overlay-icon">⚔</span><strong>ARENA STANDBY</strong><small>Waiting for battle sequence</small></div></div>
+    <div class="vb-arena-footer"><span id="vb-a-weapon">WEAPON —</span><span id="vb-event-count">0 COMBAT EVENTS</span><span id="vb-b-weapon">WEAPON —</span></div>
+    <div class="vb-event-line" id="vb-event-line">Battle events will appear here.</div>
+  </section>
+  <section class="vb-markets-section">
+    <div class="vb-section-head"><div><span class="vb-kicker">PREDICTION ROOM</span><h2>CHOOSE YOUR MARKET</h2></div><div class="vb-market-actions"><span class="vb-points-note">Virtual points only</span><button id="vb-next-match" class="vb-quiet" hidden>GENERATE NEXT BATTLE</button></div></div>
+    <div id="vb-markets" class="vb-markets"><div class="vb-loading">Loading prediction markets…</div></div>
+    <div class="vb-slip" id="vb-slip" hidden>
+      <div class="vb-slip-head"><div><small>YOUR PREDICTION</small><strong id="vb-slip-title">Select an outcome</strong></div><button id="vb-slip-close" aria-label="Close">×</button></div>
+      <label class="vb-stake-label">Virtual stake <span>10–5,000 points</span><input id="vb-stake" type="number" min="10" max="5000" step="10" value="100" inputmode="numeric"></label>
+      <div class="vb-slip-return"><span>Potential return</span><strong id="vb-potential">185 pts</strong></div>
+      <button id="vb-submit" class="vb-primary">CONFIRM PREDICTION</button>
+      <p class="vb-disclaimer">No cash, deposits, withdrawals or cash prizes. Points have no monetary value.</p>
+    </div>
+  </section>
+  <section class="vb-lower-grid">
+    <article class="vb-panel"><div class="vb-section-head"><div><span class="vb-kicker">MATCH CENTRE</span><h2>FINAL RESULT</h2></div></div><div id="vb-result" class="vb-result-empty">The official result appears when the match ends.</div></article>
+    <article class="vb-panel"><div class="vb-section-head"><div><span class="vb-kicker">YOUR ACTIVITY</span><h2>MY PREDICTIONS</h2></div></div><div id="vb-my-predictions" class="vb-predictions-empty">Your submitted predictions will appear here.</div></article>
+  </section>
+  <section class="vb-history"><div class="vb-section-head"><div><span class="vb-kicker">RECENT RECORDS</span><h2>BATTLE HISTORY</h2></div><button id="vb-refresh" class="vb-quiet">REFRESH</button></div><div id="vb-history-list" class="vb-history-list">No completed battles yet.</div></section>
+  <footer class="vb-footer"><span>TM VIRTUAL BATTLE</span><span>Original simulated characters · Not affiliated with Garena Free Fire</span></footer>
+  <div class="vb-toast" id="vb-toast" role="status" aria-live="polite"></div>
+</main>
+<script src="./virtual-battle.js?v=1"></script>
+</body>
+</html>
