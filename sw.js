@@ -1,4 +1,4 @@
-const CACHE_NAME = "tm-app-pages-v158";
+const CACHE_NAME = "tm-app-pages-v159";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -18,6 +18,7 @@ const APP_SHELL = [
   "./gamehub.js",
   "./discover.css",
   "./google-auth.css",
+  "./adminhub.css",
   "./virtual-battle.html",
   "./virtual-battle.css",
   "./virtual-battle.js"
