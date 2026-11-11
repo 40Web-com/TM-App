@@ -10,7 +10,7 @@
 <body>
 <main class="vb-shell">
   <header class="vb-header">
-    <div class="vb-brand"><span class="vb-mark">TM</span><span><b>FREE FIRE · VIRTUAL BATTLE</b><small>50 ORIGINAL FIGHTERS · 1V1 SIMULATOR</small></span></div>
+    <div class="vb-brand"><span class="vb-mark">TM</span><span><b>FREE FIRE · VIRTUAL BATTLE</b><small>LIVE 1V1 SIMULATION · TM ARENA</small></span></div>
     <div class="vb-wallet"><small>YOUR POINTS</small><strong id="vb-balance">—</strong><button id="vb-claim-daily" class="vb-claim">CLAIM +250</button></div>
   </header>
   <section class="vb-arena-card">
@@ -30,10 +30,10 @@
     </div>
     <div class="vb-canvas-wrap"><canvas id="vb-canvas" width="960" height="430" aria-label="Animated virtual 1v1 battle arena"></canvas><div class="vb-canvas-overlay" id="vb-canvas-overlay"><span class="vb-overlay-icon">⚔</span><strong>ARENA STANDBY</strong><small>Preparing the next 1v1</small></div></div>
     <div class="vb-arena-footer"><span id="vb-a-weapon">WEAPON —</span><span id="vb-event-count">0 COMBAT EVENTS</span><span id="vb-b-weapon">WEAPON —</span></div>
-    <div class="vb-event-line" id="vb-event-line">The next battle is being prepared.</div>
+    <div class="vb-event-line" id="vb-event-line">Live combat events will appear here.</div><div class="vb-event-feed" id="vb-event-feed" aria-live="polite"></div>
   </section>
   <section class="vb-markets-section">
-    <div class="vb-section-head"><div><span class="vb-kicker">PICK YOUR FIGHTER</span><h2>WHO WILL WIN?</h2><p>Choose one of the two fighters before the countdown ends.</p></div><span class="vb-points-note">FREE VIRTUAL POINTS</span></div>
+    <div class="vb-section-head"><div><span class="vb-kicker">TM VIRTUAL BATTLE</span><h2>LIVE MARKETS</h2><p>Explore all available markets before the battle starts.</p></div><span class="vb-points-note">VIRTUAL POINTS ONLY</span></div>
     <div id="vb-markets" class="vb-markets"><div class="vb-loading">Loading this match…</div></div>
     <div class="vb-slip" id="vb-slip" hidden>
       <div class="vb-slip-head"><div><small>YOUR PICK</small><strong id="vb-slip-title">Choose a fighter</strong></div><button id="vb-slip-close" aria-label="Close">×</button></div>
@@ -43,8 +43,8 @@
       <p class="vb-disclaimer">Virtual points only. No deposits, withdrawals or cash prizes.</p>
     </div>
   </section>
-  <section class="vb-roster-section"><div class="vb-section-head"><div><span class="vb-kicker">THE FIGHTER LEAGUE</span><h2>50 CHARACTERS</h2><p>Every fighter builds a permanent record as matches are played.</p></div><span id="vb-roster-count" class="vb-points-note">50 FIGHTERS</span></div><div id="vb-roster" class="vb-roster-grid"><div class="vb-loading">Loading fighter roster…</div></div></section>
-  <button id="vb-next-match" class="vb-quiet" hidden>PREPARE NEXT MATCH</button>
+  
+  
   <button id="vb-refresh" class="vb-quiet vb-refresh">REFRESH ARENA</button>
   <div class="vb-toast" id="vb-toast" role="status" aria-live="polite"></div>
 </main>
