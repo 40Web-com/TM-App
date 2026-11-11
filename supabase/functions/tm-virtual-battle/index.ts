@@ -62,17 +62,17 @@ function applyForm(fighter: any) {
 function simulate(seed: string, a: any, b: any) {
   const rand = makeRandom(seed);
   const base = [
-    { id:a.fighter_id,name:a.display_name,hp:Number(a.base_health)||100,weapon:a.weapon_pool[Math.floor(rand()*a.weapon_pool.length)],headshots:0,nextShot:Math.max(0,a.reaction_ms/1000),accuracy:Number(a.accuracy),headRate:Number(a.headshot_rate) },
-    { id:b.fighter_id,name:b.display_name,hp:Number(b.base_health)||100,weapon:b.weapon_pool[Math.floor(rand()*b.weapon_pool.length)],headshots:0,nextShot:Math.max(0,b.reaction_ms/1000),accuracy:Number(b.accuracy),headRate:Number(b.headshot_rate) },
+    { id:a.fighter_id,name:a.display_name,hp:Number(a.base_health)||100,weapon:a.weapon_pool[Math.floor(rand()*a.weapon_pool.length)],headshots:0,nextShot:Math.max(0,a.reaction_ms/1000),accuracy:Number(a.accuracy),headRate:Number(a.headshot_rate),x:110,y:0,hideUntil:0,stamina:100 },
+    { id:b.fighter_id,name:b.display_name,hp:Number(b.base_health)||100,weapon:b.weapon_pool[Math.floor(rand()*b.weapon_pool.length)],headshots:0,nextShot:Math.max(0,b.reaction_ms/1000),accuracy:Number(b.accuracy),headRate:Number(b.headshot_rate),x:850,y:0,hideUntil:0,stamina:100 },
   ];
   const fighters = base.map(f=>({...f}));
   const events:any[]=[];
   let firstHeadshot:string|null=null,firstHeadshotTime:number|null=null;
   let firstEliminated:string|null=null,finalWeapon:string|null=null;
-  let totalHits=0,totalMisses=0,totalEliminations=0,totalGlooBlocks=0,totalDodges=0,totalJumps=0,totalFireballs=0,roundA=0,roundB=0,roundEliminationWins=0;
+  let totalHits=0,totalMisses=0,totalEliminations=0,totalGlooBlocks=0,totalDodges=0,totalJumps=0,totalFireballs=0,totalHides=0,totalChases=0,totalMelee=0,totalGrenades=0,totalSlides=0,totalCrouches=0,totalReloads=0,totalFlanks=0,roundA=0,roundB=0,roundEliminationWins=0;
   const roundScores:any[]=[];
   const push=(t:number,round:number,type:string,actor:any,target:any,damage=0,headshot=false)=>{
-    events.push({time_sec:Math.max(0,Math.min(60,Number(t.toFixed(2)))),round,type,actor_id:actor.id,actor_name:actor.name,target_id:target.id,target_name:target.name,weapon:actor.weapon,weapon_label:weaponData[actor.weapon].label,damage,headshot,target_hp:Math.max(0,Math.round(target.hp)),text:type==="miss"?actor.name+" missed a shot":type==="headshot"?"HEADSHOT! "+actor.name+" hit "+target.name:type==="hit"?actor.name+" hit "+target.name:type==="fireball"?"FIREBALL! "+actor.name+" scorched "+target.name:type==="gloo_wall"?target.name+" blocked the shot with a Gloo Wall":type==="dodge"?target.name+" dodged the incoming attack":type==="jump"?actor.name+" jumped to reposition":type==="elimination"?actor.name+" eliminated "+target.name:""});
+    events.push({time_sec:Math.max(0,Math.min(75,Number(t.toFixed(2)))),round,type,actor_id:actor.id,actor_name:actor.name,target_id:target.id,target_name:target.name,weapon:actor.weapon,weapon_label:weaponData[actor.weapon].label,damage,headshot,target_hp:Math.max(0,Math.round(target.hp)),text:type==="miss"?actor.name+" missed a shot":type==="headshot"?"HEADSHOT! "+actor.name+" hit "+target.name:type==="hit"?actor.name+" hit "+target.name:type==="fireball"?"FIREBALL! "+actor.name+" scorched "+target.name:type==="gloo_wall"?target.name+" blocked the shot with a Gloo Wall":type==="dodge"?target.name+" dodged the incoming attack":type==="jump"?actor.name+" jumped to reposition":type==="elimination"?actor.name+" eliminated "+target.name:""});
   };
   for(let round=1;round<=3;round++){
     for(let i=0;i<2;i++){fighters[i].hp=Number(base[i].hp)||100;fighters[i].nextShot=(round-1)*20000+Math.max(0,Number(i===0?a.reaction_ms:b.reaction_ms));}
@@ -87,10 +87,14 @@ function simulate(seed: string, a: any, b: any) {
       for(const actor of ready){
         const target=fighters.find(f=>f.id!==actor.id)!;
         if(target.hp<=0)continue;
+        const dir=target.x>=actor.x?1:-1,dist=Math.abs(target.x-actor.x);
+        if(ms%1000===0){const move=rand();if(move<0.10){actor.hideUntil=ms/1000+1.5;actor.x=Math.max(40,Math.min(920,actor.x-dir*36));totalHides++;push(ms/1000,round,"hide",actor,target);}else if(move<0.22){actor.x=Math.max(40,Math.min(920,actor.x+dir*(actor.id===fighters[0].id?1:-1)*65));actor.y=(rand()-.5)*48;totalFlanks++;push(ms/1000,round,"flank",actor,target);}else if(move<0.32&&actor.stamina>15){actor.stamina-=15;actor.x=Math.max(40,Math.min(920,actor.x-dir*62));totalSlides++;push(ms/1000,round,"slide",actor,target);}else if(dist>330){actor.x+=dir*22;actor.stamina=Math.max(0,actor.stamina-1);totalChases++;push(ms/1000,round,"chase",actor,target);}else if(dist<190){actor.x-=dir*18;actor.y=(rand()-.5)*40;}else{actor.y=Math.sin(ms/3000+actor.id.length)*30;}actor.x=Math.max(40,Math.min(920,actor.x));if(rand()<0.16){totalJumps++;push(ms/1000,round,"jump",actor,target);}push(ms/1000,round,"move",actor,target,0,false,{actor_x:actor.x,actor_y:actor.y});}
+        if(actor.hideUntil>ms/1000)continue;
         const weapon=weaponData[actor.weapon];actor.nextShot=ms+weapon.interval;
-        if(rand()<0.16){totalJumps++;push(ms/1000,round,"jump",actor,target);}
-        if(rand()<0.12){totalDodges++;push(ms/1000,round,"dodge",actor,target);continue;}
-        const wallBlocked=rand()<0.10;if(wallBlocked){totalGlooBlocks++;push(ms/1000,round,"gloo_wall",actor,target);}
+        if(rand()<0.14){totalDodges++;actor.x=Math.max(40,Math.min(920,actor.x-dir*58));push(ms/1000,round,"dodge",actor,target);continue;}
+        const wallBlocked=rand()<0.09;if(wallBlocked){totalGlooBlocks++;push(ms/1000,round,"gloo_wall",actor,target,0,false,{wall_x:(actor.x+target.x)/2});}
+        if(Math.abs(actor.x-target.x)<120&&rand()<0.12){const meleeDamage=10+Math.floor(rand()*9);target.hp-=meleeDamage;totalMelee++;totalHits++;push(ms/1000,round,"melee",actor,target,meleeDamage);}
+        if(rand()<0.03){totalGrenades++;push(ms/1000,round,"grenade",actor,target,0,false,{impact_x:target.x});}
         if(rand()>actor.accuracy){intents.push({actor,target,type:"miss",damage:0,headshot:false});totalMisses++;continue;}
         const headshot=rand()<actor.headRate,fireball=rand()<0.08,damage=Math.round((weapon.damage*(headshot?weapon.head:1)+(fireball?12:0))*(wallBlocked?0.28:1));
         intents.push({actor,target,type:fireball?"fireball":headshot?"headshot":"hit",damage,headshot});totalHits++;if(fireball)totalFireballs++;
@@ -119,11 +123,11 @@ function simulate(seed: string, a: any, b: any) {
   return {events,result:{
     winner_id:winner,is_draw:winner===null,first_headshot_by:firstHeadshot,first_headshot_time_sec:firstHeadshotTime,
     first_headshot_time_outcome:firstHeadshotTime===null?"none":firstHeadshotTime<30?"under_30":"over_30",
-    first_elimination_id:firstEliminated,final_weapon:finalWeapon,duration_sec:60,total_headshots:totalHeadshots,
+    first_elimination_id:firstEliminated,final_weapon:finalWeapon,duration_sec:75,total_headshots:totalHeadshots,
     fighter_a_headshots:fighters[0].headshots,fighter_b_headshots:fighters[1].headshots,
     fighter_a_hp:Math.max(0,Math.round(fighters[0].hp)),fighter_b_hp:Math.max(0,Math.round(fighters[1].hp)),
     fighter_a_weapon:fighters[0].weapon,fighter_b_weapon:fighters[1].weapon,
-    gloo_wall_blocks:totalGlooBlocks,dodges:totalDodges,jumps:totalJumps,fireballs:totalFireballs,
+    gloo_wall_blocks:totalGlooBlocks,dodges:totalDodges,jumps:totalJumps,fireballs:totalFireballs,hides:totalHides,chases:totalChases,melee:totalMelee,grenades:totalGrenades,slides:totalSlides,crouches:totalCrouches,reloads:totalReloads,flanks:totalFlanks,
     both_headshot:fighters[0].headshots>0&&fighters[1].headshots>0,total_eliminations:totalEliminations,total_hits:totalHits,total_misses:totalMisses,
     winner_by:winner===null?"draw":roundEliminationWins>0?"elimination":"time",
     winner_remaining_health:winnerFighter?Math.max(0,Math.round(winnerFighter.hp)):null,
@@ -171,7 +175,7 @@ function publicMatch(match: any, markets: any[], predictions: any[], bets: any[]
   const now = Date.now();
   const start = new Date(match.scheduled_start_at).getTime();
   const end = new Date(match.ends_at).getTime();
-  const elapsed = now < start ? 0 : Math.min(60, Math.max(0, Math.floor((now - start) / 1000)));
+  const elapsed = now < start ? 0 : Math.min(75, Math.max(0, Math.floor((now - start) / 1000)));
   const status = now < start ? "scheduled" : now < end ? "running" : "completed";
   const events = status === "scheduled" ? [] : (match.events || []).filter((e: any) => status === "completed" || e.time_sec <= elapsed);
   return {
@@ -222,13 +226,13 @@ Deno.serve(async (req: Request) => {
       const seed = randomSeed();
       const seedHash = await digest(seed);
       const { events, result } = simulate(seed, a, b);
-      const startAt = new Date(Date.now() + 60000);
-      const endAt = new Date(startAt.getTime() + 60000);
+      const startAt = new Date(Date.now() + 45000);
+      const endAt = new Date(startAt.getTime() + 75000);
       const { data: match, error: matchError } = await db.from("tmvb_matches").insert({
         status: "scheduled", fighter_a_id: a.fighter_id, fighter_b_id: b.fighter_id,
         fighter_a_snapshot: a, fighter_b_snapshot: b, scheduled_start_at: startAt.toISOString(),
         ends_at: endAt.toISOString(), seed_hash: seedHash, seed_secret: seed,
-        simulation_version: "tmvb-1.5.0-advanced-combat", events, result, created_by: userId,
+        simulation_version: "tmvb-1.6.0-tactical-75s", events, result, created_by: userId,
       }).select("id").single();
       if (matchError) {
         const { data: existing } = await db.from("tmvb_matches").select("id")
