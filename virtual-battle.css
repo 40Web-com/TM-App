@@ -141,3 +141,38 @@ body{background:radial-gradient(ellipse at 50% -20%,#42145c 0,#0a0611 62%);color
 .vb-stake-control{display:grid;grid-template-columns:48px minmax(0,1fr) 48px;gap:8px;margin-top:8px}.vb-stake-control button{border:1px solid #8e3ba9;border-radius:10px;background:#2b153b;color:#fff;font-size:24px;font-weight:900;min-height:46px}.vb-stake-control input{width:100%;min-width:0;box-sizing:border-box;text-align:center}.vb-winner-market .vb-market-options{grid-template-columns:repeat(2,minmax(0,1fr))}.vb-winner-market .vb-option{min-height:72px}.vb-winner-market .vb-option b{font-size:19px}
 
 .vb-market-locked{color:#d9b6ff;font-size:11px;font-weight:800;letter-spacing:.05em}.vb-option.selected{border-color:#f15bc2;background:linear-gradient(135deg,rgba(143,54,181,.34),rgba(241,91,194,.18));box-shadow:0 0 0 1px #f15bc2 inset}.vb-slip #vb-submit:disabled{opacity:.45;cursor:not-allowed}
+
+/* TM full-room white + purple visual system */
+:root{color-scheme:light;--blue:#7b43d6;--purple:#8b4be2;--muted:#77728a;--panel:#fff;--line:#e5d9f5;background:#fff;color:#21152f}
+html,body{min-height:100%;background:#fff!important;color:#21152f!important}
+body{background:linear-gradient(180deg,#fff 0%,#fbf9ff 100%)!important}
+.vb-shell.vb-full-room{width:100%;max-width:none;min-height:100vh;margin:0;padding:14px clamp(12px,2.2vw,30px) 48px}
+.vb-header{border-color:#e7dcf5}.vb-brand b{color:#241334}.vb-brand small,.vb-wallet small{color:#82758f}
+.vb-mark{background:linear-gradient(135deg,#9c66f1,#6327b9);box-shadow:0 6px 18px #8d54d833}
+.vb-wallet strong{color:#7134be}.vb-claim{border-color:#cbb2ed;background:#f4edff;color:#7134be}
+.vb-arena-card,.vb-panel{border:1px solid #e5d9f5;border-radius:20px;background:#fff;box-shadow:0 14px 38px #44206c12}
+.vb-arena-top{background:#fbf8ff;border-color:#e8def4;color:#6d5d7d}
+.vb-countdown{color:#7134be}.vb-version{color:#806a9c}
+.vb-fighters{background:linear-gradient(90deg,#f7f1ff,#fff 50%,#fbf2ff)}
+.vb-fighter-meta strong{color:#251536}.vb-fighter-meta small,.vb-health div{color:#806d91}.vb-fighter-meta span{color:#766b80}
+.vb-health-track{background:#ece5f4}.vb-vs{color:#9a7abd}
+.vb-arena-footer{background:#fff;border-color:#e9e0f2;color:#76638b}
+.vb-event-line{background:#fbf8ff;color:#6e3ca8;border-color:#eadff6}
+.vb-section-head h2{color:#241333}.vb-kicker{color:#8650c7}.vb-points-note{color:#776b83}
+.vb-markets{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.vb-market{background:#fff;border:1px solid #e7dcf4;border-radius:14px;box-shadow:0 5px 16px #4b26730a}
+.vb-market h3{color:#2b1a3c}.vb-market-heading small{color:#8c7a9e}
+.vb-option{border:1px solid #e5d9f2;background:#fcfaff;color:#38264a;border-radius:10px}
+.vb-option b{color:#7638c4}.vb-option.selected{border-color:#9b68dc;background:#f2eaff;box-shadow:inset 0 0 0 1px #a87ce455}
+.vb-option:disabled{opacity:.5}.vb-slip{border:1px solid #cbb1eb;background:linear-gradient(135deg,#fbf7ff,#fff);color:#2b1b3d}
+.vb-slip-head small{color:#7e43bd}.vb-slip-head strong{color:#2b1b3d}.vb-slip-return{color:#766784}.vb-slip-return strong{color:#7134be}
+.vb-stake-label{color:#4c3b5b}.vb-stake-label input{background:#fff;color:#251536;border-color:#ddcbed}
+.vb-primary{background:linear-gradient(100deg,#8b4be2,#6330b5)}
+.vb-result-empty,.vb-predictions-empty,.vb-loading{border-color:#e6d9f3;color:#786c84}
+.vb-result-winner{background:#f7f1ff;border-color:#d9c3f1;color:#28163a}
+.vb-stat,.vb-history-item{background:#fcfaff;border-color:#e9e0f2;color:#2c1c3c}
+.vb-stat small,.vb-history-item small{color:#82748f}
+.vb-prediction-row{border-color:#eee6f5;color:#38264a}
+.vb-toast{box-shadow:0 10px 32px #38204b22}
+@media(max-width:900px){.vb-markets{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.vb-shell.vb-full-room{padding:10px 10px 34px}.vb-arena-top{gap:8px;padding:0 10px;font-size:8px}.vb-markets{grid-template-columns:1fr}.vb-market{padding:12px}.vb-fighters{gap:7px;padding:12px 8px}.vb-fighter{grid-template-columns:44px 1fr;gap:7px}.vb-avatar{width:42px;height:42px}.vb-fighter-meta strong{font-size:12px}.vb-fighter-meta span{font-size:8px}.vb-vs{font-size:10px}}
