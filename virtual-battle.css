@@ -200,3 +200,18 @@ body{background:#fff!important;min-width:320px}
 .vb-canvas-wrap{background:#101a2c!important;border-radius:0!important}
 @media(max-width:900px){.vb-markets{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:560px){.vb-shell.vb-full-room{padding:8px 9px 28px}.vb-markets{grid-template-columns:1fr!important}.vb-fighters{padding:12px 7px;gap:6px}.vb-fighter{grid-template-columns:42px 1fr;gap:6px}.vb-avatar{width:42px;height:42px}.vb-fighter-meta strong{font-size:11px}}
+
+/* Feed-native white presentation across the complete betting room */
+:root{color-scheme:light!important;background:#fff!important;color:#241b2c!important;--blue:#7841c9;--purple:#8749d8;--muted:#766b82;--panel:#fff;--line:#e9e2f0}
+html,body{background:#fff!important;color:#241b2c!important;min-height:100%;margin:0}body{background:#fff!important;min-width:320px}
+.vb-shell,.vb-shell.vb-full-room{width:100%;max-width:none;min-height:100vh;margin:0;padding:clamp(10px,1.8vw,24px) clamp(10px,2vw,28px) 42px;background:#fff!important;color:#241b2c!important}
+.vb-header,.vb-intro,.vb-section-head,.vb-results-section,.vb-markets-section{background:#fff!important;color:#241b2c!important}.vb-header{border-color:#eee8f4!important}
+.vb-brand b,.vb-section-head h2,.vb-fighter-meta strong,.vb-market h3,.vb-stake-label{color:#261b30!important}.vb-brand small,.vb-wallet small,.vb-fighter-meta small,.vb-fighter-meta span,.vb-health div,.vb-intro p,.vb-section-head p{color:#82788a!important}
+.vb-wallet strong,.vb-countdown{color:#6f36bb!important}.vb-claim{background:#f6f0ff!important;border:1px solid #d9c5f0!important;color:#6f36bb!important}
+.vb-arena-card,.vb-panel{background:#fff!important;border:1px solid #eae4f0!important;box-shadow:0 5px 24px #2612390b!important;color:#241b2c!important}.vb-arena-top,.vb-fighters,.vb-arena-footer,.vb-event-line,.vb-event-feed{background:#fff!important;color:#786d82!important;border-color:#eee8f4!important}
+.vb-vs{color:#9875b7!important}.vb-health-track{background:#eee9f3!important}.vb-health-track i{background:linear-gradient(90deg,#8a4bd6,#c59af0)!important}.vb-purple .vb-health-track i{background:linear-gradient(90deg,#d45c9c,#f0a0c6)!important}
+.vb-market{background:#fff!important;border:1px solid #e9e2f0!important;box-shadow:0 3px 12px #32184908!important}.vb-market-heading small{color:#93879d!important}.vb-option{background:#faf8fc!important;border:1px solid #e9e2f0!important;color:#3c3046!important}.vb-option b{color:#7440bf!important}.vb-option.selected{background:#f2eaff!important;border-color:#a982d5!important}
+.vb-slip{background:#fff!important;border:1px solid #d9c6ed!important;box-shadow:0 8px 24px #3218490d!important;color:#241b2c!important}.vb-slip-head strong,.vb-slip-return strong{color:#7138b9!important}.vb-stake-label input{background:#fff!important;color:#241b2c!important;border:1px solid #e2d8eb!important}.vb-primary{background:linear-gradient(100deg,#8549d4,#6e35b8)!important;color:#fff!important}
+.vb-result-empty,.vb-predictions-empty,.vb-loading,.vb-result-winner,.vb-stat,.vb-history-item,.vb-prediction-row{background:#fff!important;border-color:#e9e2f0!important;color:#2b2035!important}
+.vb-markets{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}.vb-markets-section{width:100%;max-width:none}.vb-canvas-wrap{background:#101a2c!important;border-radius:0!important}
+@media(max-width:900px){.vb-markets{grid-template-columns:repeat(2,minmax(0,1fr))!important}}@media(max-width:560px){.vb-shell.vb-full-room{padding:8px 9px 28px}.vb-markets{grid-template-columns:1fr!important}.vb-fighters{padding:12px 7px;gap:6px}.vb-fighter{grid-template-columns:42px 1fr;gap:6px}.vb-avatar{width:42px;height:42px}.vb-fighter-meta strong{font-size:11px}}
