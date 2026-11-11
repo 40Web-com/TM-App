@@ -1022,3 +1022,8 @@ body.menu-open{overflow:hidden}
 .tm-topbar-brand .brand-logo{width:42px;height:42px;object-fit:contain;border-radius:12px;box-shadow:0 3px 14px #7d2cff26}
 .tm-topbar-brand b{font-weight:800;background:linear-gradient(100deg,#ffb51b,#f04480,#7b35ec);-webkit-background-clip:text;background-clip:text;color:transparent}
 @media(max-width:700px){.tm-topbar-brand{font-size:17px;gap:8px}.tm-topbar-brand .brand-logo{width:36px;height:36px}}
+
+/* Free Fire game sub-navigation: tools and its virtual battle live together. */
+.tm-embedded-game-tabs{display:flex;gap:10px;padding:12px 16px;background:#0a1020;border-bottom:1px solid #26334a;overflow-x:auto}
+.tm-embedded-game-tabs button{flex:1;min-width:130px;border:1px solid #34425d;border-radius:12px;padding:12px 14px;background:#111b30;color:#b8c7df;font-weight:800;font-size:13px;white-space:nowrap}
+.tm-embedded-game-tabs button.active{background:linear-gradient(110deg,#7137c9,#a34bd4);border-color:#b27bff;color:#fff;box-shadow:0 5px 18px #7c3bd944}
