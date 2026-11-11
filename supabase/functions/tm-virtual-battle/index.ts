@@ -228,7 +228,7 @@ Deno.serve(async (req: Request) => {
         status: "scheduled", fighter_a_id: a.fighter_id, fighter_b_id: b.fighter_id,
         fighter_a_snapshot: a, fighter_b_snapshot: b, scheduled_start_at: startAt.toISOString(),
         ends_at: endAt.toISOString(), seed_hash: seedHash, seed_secret: seed,
-        simulation_version: "tmvb-1.4.0-two-pick-accumulator", events, result, created_by: userId,
+        simulation_version: "tmvb-1.5.0-advanced-combat", events, result, created_by: userId,
       }).select("id").single();
       if (matchError) {
         const { data: existing } = await db.from("tmvb_matches").select("id")
