@@ -11,15 +11,7 @@ async function api(action,payload={}){const res=await fetch(API_URL,{method:"POS
 function latestMatch(){return state?.matches?.[0]||null;}
 function activeMatch(){return state?.matches?.find(m=>m.status==="scheduled"||m.status==="running")||latestMatch();}
 function portraitData(fighter,side){
- const source=String(fighter?.fighter_id||fighter?.display_name||side);
- let h=2166136261;for(let i=0;i<source.length;i++)h=Math.imul(h^source.charCodeAt(i),16777619);
- const pick=n=>Math.abs(h>>>0)%n;
- const skin=["#f0c7a5","#c98d68","#8e5b43","#e2aa83","#754b39","#d6a17f"][pick(6)];
- const hair=["#18202d","#30201b","#4a2c22","#b98a43","#242b48","#161616"][pick(6)];
- const cloth=side==="b"?"#c13a8b":"#8d36b5";
- const style=pick(4),hairPath=style===0?"M25 51 Q24 14 60 13 Q98 12 95 56 L85 43 Q70 30 48 38 L34 55Z":style===1?"M25 50 Q20 17 57 12 Q92 8 97 44 L88 32 Q60 20 35 45Z":style===2?"M27 48 Q29 9 63 12 Q90 13 94 48 L82 35 Q55 27 38 48Z":"M25 48 Q24 10 61 11 Q100 10 96 49 L87 37 Q68 29 45 39Z";
- const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="'+cloth+'"/><stop offset="1" stop-color="#11182d"/></linearGradient><radialGradient id="light"><stop stop-color="#fff" stop-opacity=".22"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><rect width="120" height="120" rx="20" fill="url(#bg)"/><circle cx="60" cy="48" r="54" fill="url(#light)"/><path d="M12 120 Q18 83 60 82 Q102 83 108 120" fill="#111b2b"/><path d="M36 84 Q60 68 84 84 L96 120 H24Z" fill="'+cloth+'"/><path d="M42 75 L60 91 L78 75" fill="#e7edf7" opacity=".7"/><ellipse cx="60" cy="52" rx="31" ry="37" fill="'+skin+'"/><path d="'+hairPath+'" fill="'+hair+'"/><path d="M34 52 Q30 82 48 88 Q36 79 37 59Z" fill="'+hair+'"/><path d="M86 51 Q91 79 73 88 Q84 78 83 59Z" fill="'+hair+'"/><path d="M43 53 Q50 48 56 53 M65 53 Q72 48 78 53" stroke="#33251f" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="58" rx="3" ry="2.5" fill="#172334"/><ellipse cx="70" cy="58" rx="3" ry="2.5" fill="#172334"/><path d="M60 61 L57 72 L63 72" stroke="#9c624f" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M50 79 Q60 85 70 79" stroke="#793d39" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M38 44 Q60 34 82 44" stroke="'+hair+'" stroke-width="7" fill="none" stroke-linecap="round"/><circle cx="60" cy="108" r="3" fill="#c9e8ff" opacity=".7"/></svg>';
- return "data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(svg);
+ const source=String(fighter?.fighter_id||fighter?.display_name||side);let h=2166136261;for(let i=0;i<source.length;i++)h=Math.imul(h^source.charCodeAt(i),16777619);const pick=Math.abs(h>>>0)%8+1;return "./assets/virtual-battle/fighters/tm-fighter-"+String(pick).padStart(2,"0")+".svg";
 }
 function setFighterPortrait(id,fighter,side){
  const host=$(id);if(!host)return;
