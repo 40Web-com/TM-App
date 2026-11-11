@@ -1,4 +1,4 @@
-const CACHE_NAME = "tm-app-pages-v149";
+const CACHE_NAME = "tm-app-pages-v150";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -17,7 +17,10 @@ const APP_SHELL = [
   "./gamehub.css",
   "./gamehub.js",
   "./discover.css",
-  "./google-auth.css"
+  "./google-auth.css",
+  "./virtual-battle.html",
+  "./virtual-battle.css",
+  "./virtual-battle.js"
 ];
 self.addEventListener("install", event => {
   event.waitUntil(
