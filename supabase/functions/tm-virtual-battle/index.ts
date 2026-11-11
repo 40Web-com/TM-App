@@ -89,7 +89,7 @@ function simulate(seed: string, a: any, b: any) {
     const eliminated=fighters.filter(f=>f.hp<=0);
     if(eliminated.length){
       for(const target of eliminated)target.hp=0;
-      if(eliminated.length===2){firstEliminated="simultaneous";finalWeapon="simultaneous";push(ms/1000,"elimination",intents[0]?.actor||fighters[0],eliminated[0]);}
+      if(eliminated.length===2){firstEliminated="simultaneous";finalWeapon="simultaneous";for(const target of eliminated){const killer=intents.find(i=>i.target.id===target.id&&i.damage>0)?.actor;if(killer)push(ms/1000,"elimination",killer,target);}}
       else {const target=eliminated[0],killer=intents.find(i=>i.target.id===target.id&&i.damage>0)?.actor;if(killer){firstEliminated=target.id;finalWeapon=killer.weapon;push(ms/1000,"elimination",killer,target);}}
       duration=Math.max(1,Math.ceil(ms/1000));break;
     }
