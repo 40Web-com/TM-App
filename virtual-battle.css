@@ -137,3 +137,5 @@ body{background:radial-gradient(ellipse at 50% -20%,#42145c 0,#0a0611 62%);color
 .vb-round-result{display:grid;gap:4px;padding:9px;border:1px solid #59336a;border-radius:9px;background:#281638}
 .vb-round-result b{font-size:9px;color:#ff9bd1;letter-spacing:.8px}.vb-round-result span{font-size:11px;font-weight:800}.vb-round-result small{font-size:8px;color:#b49abd}
 @media(max-width:380px){.vb-round-results{gap:4px}.vb-round-result{padding:6px}}
+
+.vb-stake-control{display:grid;grid-template-columns:48px minmax(0,1fr) 48px;gap:8px;margin-top:8px}.vb-stake-control button{border:1px solid #8e3ba9;border-radius:10px;background:#2b153b;color:#fff;font-size:24px;font-weight:900;min-height:46px}.vb-stake-control input{width:100%;min-width:0;box-sizing:border-box;text-align:center}.vb-winner-market .vb-market-options{grid-template-columns:repeat(2,minmax(0,1fr))}.vb-winner-market .vb-option{min-height:72px}.vb-winner-market .vb-option b{font-size:19px}
