@@ -80,7 +80,7 @@ ctx.strokeStyle="#d4e4f7";ctx.lineWidth=8;ctx.lineCap="round";ctx.beginPath();ct
 ctx.fillStyle="#263c59";ctx.fillRect(30,-94,43,11);ctx.fillStyle=accent;ctx.fillRect(59,-91,25,4);if(recoil>0){ctx.globalAlpha=Math.min(1,recoil);ctx.fillStyle="#fff1a8";ctx.beginPath();ctx.moveTo(84,-89);ctx.lineTo(103,-101);ctx.lineTo(98,-89);ctx.lineTo(103,-77);ctx.closePath();ctx.fill();ctx.globalAlpha=1;}
 ctx.restore();}
 function draw(){
-const w=960,h=430,m=currentMatch;if(!ctx)return;ctx.clearRect(0,0,w,h);
+const now=performance.now();const w=960,h=430,m=currentMatch;if(!ctx)return;ctx.clearRect(0,0,w,h);
 const bg=ctx.createLinearGradient(0,0,0,h);bg.addColorStop(0,"#101d34");bg.addColorStop(.6,"#0b1426");bg.addColorStop(1,"#070d19");ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
 ctx.strokeStyle="#223958";ctx.lineWidth=1;for(let x=0;x<w;x+=48){ctx.globalAlpha=.35;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}for(let y=0;y<h;y+=42){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}ctx.globalAlpha=1;
 ctx.fillStyle="#14243c";for(let i=0;i<12;i++){const x=i*88+12,ht=65+(i*37)%100;ctx.fillRect(x,h-ht-55,52,ht);ctx.fillStyle="#294364";for(let j=0;j<3;j++)ctx.fillRect(x+9+j*13,h-ht-42,5,5);ctx.fillStyle="#14243c";}
@@ -91,7 +91,7 @@ ctx.strokeStyle="#37608a";ctx.globalAlpha=.55;ctx.beginPath();ctx.moveTo(0,h-54)
  for(let i=0;i<7;i++){const x=((i*173+now*.018)%1100)-70;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(480+(x-480)*.18,h-55);ctx.stroke();}
  ctx.restore();
  for(let i=0;i<24;i++){const x=(i*137+now*(.012+(i%4)*.003))%w,y=(i*79+now*(.009+(i%3)*.004))%h;ctx.globalAlpha=.12+(i%4)*.035;ctx.fillStyle=i%2?"#7ccfff":"#b99aff";ctx.beginPath();ctx.arc(x,y,1+(i%3)*.5,0,Math.PI*2);ctx.fill();}ctx.globalAlpha=1;
-const now=performance.now(),running=m?.status==="running",startMs=m?new Date(m.scheduled_start_at).getTime():0,t=m?Math.min(60,Math.max(0,(Date.now()-startMs)/1000)):0,pulse=running?Math.sin(now*.012):0;if(m?.status==="scheduled"){const left=Math.max(0,Math.ceil((startMs-Date.now())/1000));setText("vb-clock","00:"+String(left).padStart(2,"0"));}else if(running){setText("vb-clock","00:"+String(Math.max(0,60-Math.floor(t))).padStart(2,"0"));}
+const running=m?.status==="running",startMs=m?new Date(m.scheduled_start_at).getTime():0,t=m?Math.min(60,Math.max(0,(Date.now()-startMs)/1000)):0,pulse=running?Math.sin(now*.012):0;if(m?.status==="scheduled"){const left=Math.max(0,Math.ceil((startMs-Date.now())/1000));setText("vb-clock","00:"+String(left).padStart(2,"0"));}else if(running){setText("vb-clock","00:"+String(Math.max(0,60-Math.floor(t))).padStart(2,"0"));}
 const ax=180+Math.sin(now*.0018)*13,bx=780-Math.sin(now*.0018)*13;let recoilA=0,recoilB=0;
 for(const item of visualEvents){const age=now-item.at;if(age<260){const amount=1-age/260;if(item.event.actor_id===m?.fighter_a?.fighter_id)recoilA=Math.max(recoilA,amount);if(item.event.actor_id===m?.fighter_b?.fighter_id)recoilB=Math.max(recoilB,amount);}}
 fighterDraw(ax,h-55,1,"#55b9ff",now,0,recoilA);fighterDraw(bx,h-55,-1,"#c28aff",now,0,recoilB);
