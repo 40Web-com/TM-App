@@ -5,17 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10072b">
 <title>TM Free Fire Virtual Battle</title>
-<link rel="stylesheet" href="./virtual-battle.css?v=4">
+<link rel="stylesheet" href="./virtual-battle.css?v=5">
 </head>
 <body>
 <main class="vb-shell">
   <header class="vb-header">
     <div class="vb-brand"><span class="vb-mark">TM</span><span><b>FREE FIRE · VIRTUAL BATTLE</b><small>LIVE 1V1 SIMULATION · TM ARENA</small></span></div>
-    <button id="vb-refresh" class="vb-quiet vb-refresh" type="button">↻ REFRESH ARENA</button>
+    
     <div class="vb-wallet"><small>YOUR POINTS</small><strong id="vb-balance">—</strong><button id="vb-claim-daily" class="vb-claim">CLAIM +250</button></div>
   </header>
   <section class="vb-arena-card">
-    <div class="vb-arena-top"><span id="vb-match-id">PREPARING MATCH</span><span class="vb-countdown" id="vb-clock">--:--</span><span class="vb-version" id="vb-status">CONNECTING</span></div>
+    <div class="vb-arena-top"><span id="vb-match-id">PREPARING MATCH</span><span><small id="vb-clock-label">NEXT MATCH IN</small> <b class="vb-countdown" id="vb-clock">--:--</b></span><span class="vb-version" id="vb-round">ROUND — / 3</span><span class="vb-version" id="vb-status">CONNECTING</span></div>
     <div class="vb-fighters">
       <article class="vb-fighter vb-blue">
         <div class="vb-avatar" id="vb-avatar-a"><span class="vb-avatar-symbol">N</span><i></i></div>
@@ -33,6 +33,11 @@
     <div class="vb-arena-footer"><span id="vb-a-weapon">WEAPON —</span><span id="vb-event-count">0 COMBAT EVENTS</span><span id="vb-b-weapon">WEAPON —</span></div>
     <div class="vb-event-line" id="vb-event-line">Live combat events will appear here.</div><div class="vb-event-feed" id="vb-event-feed" aria-live="polite"></div>
   </section>
+  <section class="vb-results-section">
+    <div class="vb-section-head"><div><span class="vb-kicker">OFFICIAL MATCH REPORT</span><h2>LAST MATCH RESULT</h2><p>Verified result and your settled prediction.</p></div></div>
+    <div id="vb-result" class="vb-result"><div class="vb-result-empty">The official result appears after Round 3.</div></div>
+    <div class="vb-my-predictions"><h3>YOUR PREDICTIONS</h3><div id="vb-my-predictions" class="vb-predictions"><div class="vb-predictions-empty">Your settled picks will appear here.</div></div></div>
+  </section>
   <section class="vb-markets-section">
     <div class="vb-section-head"><div><span class="vb-kicker">TM VIRTUAL BATTLE</span><h2>LIVE MARKETS</h2><p>Explore all available markets before the battle starts.</p></div><span class="vb-points-note">VIRTUAL POINTS ONLY</span></div>
     <div id="vb-markets" class="vb-markets"><div class="vb-loading">Loading this match…</div></div>
@@ -48,6 +53,6 @@
   
   <div class="vb-toast" id="vb-toast" role="status" aria-live="polite"></div>
 </main>
-<script src="./virtual-battle.js?v=5"></script>
+<script src="./virtual-battle.js?v=6"></script>
 </body>
 </html>
