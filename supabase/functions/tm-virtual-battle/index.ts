@@ -132,12 +132,23 @@ function makeMarkets(matchId:string,a:any,b:any,startAt:string){
  const skillB=Number(b.accuracy)*.55+Number(b.headshot_rate)*.3+(1/Number(b.reaction_ms))*40;
  const pA=Math.max(.38,Math.min(.62,skillA/(skillA+skillB))),pB=1-pA;
  const odds=(p:number)=>Number(Math.max(1.15,Math.min(4.8,.92/p)).toFixed(2));
- return [{
-  market_key:"winner",label:"Match winner",
-  selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name},
-  odds:{[a.fighter_id]:odds(pA*.88),[b.fighter_id]:odds(pB*.88)},
-  match_id:matchId,closes_at:startAt,status:"open"
- }];
+ const entries=[
+ {market_key:"winner",label:"Match winner",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,draw:"Draw"},odds:{[a.fighter_id]:odds(pA*.88),[b.fighter_id]:odds(pB*.88),draw:4.5}},
+ {market_key:"first_headshot",label:"First headshot",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,none:"No headshot"},odds:{[a.fighter_id]:2.05,[b.fighter_id]:2.05,none:3.6}},
+ {market_key:"headshots_total",label:"Total headshots",selections:{over_3_5:"Over 3.5",under_3_5:"Under 3.5"},odds:{over_3_5:1.95,under_3_5:1.85}},
+ {market_key:"first_elimination",label:"First fighter eliminated",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,none:"No elimination",simultaneous:"Both together"},odds:{[a.fighter_id]:2.05,[b.fighter_id]:2.05,none:3.8,simultaneous:8}},
+ {market_key:"final_weapon",label:"Final elimination weapon",selections:{ak47:"AK-47",mp40:"MP40",m1014:"M1014",m4a1:"M4A1",awm:"AWM",none:"No elimination",simultaneous:"Simultaneous"},odds:{ak47:2.7,mp40:2.7,m1014:3.1,m4a1:3,awm:3.8,none:4.2,simultaneous:9}},
+ {market_key:"duration",label:"Battle duration",selections:{under_45:"Under 45 sec",over_45:"45–60 sec"},odds:{under_45:2.1,over_45:1.72}},
+ {market_key:"both_headshot",label:"Will both fighters land a headshot?",selections:{yes:"Yes",no:"No"},odds:{yes:2.15,no:1.65}},
+ {market_key:"eliminations_total",label:"Total eliminations",selections:{zero:"0",one:"1",two_plus:"2"},odds:{zero:4.2,one:1.35,two_plus:12}},
+ {market_key:"first_headshot_time",label:"Time of first headshot",selections:{under_30:"Before 30 sec",over_30:"30 sec or later",none:"No headshot"},odds:{under_30:1.8,over_30:2.5,none:4.2}},
+ {market_key:"winner_method",label:"How is the winner decided?",selections:{elimination:"By elimination",time:"By time",draw:"Draw"},odds:{elimination:1.6,time:2.4,draw:6}},
+ {market_key:"winning_health",label:"Winner's remaining health",selections:{over_50:"Over 50 HP",under_50:"50 HP or less",draw:"Draw"},odds:{over_50:2.7,under_50:1.7,draw:6}},
+ {market_key:"more_headshots",label:"Who lands more headshots?",selections:{[a.fighter_id]:a.display_name,[b.fighter_id]:b.display_name,tie:"Tie"},odds:{[a.fighter_id]:2.15,[b.fighter_id]:2.15,tie:3.2}},
+ {market_key:"total_hits",label:"Total successful hits",selections:{over_12_5:"Over 12.5",under_12_5:"Under 12.5"},odds:{over_12_5:1.9,under_12_5:1.9}},
+ {market_key:"total_misses",label:"Total missed shots",selections:{over_20_5:"Over 20.5",under_20_5:"Under 20.5"},odds:{over_20_5:1.9,under_20_5:1.9}}
+ ];
+ return entries.map(m=>({...m,match_id:matchId,closes_at:startAt,status:"open"}));
 }
 
 async function settleExpired(matches: any[]) {
@@ -175,13 +186,13 @@ Deno.serve(async (req: Request) => {
     const userId = await authenticate(String(body.session_token || ""));
     const action = String(body.action || "");
 
-    if (action === "place_prediction") {
-      const marketId = String(body.market_id || "");
-      const selection = String(body.selection || "");
+    if (action === "place_accumulator") {
+      const matchId = String(body.match_id || "");
+      const legs = body.legs;
       const stake = Number(body.stake);
-      if (!marketId || !selection || !Number.isInteger(stake) || stake < 100 || stake > 5000) return out(400, { error: "Stake must be a whole amount between 100 and 5,000 points." });
-      const { data, error } = await db.rpc("tmvb_place_prediction", {
-        p_user_id: userId, p_market_id: marketId, p_selection: selection, p_stake: stake,
+      if (!matchId || !Array.isArray(legs) || legs.length !== 2 || !Number.isInteger(stake) || stake < 100 || stake > 5000) return out(400, { error: "Choose exactly two different markets and a stake from 100 to 5,000 points." });
+      const { data, error } = await db.rpc("tmvb_place_accumulator", {
+        p_user_id: userId, p_match_id: matchId, p_legs: legs, p_stake: stake,
       });
       if (error) return out(400, { error: error.message });
       return out(200, { ok: true, ...data });
@@ -208,7 +219,7 @@ Deno.serve(async (req: Request) => {
         status: "scheduled", fighter_a_id: a.fighter_id, fighter_b_id: b.fighter_id,
         fighter_a_snapshot: a, fighter_b_snapshot: b, scheduled_start_at: startAt.toISOString(),
         ends_at: endAt.toISOString(), seed_hash: seedHash, seed_secret: seed,
-        simulation_version: "tmvb-1.3.0-two-outcome", events, result, created_by: userId,
+        simulation_version: "tmvb-1.4.0-two-pick-accumulator", events, result, created_by: userId,
       }).select("id").single();
       if (matchError) {
         const { data: existing } = await db.from("tmvb_matches").select("id")
