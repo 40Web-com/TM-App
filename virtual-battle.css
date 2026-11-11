@@ -77,3 +77,44 @@ body{background:#080b17}
  .vb-market-options{grid-template-columns:repeat(2,minmax(0,1fr))}
  .vb-section-head h2{font-size:15px}
 }
+
+/* TM App brand pass: purple, violet and pink instead of the temporary blue arena */
+:root{--blue:#c45bff;--purple:#ff65ad;--muted:#b49abd;--panel:#1a1025;--line:#482657}
+body{background:radial-gradient(ellipse at 50% -20%,#42145c 0,#0a0611 62%);color:#fff0fb}
+.vb-shell{background:radial-gradient(ellipse at 50% -20%,#431452 0,#0b0712 62%)!important}
+.vb-header{border-color:#492354}
+.vb-mark{background:linear-gradient(135deg,#a100ff,#ed168f)!important;box-shadow:0 0 24px #d52bff55!important}
+.vb-wallet strong{color:#ff9bd1!important}
+.vb-claim{border-color:#9b43b8!important;background:#291033!important;color:#ffc1e4!important}
+.vb-arena-card,.vb-panel{border-color:#542b68!important;background:linear-gradient(145deg,#21132f,#100a19)!important}
+.vb-arena-top{background:#170d21!important;border-color:#4a2459!important;color:#c4a8d2!important}
+.vb-fighters{background:linear-gradient(90deg,#28113d,#171020 50%,#3b1230)!important}
+.vb-blue .vb-avatar{background:linear-gradient(140deg,#61247e,#241032)!important;border-color:#c45bff!important;box-shadow:0 0 20px #c45bff33!important}
+.vb-purple .vb-avatar{background:linear-gradient(140deg,#84224f,#32102c)!important;border-color:#ff65ad!important;box-shadow:0 0 20px #ff65ad33!important}
+.vb-health-track{background:#382344!important}
+.vb-health-track i{background:linear-gradient(90deg,#9d35ed,#e17bff)!important}
+.vb-purple .vb-health-track i{background:linear-gradient(90deg,#d52b85,#ff8bc1)!important}
+.vb-canvas-wrap{background:radial-gradient(ellipse at 50% 100%,#40194f,#100817 72%)!important}
+.vb-markets-section,.vb-roster-section{border-color:#51285f!important;background:linear-gradient(145deg,#21132f,#100a19)!important}
+.vb-market{border-color:#482657!important;background:linear-gradient(145deg,#241431,#130b1b)!important}
+.vb-option{border-color:#59336a!important;background:#281638!important;color:#fff0fb!important}
+.vb-option b{color:#ff9bd1!important}
+.vb-option.selected{border-color:#e35bba!important;background:#4a1b4c!important;box-shadow:inset 0 0 0 1px #e35bba55!important}
+.vb-slip{border-color:#a13ab8!important;background:linear-gradient(135deg,#31113e,#1b1028)!important}
+.vb-stake-label input{border-color:#62366e!important;background:#130b1d!important}
+.vb-primary{background:linear-gradient(100deg,#a100ff,#ed168f)!important}
+.vb-result-winner{background:#32133f!important;border-color:#a13ab8!important}
+.vb-stat,.vb-history-item{background:#190f24!important;border-color:#43234f!important}
+.vb-event-line{background:#160c20!important;color:#f0b1df!important;border-color:#4b2658!important}
+.vb-event-feed{background:#120a1a!important;border-color:#4b2658!important}
+.vb-feed-item{background:#21132d!important;border-color:#4a2857!important}
+.vb-feed-item.headshot{background:#3a1834!important;border-color:#b94f91!important}
+.vb-feed-item.headshot b{color:#ffc1e4!important}
+.vb-feed-item.elimination{background:#3a142b!important;border-color:#c3447c!important}
+.vb-quiet{border-color:#8e3da8!important;color:#f0c5ff!important;background:#24112f!important}
+.vb-refresh{display:inline-flex;align-items:center;justify-content:center;min-height:34px;margin:0 8px 0 auto;padding:7px 10px;border-radius:9px;font-size:8px;font-weight:900;white-space:nowrap}
+.vb-refresh:disabled{opacity:.55}
+.vb-brand{margin-right:0!important}
+.vb-wallet{margin-left:auto}
+.vb-toast{background:#fce7f3!important;color:#4a1238!important}
+@media(max-width:480px){.vb-header{flex-wrap:wrap}.vb-brand{flex:1 1 auto}.vb-refresh{order:3;flex:1 1 100%;margin:5px 0 0}.vb-wallet{margin-left:auto}}
