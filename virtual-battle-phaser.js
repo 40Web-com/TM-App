@@ -2,6 +2,7 @@
   "use strict";
   if (!window.Phaser || !document.getElementById("vb-phaser-arena")) {
     console.warn("[TM Virtual Battle] Phaser did not load; using the legacy arena renderer.");
+    document.querySelector(".vb-canvas-wrap")?.classList.add("legacy-mode");
     return;
   }
 
@@ -84,7 +85,7 @@
       weapon.lineStyle(8,0x1b2737,1);weapon.lineBetween(37,-68,78,-68);weapon.fillStyle(0x9eb6c8,1);weapon.fillRect(57,-73,22,5);weapon.fillStyle(Phaser.Display.Color.HexStringToColor(accent).color,1);weapon.fillRect(76,-70,9,4);
       root.add([shadow,aura,rearLeg,frontLeg,body,rearArm,frontArm,head,weapon]);
       if(id==="b")root.setScale(-1,1);
-      fighters[id]={root,shadow,aura,rearLeg,frontLeg,body,rearArm,frontArm,head,weapon,accent,baseY:348,lastX:root.x,hiddenUntil:0,jumpUntil:0};
+      fighters[id]={root,shadow,aura,rearLeg,frontLeg,body,rearArm,frontArm,head,weapon,accent,baseY:348,lastX:root.x,hiddenUntil:0,jumpUntil:0,jumpOffset:0,dodgeOffset:0};
     }
 
     getElapsed(m){
@@ -116,17 +117,17 @@
       const color=e.type==="fireball"?0xff8b32:e.headshot?0xffd0ef:actor===a?0xc59aff:0xff9fcf;
       if(e.type==="gloo_wall"){
         const wx=Number(e.wall_x)||((sx+tx)/2);
-        const wall=this.add.container(wx,300).setDepth(300);
+        const wall=this.add.container(wx,300).setDepth(720);
         const shield=this.add.rectangle(0,0,24,116,0x75dfff,.42).setStrokeStyle(3,0xe0fbff,1);
         const shine=this.add.rectangle(0,0,6,104,0xffffff,.38);
         wall.add([shield,shine]);this.tweens.add({targets:wall,alpha:0,duration:4400,delay:1100,onComplete:()=>wall.destroy()});
         walls.push(wall);return;
       }
-      if(e.type==="hide"){actor.hiddenUntil=this.time.now+1350;actor.root.y=365;actor.root.setAlpha(.55);return;}
-      if(e.type==="jump"){actor.jumpUntil=this.time.now+650;this.tweens.add({targets:actor.root,y:actor.root.y-48,duration:260,yoyo:true,ease:"Sine.easeOut"});return;}
+      if(e.type==="hide"){actor.hiddenUntil=this.time.now+1350;actor.root.setAlpha(.55);actor.root.setScale(actor===a?1:-1,.78);this.time.delayedCall(1400,()=>{if(actor.root.active)actor.root.setScale(actor===a?1:-1,1);});return;}
+      if(e.type==="jump"){actor.jumpUntil=this.time.now+650;this.tweens.add({targets:actor,jumpOffset:52,duration:260,yoyo:true,ease:"Sine.easeOut",onComplete:()=>{actor.jumpOffset=0;}});return;}
       if(e.type==="dodge"){
-        const old=actor.root.x,dir=actor===a?1:-1;
-        this.tweens.add({targets:actor.root,x:clamp(old+dir*58,40,920),duration:150,yoyo:true,ease:"Quad.easeOut"});
+        const dir=actor===a?1:-1;
+        this.tweens.add({targets:actor,dodgeOffset:dir*58,duration:150,yoyo:true,ease:"Quad.easeOut",onComplete:()=>{actor.dodgeOffset=0;}});
         this.floatLabel("DODGE!",actor.root.x,actor.root.y-120,0x8ceaff);return;
       }
       if(e.type==="fireball"||e.type==="grenade"){
@@ -165,7 +166,7 @@
       const t=this.getElapsed(m),a=fighters.a,b=fighters.b;
       const pa=this.positionAt(m,m.fighter_a.fighter_id,t),pb=this.positionAt(m,m.fighter_b.fighter_id,t);
       const setPos=(f,p)=>{
-        const old=f.root.x;f.root.x=p.x;f.root.y=348-p.y*.65;
+        const old=f.root.x;f.root.x=p.x+(f.dodgeOffset||0);f.root.y=348-p.y*.65-(f.jumpOffset||0);
         const moving=p.moving||Math.abs(p.x-old)>1.5;
         const phase=this.time.now*.012;
         f.rearLeg.rotation=moving?Math.sin(phase)*.48:0;
@@ -185,12 +186,12 @@
       this.statusText.setText(m.status==="running"?"LIVE AI BATTLE":m.status==="completed"?"BATTLE COMPLETE":"AI BATTLE PREPARING");
       this.roundText.setText("ROUND "+(m.status==="completed"?3:Math.min(3,Math.floor(t/25)+1))+" / 3   ·   "+Math.floor(t)+"s");
       this.progress.width=912*(t/75);
-      if(m.status==="completed"&&!this.winnerShown){
-        this.winnerShown=true;
+      if(m.status==="completed"&&this.winnerForId!==m.id){
+        this.winnerForId=m.id;
         const winner=m.result?.winner_id===m.fighter_a.fighter_id?m.fighter_a.display_name:m.fighter_b.display_name;
         const veil=this.add.rectangle(W/2,H/2,W,H,0x080d19,.72).setDepth(900);
         const label=this.add.text(W/2,H/2,winner.toUpperCase()+" WINS",{fontFamily:"Arial",fontSize:"34px",fontStyle:"bold",color:"#ffffff",stroke:"#27133d",strokeThickness:5}).setOrigin(.5).setDepth(901);
-        this.time.delayedCall(4200,()=>{veil.destroy();label.destroy();this.winnerShown=false;});
+        this.time.delayedCall(4200,()=>{veil.destroy();label.destroy();});
       }
     }
 
