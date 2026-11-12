@@ -29,7 +29,7 @@
         <div class="vb-health"><div><span>HP</span><b id="vb-b-hp">100</b></div><span class="vb-health-track"><i id="vb-b-health"></i></span></div>
       </article>
     </div>
-    <div class="vb-canvas-wrap"><canvas id="vb-canvas" width="960" height="430" aria-label="Animated virtual 1v1 battle arena"></canvas><div class="vb-canvas-overlay" id="vb-canvas-overlay"><span class="vb-overlay-icon">⚔</span><strong>ARENA STANDBY</strong><small>Preparing the next 1v1</small></div></div>
+    <div class="vb-canvas-wrap"><div id="vb-phaser-arena" role="img" aria-label="Animated AI-controlled 1v1 battle arena"></div><canvas id="vb-canvas" width="960" height="430" aria-hidden="true"></canvas><div class="vb-canvas-overlay" id="vb-canvas-overlay"><span class="vb-overlay-icon">⚔</span><strong>ARENA STANDBY</strong><small>Preparing the next 1v1</small></div></div>
     <div class="vb-arena-footer"><span id="vb-a-weapon">WEAPON —</span><span id="vb-event-count">0 COMBAT EVENTS</span><span id="vb-b-weapon">WEAPON —</span></div>
     <div class="vb-event-line" id="vb-event-line">Live combat events will appear here.</div><div class="vb-event-feed" id="vb-event-feed" aria-live="polite"></div>
   </section>
@@ -53,6 +53,8 @@
   
   <div class="vb-toast" id="vb-toast" role="status" aria-live="polite"></div>
 </main>
-<script src="./virtual-battle.js?v=14"></script>
+<script src="https://cdn.jsdelivr.net/npm/phaser@4.2.1/dist/phaser.min.js" crossorigin="anonymous"></script>
+<script src="./virtual-battle-phaser.js?v=1"></script>
+<script src="./virtual-battle.js?v=15"></script>
 </body>
 </html>
