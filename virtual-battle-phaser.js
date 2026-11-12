@@ -97,7 +97,13 @@
       root.add([shadow,sprite]);
       fighters[id]={root,shadow,sprite,kind,hiddenUntil:0,jumpOffset:0,dodgeOffset:0,animKey:kind+"-idle"};
     }
-    playFighter(f,key){if(f&&f.sprite&&this.anims.exists(key)&&f.animKey!==key){f.animKey=key;f.sprite.play(key,true);}}
+    playFighter(f,key){
+      if(!f||!f.sprite||!this.anims.exists(key)||f.animKey===key)return;
+      f.animKey=key;f.sprite.play(key,true);
+      if(!key.endsWith("-idle")&&!key.endsWith("-run")&&!key.endsWith("-walk")){
+        f.sprite.once(Phaser.Animations.Events.ANIMATION_COMPLETE,()=>{f.animKey="";});
+      }
+    }
     getElapsed(m){
       if(m.status==="completed")return 75;
       const start=Date.parse(m.scheduled_start_at||"");
