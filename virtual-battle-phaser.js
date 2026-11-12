@@ -56,6 +56,10 @@
       this.makeCrate(82,300,74,55);this.makeCrate(192,322,58,38);
       this.makeCrate(774,295,82,62);this.makeCrate(875,323,52,38);
       this.makeCrate(442,272,82,44);
+      // Purpose-built hide positions: waist-high bunkers with overhead cover.
+      this.makeBunker(292,322,118,76);
+      this.makeBunker(668,322,118,76);
+      this.makeRockCover(485,355,74,42);
       for(let i=0;i<24;i++){
         const dot=this.add.circle((i*137)%W,(i*71)%H,1+(i%3)*.5,i%2?0xe6a8ff:0x9adfff,.32);
         this.tweens.add({targets:dot,y:dot.y-24,duration:2800+(i%5)*400,repeat:-1,yoyo:true,ease:"Sine.easeInOut"});
@@ -69,6 +73,23 @@
       c.add([body,slash]);c.setDepth(y);
     }
 
+    makeBunker(x,y,w,h){
+      const c=this.add.container(x,y).setDepth(y+5);
+      const g=this.add.graphics();
+      g.fillStyle(0x263544,1);g.fillRoundedRect(-w/2+8,-h/2+20,w-16,h-12,7);
+      g.fillStyle(0x687b83,1);g.fillRoundedRect(-w/2,-h/2+9,w,22,5);
+      g.fillStyle(0x9aa9a4,1);g.fillRoundedRect(-w/2-7,-h/2,w+14,15,4);
+      g.lineStyle(2,0xc5d2cc,.7);g.strokeRoundedRect(-w/2,-h/2+9,w,22,5);
+      g.fillStyle(0x182b38,.9);g.fillRoundedRect(-w/2+15,-h/2+34,w-30,h-34,4);
+      g.fillStyle(0x9fc0c9,.22);g.fillRect(-w/2+10,h/2-17,w-20,3);
+      c.add(g);return c;
+    }
+    makeRockCover(x,y,w,h){
+      const c=this.add.container(x,y).setDepth(y);
+      const g=this.add.graphics();g.fillStyle(0x53676a,1);g.fillEllipse(0,0,w,h);
+      g.fillStyle(0x8b9990,.8);g.fillEllipse(-12,-7,w*.48,h*.48);
+      g.fillStyle(0x293e46,.65);g.fillEllipse(13,7,w*.5,h*.45);c.add(g);return c;
+    }
     part(container,draw,x,y){
       const g=this.add.graphics();draw(g);g.setPosition(x||0,y||0);container.add(g);return g;
     }
@@ -133,13 +154,19 @@
       const color=e.type==="fireball"?0xff8b32:e.headshot?0xffd0ef:actor===a?0xc59aff:0xff9fcf;
       if(e.type==="gloo_wall"){
         const wx=Number(e.wall_x)||((sx+tx)/2);
-        const wall=this.add.container(wx,300).setDepth(720);
-        const shield=this.add.rectangle(0,0,24,116,0x75dfff,.42).setStrokeStyle(3,0xe0fbff,1);
-        const shine=this.add.rectangle(0,0,6,104,0xffffff,.38);
-        wall.add([shield,shine]);this.tweens.add({targets:wall,alpha:0,duration:4400,delay:1100,onComplete:()=>wall.destroy()});
+        const wall=this.add.container(wx,310).setDepth(720);
+        const shield=this.add.rectangle(0,0,104,112,0x55cfff,.42).setStrokeStyle(4,0xd9f8ff,1);
+        const core=this.add.rectangle(0,0,86,94,0x8beaff,.18).setStrokeStyle(2,0xffffff,.62);
+        const shine=this.add.rectangle(-34,0,5,94,0xffffff,.48);
+        const base=this.add.rectangle(0,56,116,9,0x9eefff,.65);
+        wall.add([shield,core,shine,base]);
+        this.tweens.add({targets:wall,alpha:0,duration:5200,delay:900,onComplete:()=>wall.destroy()});
         walls.push(wall);return;
       }
-      if(e.type==="hide"){actor.hiddenUntil=this.time.now+1350;actor.root.setAlpha(.55);return;}
+      if(e.type==="hide"){
+        actor.hiddenUntil=this.time.now+1550;actor.root.setAlpha(.28);
+        this.floatLabel("TAKING COVER",sx,sy-116,0x9feaff);return;
+      }
       if(e.type==="jump"){actor.jumpUntil=this.time.now+650;this.playFighter(actor,actor.kind==="swordsman"?"swordsman-jump":"golem-walk");this.tweens.add({targets:actor,jumpOffset:52,duration:260,yoyo:true,ease:"Sine.easeOut",onComplete:()=>{actor.jumpOffset=0;}});return;}
       if(e.type==="dodge"){
         const dir=actor===a?1:-1;
