@@ -18,11 +18,16 @@
   class VirtualBattleScene extends Phaser.Scene {
     constructor(){ super({key:"TMVirtualBattleScene"}); }
 
+    preload(){
+      const root="./assets/virtual-battle/sprites/";
+      [["swordsman-idle",384,256],["swordsman-run",384,256],["swordsman-jump",384,256],["swordsman-attack",384,256],["swordsman-skill",384,256],["golem-idle",288,301],["golem-walk",288,301],["golem-attack",288,301],["golem-hurt",288,301],["golem-death",288,301]].forEach(([key,w,h])=>this.load.spritesheet(key,root+key+".webp",{frameWidth:w,frameHeight:h}));
+    }
     create(){
       sceneRef = this;
+      this.createFighterAnimations();
       this.drawArena();
-      this.makeFighter("a","#8a4ce0","#f4c6a1");
-      this.makeFighter("b","#dc5d9c","#b77b5e");
+      this.makeFighter("a","swordsman");
+      this.makeFighter("b","golem");
       this.statusText = this.add.text(24,18,"TM VIRTUAL ARENA",{fontFamily:"Arial",fontSize:"12px",fontStyle:"bold",color:"#ffffff"}).setDepth(100);
       this.roundText = this.add.text(24,37,"AI COMBAT SIMULATION",{fontFamily:"Arial",fontSize:"10px",color:"#d8c4ef"}).setDepth(100);
       this.progress = this.add.rectangle(24,62,0,3,0xc58bff).setOrigin(0,0).setDepth(100);
@@ -68,26 +73,20 @@
       const g=this.add.graphics();draw(g);g.setPosition(x||0,y||0);container.add(g);return g;
     }
 
-    makeFighter(id,accent,skin){
-      const root=this.add.container(id==="a"?120:840,348).setDepth(350);
-      const shadow=this.add.ellipse(0,5,62,15,0x07111d,.38);
-      const rearLeg=this.add.graphics(),frontLeg=this.add.graphics(),body=this.add.graphics(),rearArm=this.add.graphics(),frontArm=this.add.graphics(),head=this.add.graphics(),weapon=this.add.graphics(),aura=this.add.circle(0,-54,42,Phaser.Display.Color.HexStringToColor(accent).color,.10);
-      rearLeg.lineStyle(13,0x1d293b,1);rearLeg.lineBetween(-8,-43,-17,-8);rearLeg.lineStyle(5,Phaser.Display.Color.HexStringToColor(accent).color,1);rearLeg.lineBetween(-17,-8,-25,-3);
-      frontLeg.lineStyle(13,0x26364a,1);frontLeg.lineBetween(8,-43,16,-9);frontLeg.lineStyle(5,Phaser.Display.Color.HexStringToColor(accent).color,1);frontLeg.lineBetween(16,-9,25,-3);
-      body.fillStyle(0x24354b,1);body.fillRoundedRect(-22,-94,44,56,12);body.lineStyle(3,Phaser.Display.Color.HexStringToColor(accent).color,1);body.strokeRoundedRect(-22,-94,44,56,12);
-      body.fillStyle(Phaser.Display.Color.HexStringToColor(accent).color,1);body.fillRoundedRect(-7,-90,14,42,5);
-      rearArm.lineStyle(12,0x26364a,1);rearArm.lineBetween(-17,-84,-31,-58);rearArm.lineStyle(8,Phaser.Display.Color.HexStringToColor(skin).color,1);rearArm.lineBetween(-31,-58,-37,-51);
-      frontArm.lineStyle(12,0x26364a,1);frontArm.lineBetween(16,-83,33,-70);frontArm.lineStyle(8,Phaser.Display.Color.HexStringToColor(skin).color,1);frontArm.lineBetween(33,-70,42,-67);
-      head.fillStyle(Phaser.Display.Color.HexStringToColor(skin).color,1);head.fillCircle(0,-112,20);
-      head.fillStyle(0x1b1727,1);head.fillEllipse(0,-127,42,22);head.fillRoundedRect(-20,-124,8,22,4);
-      head.fillStyle(0xffffff,1);head.fillCircle(7,-113,3);head.fillStyle(0x172033,1);head.fillCircle(8,-113,1.5);
-      head.lineStyle(3,0x75483c,1);head.lineBetween(1,-100,12,-100);
-      weapon.lineStyle(8,0x1b2737,1);weapon.lineBetween(37,-68,78,-68);weapon.fillStyle(0x9eb6c8,1);weapon.fillRect(57,-73,22,5);weapon.fillStyle(Phaser.Display.Color.HexStringToColor(accent).color,1);weapon.fillRect(76,-70,9,4);
-      root.add([shadow,aura,rearLeg,frontLeg,body,rearArm,frontArm,head,weapon]);
-      if(id==="b")root.setScale(-1,1);
-      fighters[id]={root,shadow,aura,rearLeg,frontLeg,body,rearArm,frontArm,head,weapon,accent,baseY:348,lastX:root.x,hiddenUntil:0,jumpUntil:0,jumpOffset:0,dodgeOffset:0,facing:id==="a"?1:-1};
+    createFighterAnimations(){
+      const defs=[["swordsman-idle",35,9,-1],["swordsman-run",9,12,-1],["swordsman-jump",21,14,0],["swordsman-attack",38,16,0],["swordsman-skill",25,16,0],["golem-idle",21,5,-1],["golem-walk",20,10,-1],["golem-attack",28,15,0],["golem-hurt",8,15,0],["golem-death",24,15,0]];
+      defs.forEach(([key,count,fps,repeat])=>{if(!this.anims.exists(key))this.anims.create({key,frames:this.anims.generateFrameNumbers(key,{start:0,end:count-1}),frameRate:fps,repeat});});
     }
-
+    makeFighter(id,kind){
+      const root=this.add.container(id==="a"?120:840,348).setDepth(350);
+      const shadow=this.add.ellipse(0,5,kind==="golem"?94:68,18,0x07111d,.42);
+      const sprite=this.add.sprite(0,0,kind+"-idle",0);
+      sprite.setOrigin(kind==="golem"?149/288:168/384,kind==="golem"?271/301:236/256);
+      sprite.setScale(kind==="golem"?.62:.72);
+      sprite.play(kind+"-idle");root.add([shadow,sprite]);
+      fighters[id]={root,shadow,sprite,kind,hiddenUntil:0,jumpOffset:0,dodgeOffset:0,animKey:kind+"-idle"};
+    }
+    playFighter(f,key){if(f&&f.sprite&&this.anims.exists(key)&&f.animKey!==key){f.animKey=key;f.sprite.play(key,true);}}
     getElapsed(m){
       if(m.status==="completed")return 75;
       const start=Date.parse(m.scheduled_start_at||"");
@@ -124,7 +123,7 @@
         walls.push(wall);return;
       }
       if(e.type==="hide"){actor.hiddenUntil=this.time.now+1350;actor.root.setAlpha(.55);return;}
-      if(e.type==="jump"){actor.jumpUntil=this.time.now+650;this.tweens.add({targets:actor,jumpOffset:52,duration:260,yoyo:true,ease:"Sine.easeOut",onComplete:()=>{actor.jumpOffset=0;}});return;}
+      if(e.type==="jump"){actor.jumpUntil=this.time.now+650;this.playFighter(actor,actor.kind==="swordsman"?"swordsman-jump":"golem-walk");this.tweens.add({targets:actor,jumpOffset:52,duration:260,yoyo:true,ease:"Sine.easeOut",onComplete:()=>{actor.jumpOffset=0;}});return;}
       if(e.type==="dodge"){
         const dir=actor===a?1:-1;
         this.tweens.add({targets:actor,dodgeOffset:dir*58,duration:150,yoyo:true,ease:"Quad.easeOut",onComplete:()=>{actor.dodgeOffset=0;}});
@@ -138,6 +137,9 @@
           this.tweens.add({targets:blast,scale:5,alpha:0,duration:420,onComplete:()=>blast.destroy()});orb.destroy();
         }});return;
       }
+      if(e.type==="attack"||e.type==="melee"||e.type==="hit")this.playFighter(actor,actor.kind+"-attack");
+      if(e.type==="skill"&&actor.kind==="swordsman")this.playFighter(actor,"swordsman-skill");
+      if(e.type==="headshot"&&actor.kind==="golem")this.playFighter(actor,"golem-hurt");
       if(e.type==="hit"||e.type==="headshot"||e.type==="melee"){
         const flash=this.add.circle(tx,ty-56,e.headshot?12:8,color,.8).setDepth(520);
         this.tweens.add({targets:flash,scale:2.8,alpha:0,duration:260,onComplete:()=>flash.destroy()});
@@ -166,14 +168,10 @@
       const t=this.getElapsed(m),a=fighters.a,b=fighters.b;
       const pa=this.positionAt(m,m.fighter_a.fighter_id,t),pb=this.positionAt(m,m.fighter_b.fighter_id,t);
       const setPos=(f,p)=>{
-        const old=f.root.x;f.root.x=p.x+(f.dodgeOffset||0);f.root.y=348-p.y*.65-(f.jumpOffset||0);f.root.setScale(f.facing,this.time.now < f.hiddenUntil ? 0.78 : 1);
+        const old=f.root.x;f.root.x=p.x+(f.dodgeOffset||0);f.root.y=348-p.y*.65-(f.jumpOffset||0);f.root.setScale(1,this.time.now < f.hiddenUntil ? 0.78 : 1);
         const moving=p.moving||Math.abs(p.x-old)>1.5;
-        const phase=this.time.now*.012;
-        f.rearLeg.rotation=moving?Math.sin(phase)*.48:0;
-        f.frontLeg.rotation=moving?-Math.sin(phase)*.48:0;
-        f.rearArm.rotation=moving?-Math.sin(phase)*.22:0;
-        f.frontArm.rotation=moving?Math.sin(phase)*.16:0;
-        f.body.y=moving?Math.sin(phase*2)*2:0;
+        const idle=f.kind+"-idle",walk=f.kind==="swordsman"?"swordsman-run":"golem-walk";
+        if(!f.animKey||f.animKey===idle||f.animKey===walk)this.playFighter(f,moving?walk:idle);
         f.shadow.scaleX=moving?1.12:1;
         f.root.setDepth(350+f.root.y);
         if(this.time.now>f.hiddenUntil)f.root.setAlpha(1);
