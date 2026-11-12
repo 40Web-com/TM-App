@@ -75,15 +75,26 @@
 
     createFighterAnimations(){
       const defs=[["swordsman-idle",35,9,-1],["swordsman-run",9,12,-1],["swordsman-jump",21,14,0],["swordsman-attack",38,16,0],["swordsman-skill",25,16,0],["golem-idle",21,5,-1],["golem-walk",20,10,-1],["golem-attack",28,15,0],["golem-hurt",8,15,0],["golem-death",24,15,0]];
-      defs.forEach(([key,count,fps,repeat])=>{if(!this.anims.exists(key))this.anims.create({key,frames:this.anims.generateFrameNumbers(key,{start:0,end:count-1}),frameRate:fps,repeat});});
+      defs.forEach(([key,count,fps,repeat])=>{if(this.textures.exists(key)&&!this.anims.exists(key))this.anims.create({key,frames:this.anims.generateFrameNumbers(key,{start:0,end:count-1}),frameRate:fps,repeat});});
     }
     makeFighter(id,kind){
       const root=this.add.container(id==="a"?120:840,348).setDepth(350);
       const shadow=this.add.ellipse(0,5,kind==="golem"?94:68,18,0x07111d,.42);
-      const sprite=this.add.sprite(0,0,kind+"-idle",0);
-      sprite.setOrigin(kind==="golem"?149/288:168/384,kind==="golem"?271/301:236/256);
-      sprite.setScale(kind==="golem"?.62:.72);
-      sprite.play(kind+"-idle");root.add([shadow,sprite]);
+      const texture=kind+"-idle";
+      let sprite;
+      if(this.textures.exists(texture)){
+        sprite=this.add.sprite(0,0,texture,0);
+        sprite.setOrigin(kind==="golem"?149/288:168/384,kind==="golem"?271/301:236/256);
+        sprite.setScale(kind==="golem"?.62:.72);
+        if(this.anims.exists(texture))sprite.play(texture);
+      }else{
+        const fallback=this.add.graphics();
+        fallback.fillStyle(kind==="golem"?0x77836b:0x8a4ce0,1);fallback.fillCircle(0,-55,kind==="golem"?43:32);
+        fallback.fillStyle(0xf5d7b0,1);fallback.fillCircle(0,-100,23);
+        fallback.generateTexture("fallback-"+kind,100,130);fallback.destroy();
+        sprite=this.add.image(0,-55,"fallback-"+kind);
+      }
+      root.add([shadow,sprite]);
       fighters[id]={root,shadow,sprite,kind,hiddenUntil:0,jumpOffset:0,dodgeOffset:0,animKey:kind+"-idle"};
     }
     playFighter(f,key){if(f&&f.sprite&&this.anims.exists(key)&&f.animKey!==key){f.animKey=key;f.sprite.play(key,true);}}
