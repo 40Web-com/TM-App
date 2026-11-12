@@ -80,15 +80,33 @@ function simulate(seed: string, a: any, b: any) {
     const roundStartHits=totalHits,roundStartElims=totalEliminations;
     let roundWinner:string|null=null,endedByElimination=false;
     for(let ms=(round-1)*25000;ms<round*25000;ms+=100){
+      // Continuous tactical locomotion is independent of weapon cooldowns.
+      if(ms%400===0){
+        for(const mover of fighters){
+          if(mover.hp<=0)continue;
+          const prey=fighters.find(f=>f.id!==mover.id)!;
+          if(prey.hp<=0)continue;
+          const dir=prey.x>=mover.x?1:-1,dist=Math.abs(prey.x-mover.x);
+          if(dist>142){
+            const step=Math.min(44,dist-132);
+            mover.x=Math.max(42,Math.min(918,mover.x+dir*step));
+            mover.stamina=Math.max(0,mover.stamina-.35);
+            if(ms%1200===0){totalChases++;push(ms/1000,round,"chase",mover,prey);}
+          }else if(dist<92){mover.x=Math.max(42,Math.min(918,mover.x-dir*9));}
+          else{mover.x=Math.max(42,Math.min(918,mover.x+dir*(Math.sin(ms/620+mover.id.length)*5)));}
+          mover.y=Math.sin(ms/420+mover.id.length)*18;
+          if(rand()<.09&&mover.stamina>12){mover.stamina-=12;mover.y-=22;totalJumps++;push(ms/1000,round,"jump",mover,prey);}
+          push(ms/1000,round,"move",mover,prey);
+        }
+      }
       const ready=fighters.filter(f=>f.hp>0&&ms>=f.nextShot);
-      if(!ready.length)continue;
       for(let i=ready.length-1;i>0;i--){const j=Math.floor(rand()*(i+1));[ready[i],ready[j]]=[ready[j],ready[i]];}
       const intents:any[]=[];
       for(const actor of ready){
         const target=fighters.find(f=>f.id!==actor.id)!;
         if(target.hp<=0)continue;
         const dir=target.x>=actor.x?1:-1,dist=Math.abs(target.x-actor.x);
-        if(ms%1000===0){const move=rand();if(move<0.10){actor.hideUntil=ms/1000+1.5;actor.x=Math.max(40,Math.min(920,actor.x-dir*36));totalHides++;push(ms/1000,round,"hide",actor,target);}else if(move<0.22){actor.x=Math.max(40,Math.min(920,actor.x+dir*65));actor.y=(rand()-.5)*48;totalFlanks++;push(ms/1000,round,"flank",actor,target);}else if(move<0.32&&actor.stamina>15){actor.stamina-=15;actor.x=Math.max(40,Math.min(920,actor.x-dir*62));totalSlides++;push(ms/1000,round,"slide",actor,target);}else if(dist>330){actor.x+=dir*22;actor.stamina=Math.max(0,actor.stamina-1);totalChases++;push(ms/1000,round,"chase",actor,target);}else if(dist<190){actor.x-=dir*18;actor.y=(rand()-.5)*40;}else{actor.y=Math.sin(ms/3000+actor.id.length)*30;}actor.x=Math.max(40,Math.min(920,actor.x));if(rand()<0.16){totalJumps++;push(ms/1000,round,"jump",actor,target);}push(ms/1000,round,"move",actor,target,0,false,{actor_x:actor.x,actor_y:actor.y});}
+        if(ms%1800===0&&dist<250&&rand()<0.18){actor.hideUntil=ms/1000+1.4;totalHides++;push(ms/1000,round,"hide",actor,target);}
         if(actor.hideUntil>ms/1000)continue;
         const weapon=weaponData[actor.weapon];actor.nextShot=ms+weapon.interval;
         if(rand()<0.14){totalDodges++;if(!firstDodge)firstDodge=target.id;target.x=Math.max(40,Math.min(920,target.x+dir*58));push(ms/1000,round,"dodge",target,actor);continue;}
