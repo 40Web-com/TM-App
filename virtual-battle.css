@@ -222,6 +222,8 @@ html,body{background:#fff!important;color:#241b2c!important;min-height:100%;marg
 #vb-phaser-arena{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;background:#1a2840}
 #vb-phaser-arena canvas{display:block;width:100%!important;height:100%!important;object-fit:contain}
 #vb-canvas{display:none!important}
+.vb-canvas-wrap.legacy-mode #vb-phaser-arena{display:none!important}
+.vb-canvas-wrap.legacy-mode #vb-canvas{display:block!important;width:100%;height:auto!important}
 .vb-canvas-wrap{position:relative;aspect-ratio:960/430;min-height:190px;overflow:hidden}
 .vb-canvas-overlay{z-index:5}
 @media(max-width:560px){.vb-canvas-wrap{min-height:170px}}
