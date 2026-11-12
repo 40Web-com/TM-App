@@ -1,0 +1,59 @@
+
+===== swordsman.zip =====
+CC0 1.0 Universal (Public Domain Dedication)
+
+To the extent possible under law, SpriteCanvas has waived all copyright and related or neighboring
+rights to the sprite sheets in this pack. You can copy, modify, distribute and use them, including
+for commercial purposes, without asking permission or giving credit.
+
+Full legal text: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+
+The art was generated with AI in the SpriteCanvas workflow. Credit is welcome but not required:
+"Sprites by SpriteCanvas (spritecanvas.com)".
+
+
+===== golem.zip =====
+CC0 1.0 Universal (Public Domain Dedication)
+
+To the extent possible under law, SpriteCanvas has waived all copyright and related or neighboring
+rights to the sprite sheets in this pack. You can copy, modify, distribute and use them, including
+for commercial purposes, without asking permission or giving credit.
+
+Full legal text: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+
+The art was generated with AI in the SpriteCanvas workflow. Credit is welcome but not required:
+"Sprites by SpriteCanvas (spritecanvas.com)".
+
+
+===== effects.zip =====
+CC0 1.0 Universal (Public Domain Dedication)
+
+To the extent possible under law, SpriteCanvas has waived all copyright and related or neighboring
+rights to the sprite sheets in this pack. You can copy, modify, distribute and use them, including
+for commercial purposes, without asking permission or giving credit.
+
+Full legal text: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+
+The art was generated with AI in the SpriteCanvas workflow. Credit is welcome but not required:
+"Sprites by SpriteCanvas (spritecanvas.com)".
+
+
+===== anime-portraits.zip =====
+CC0 1.0 Universal
+
+All included asset records declare CC0.
+You may copy, modify, distribute and use the artwork, including commercially, without attribution.
+This notice summarizes the catalog declaration; it is not an independent provenance verification or warranty of third-party rights.
+Full legal instrument: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+Summary: https://creativecommons.org/publicdomain/zero/1.0/
+
+
+===== village.zip =====
+CC0 1.0 Universal
+
+All included asset records declare CC0.
+You may copy, modify, distribute and use the artwork, including commercially, without attribution.
+This notice summarizes the catalog declaration; it is not an independent provenance verification or warranty of third-party rights.
+Full legal instrument: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+Summary: https://creativecommons.org/publicdomain/zero/1.0/
+
