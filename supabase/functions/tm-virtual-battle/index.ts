@@ -106,7 +106,7 @@ function simulate(seed: string, a: any, b: any) {
         const target=fighters.find(f=>f.id!==actor.id)!;
         if(target.hp<=0)continue;
         const dir=target.x>=actor.x?1:-1,dist=Math.abs(target.x-actor.x);
-        if(ms%1800===0&&dist<250&&rand()<0.18){actor.hideUntil=ms/1000+1.4;totalHides++;push(ms/1000,round,"hide",actor,target);}
+        if(ms%1800===0&&dist<250&&rand()<0.18){actor.hideUntil=ms/1000+1.4;actor.x=actor.x<480?292:668;actor.y=0;totalHides++;push(ms/1000,round,"hide",actor,target);}
         if(actor.hideUntil>ms/1000)continue;
         const weapon=weaponData[actor.weapon];actor.nextShot=ms+weapon.interval;
         if(rand()<0.14){totalDodges++;if(!firstDodge)firstDodge=target.id;target.x=Math.max(40,Math.min(920,target.x+dir*58));push(ms/1000,round,"dodge",target,actor);continue;}
