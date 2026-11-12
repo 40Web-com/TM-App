@@ -166,7 +166,7 @@
       const t=this.getElapsed(m),a=fighters.a,b=fighters.b;
       const pa=this.positionAt(m,m.fighter_a.fighter_id,t),pb=this.positionAt(m,m.fighter_b.fighter_id,t);
       const setPos=(f,p)=>{
-        const old=f.root.x;f.root.x=p.x+(f.dodgeOffset||0);f.root.y=348-p.y*.65-(f.jumpOffset||0);f.root.setScale(f.facing,this.time.now<f.hiddenUntil?.78:1);
+        const old=f.root.x;f.root.x=p.x+(f.dodgeOffset||0);f.root.y=348-p.y*.65-(f.jumpOffset||0);f.root.setScale(f.facing,this.time.now < f.hiddenUntil ? 0.78 : 1);
         const moving=p.moving||Math.abs(p.x-old)>1.5;
         const phase=this.time.now*.012;
         f.rearLeg.rotation=moving?Math.sin(phase)*.48:0;
