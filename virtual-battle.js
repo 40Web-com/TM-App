@@ -96,6 +96,7 @@ function fighterDraw(x,y,side,accent,frame,aim,recoil=0,hidden=false){
  if(recoil>0){ctx.globalAlpha=Math.min(1,recoil);ctx.fillStyle="#fff3ad";ctx.beginPath();ctx.moveTo(85,-70);ctx.lineTo(104,-82);ctx.lineTo(98,-70);ctx.lineTo(104,-58);ctx.closePath();ctx.fill();ctx.globalAlpha=1;}ctx.restore();
 }
 function draw(){
+if(window.TMVBPhaser&&currentMatch){window.TMVBPhaser.render(currentMatch);return;}
 const now=performance.now();const w=960,h=430,m=currentMatch;if(!ctx)return;ctx.clearRect(0,0,w,h);
 // Bright outdoor combat map: concrete yard, distant skyline and tactical cover.
 const sky=ctx.createLinearGradient(0,0,0,h);sky.addColorStop(0,"#9bcdf1");sky.addColorStop(.56,"#dcebf3");sky.addColorStop(.57,"#aeb8c0");sky.addColorStop(1,"#68727d");ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);
