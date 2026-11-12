@@ -32,7 +32,7 @@
 
     drawArena(){
       const g=this.add.graphics();
-      g.fillGradientStyle(0x1a2840,0x1a2840,0x35465b,0x35465b,1);
+      g.fillStyle(0x26394f,1);
       g.fillRect(0,0,W,H);
       g.fillStyle(0x25374a,1);g.fillRect(0,0,W,210);
       for(let i=0;i<14;i++){
