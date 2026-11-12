@@ -85,7 +85,7 @@
       weapon.lineStyle(8,0x1b2737,1);weapon.lineBetween(37,-68,78,-68);weapon.fillStyle(0x9eb6c8,1);weapon.fillRect(57,-73,22,5);weapon.fillStyle(Phaser.Display.Color.HexStringToColor(accent).color,1);weapon.fillRect(76,-70,9,4);
       root.add([shadow,aura,rearLeg,frontLeg,body,rearArm,frontArm,head,weapon]);
       if(id==="b")root.setScale(-1,1);
-      fighters[id]={root,shadow,aura,rearLeg,frontLeg,body,rearArm,frontArm,head,weapon,accent,baseY:348,lastX:root.x,hiddenUntil:0,jumpUntil:0,jumpOffset:0,dodgeOffset:0};
+      fighters[id]={root,shadow,aura,rearLeg,frontLeg,body,rearArm,frontArm,head,weapon,accent,baseY:348,lastX:root.x,hiddenUntil:0,jumpUntil:0,jumpOffset:0,dodgeOffset:0,facing:id==="a"?1:-1};
     }
 
     getElapsed(m){
@@ -123,7 +123,7 @@
         wall.add([shield,shine]);this.tweens.add({targets:wall,alpha:0,duration:4400,delay:1100,onComplete:()=>wall.destroy()});
         walls.push(wall);return;
       }
-      if(e.type==="hide"){actor.hiddenUntil=this.time.now+1350;actor.root.setAlpha(.55);actor.root.setScale(actor===a?1:-1,.78);this.time.delayedCall(1400,()=>{if(actor.root.active)actor.root.setScale(actor===a?1:-1,1);});return;}
+      if(e.type==="hide"){actor.hiddenUntil=this.time.now+1350;actor.root.setAlpha(.55);return;}
       if(e.type==="jump"){actor.jumpUntil=this.time.now+650;this.tweens.add({targets:actor,jumpOffset:52,duration:260,yoyo:true,ease:"Sine.easeOut",onComplete:()=>{actor.jumpOffset=0;}});return;}
       if(e.type==="dodge"){
         const dir=actor===a?1:-1;
@@ -166,7 +166,7 @@
       const t=this.getElapsed(m),a=fighters.a,b=fighters.b;
       const pa=this.positionAt(m,m.fighter_a.fighter_id,t),pb=this.positionAt(m,m.fighter_b.fighter_id,t);
       const setPos=(f,p)=>{
-        const old=f.root.x;f.root.x=p.x+(f.dodgeOffset||0);f.root.y=348-p.y*.65-(f.jumpOffset||0);
+        const old=f.root.x;f.root.x=p.x+(f.dodgeOffset||0);f.root.y=348-p.y*.65-(f.jumpOffset||0);f.root.setScale(f.facing,this.time.now<f.hiddenUntil?.78:1);
         const moving=p.moving||Math.abs(p.x-old)>1.5;
         const phase=this.time.now*.012;
         f.rearLeg.rotation=moving?Math.sin(phase)*.48:0;
@@ -179,8 +179,6 @@
         if(this.time.now>f.hiddenUntil)f.root.setAlpha(1);
       };
       setPos(a,pa);setPos(b,pb);
-      a.root.setScale(m.fighter_a.fighter_id===m.fighter_b.fighter_id?1:1,1);
-      b.root.setScale(-1,1);
       const fresh=(m.events||[]).filter(e=>Number(e.time_sec)<=t+.12&&!processed.has(keyOf(e)));
       fresh.forEach(e=>{processed.add(keyOf(e));if(Number(e.time_sec)>=Math.max(0,t-1.35))this.showEvent(e);});
       this.statusText.setText(m.status==="running"?"LIVE AI BATTLE":m.status==="completed"?"BATTLE COMPLETE":"AI BATTLE PREPARING");
