@@ -1,4 +1,4 @@
-const CACHE_NAME = "tm-app-pages-v163";
+const CACHE_NAME = "tm-app-pages-v164";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -22,6 +22,7 @@ const APP_SHELL = [
   "./virtual-battle.html",
   "./virtual-battle.css",
   "./virtual-battle.js",
+  "./virtual-battle-phaser.js",
   "./assets/virtual-battle/fighters/tm-fighter-01.svg",
   "./assets/virtual-battle/fighters/tm-fighter-02.svg",
   "./assets/virtual-battle/fighters/tm-fighter-03.svg",
