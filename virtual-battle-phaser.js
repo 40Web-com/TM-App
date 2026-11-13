@@ -7,7 +7,7 @@
   }
 
   const W = 960, H = 430;
-  let game = null, sceneRef = null, latestMatch = null;
+  let game = null, sceneRef = null, latestMatch = null, lastSyncAt = 0;
   const processed = new Set();
   const fighters = {};
   const walls = [];
@@ -235,8 +235,13 @@
       }
     }
 
-    update(){
-      if(latestMatch)this.sync(latestMatch);
+    update(time){
+      // Keep the arena responsive on low-memory Android phones. The previous
+      // implementation rebuilt and sorted event-position samples every frame.
+      if(latestMatch && time-lastSyncAt>=125){
+        lastSyncAt=time;
+        this.sync(latestMatch);
+      }
     }
   }
 
@@ -247,9 +252,10 @@
       parent:"vb-phaser-arena",
       width:W,height:H,
       backgroundColor:"#1a2840",
-      antialias:true,
+      antialias:false,
+      fps:{target:20,forceSetTimeOut:true},
       scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},
-      render:{antialias:true,pixelArt:false},
+      render:{antialias:false,pixelArt:false,powerPreference:"low-power"},
       scene:[VirtualBattleScene]
     };
     game=new Phaser.Game(config);
