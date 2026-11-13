@@ -3,7 +3,7 @@ const API_URL="https://swfawduoosskffbuniks.supabase.co/functions/v1/tm-virtual-
 const API_KEY="sb_publishable_rkR-lAksyaDc9dNU4fgkZg_MNoN5RGb";
 const $=id=>document.getElementById(id);
 const canvas=$("vb-canvas"),ctx=canvas?.getContext("2d");
-let sessionToken="",state=null,currentMatch=null,selected=[],pollTimer=null,raf=0,toastTimer=0,lastEventId="",busy=false,refreshing=false,refreshQueued=false,seenEventKeys=new Set(),visualEvents=[],visualMatchId="",lastFeedKeys=[];
+let sessionToken="",state=null,currentMatch=null,selected=[],pollTimer=null,raf=0,toastTimer=0,lastEventId="",busy=false,refreshing=false,refreshQueued=false,seenEventKeys=new Set(),visualEvents=[],visualMatchId="",lastFeedKeys=[];let renderedMarketsKey="";
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt=n=>Number(n||0).toLocaleString();
 function toast(message){const el=$("vb-toast");if(!el){console.warn("[TM Virtual Battle]",message);return;}el.textContent=message;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2600);}
@@ -36,22 +36,51 @@ draw();
 }
 function renderMarkets(m){
  const host=$("vb-markets");if(!host)return;
- const accepting=m.status==="scheduled";
- const markets=m.markets||[];if(!markets.length){host.innerHTML='<div class="vb-loading">Loading markets…</div>';return;}
- host.innerHTML=markets.map(market=>{
-  const locked=!accepting||market.status!=="open";
-  const chosen=selected.find(x=>x.market.id===market.id);
-  const options=Object.entries(market.selections||{});
-  return '<article class="vb-market"><div class="vb-market-heading"><h3>'+esc(market.label)+'</h3><small>'+(locked?'LOCKED · ':'OPEN · ')+options.length+' OUTCOMES</small></div><div class="vb-market-options">'+options.map(([key,label])=>'<button class="vb-option '+(chosen?.selection===key?'selected':'')+'" data-market="'+market.id+'" data-selection="'+esc(key)+'" '+(locked?'disabled':'')+'><span>'+esc(label)+'</span><b>'+Number(market.odds?.[key]||1).toFixed(2)+'×</b></button>').join('')+'</div>'+(chosen?'<p class="vb-market-locked">SELECTED: '+esc(chosen.label)+' · '+chosen.odds.toFixed(2)+'×</p>':'')+'</article>';
- }).join('');
- host.querySelectorAll("[data-market]").forEach(btn=>btn.addEventListener("click",()=>{
-  const market=markets.find(x=>x.id===btn.dataset.market),selection=btn.dataset.selection;
-  const existing=selected.findIndex(x=>x.market.id===market.id);
-  if(existing>=0){selected.splice(existing,1);}
-  if(existing<0){if(selected.length>=2){toast("You can select exactly two markets. Remove one selection first.");return;}selected.push({market,selection,label:market.selections[selection],odds:Number(market.odds[selection])});}
-  renderMarkets(m);renderAccumulatorSlip(m);
- }));
+ const markets=m?.markets||[];
+ if(!markets.length){host.innerHTML='<div class="vb-loading">Loading markets…</div>';renderedMarketsKey="";return;}
+ const renderKey=m.id+":"+m.status;
+ if(renderedMarketsKey!==renderKey){
+  const accepting=m.status==="scheduled";
+  host.innerHTML=markets.map(market=>{
+   const locked=!accepting||market.status!=="open";
+   const options=Object.entries(market.selections||{});
+   return '<article class="vb-market" data-market-card="'+esc(market.id)+'"><div class="vb-market-heading"><h3>'+esc(market.label)+'</h3><small>'+(locked?'LOCKED · ':'OPEN · ')+options.length+' OUTCOMES</small></div><div class="vb-market-options">'+options.map(([key,label])=>'<button type="button" class="vb-option" data-market="'+esc(market.id)+'" data-selection="'+esc(key)+'" '+(locked?'disabled':'')+'><span>'+esc(label)+'</span><b>'+Number(market.odds?.[key]||1).toFixed(2)+'×</b></button>').join('')+'</div><p class="vb-market-locked" data-picked hidden></p></article>';
+  }).join('');
+  renderedMarketsKey=renderKey;
+ }
+ updateMarketSelectionUI(m);
+}
+function handleMarketClick(event){
+ const btn=event.target.closest?.("button[data-market][data-selection]");
+ const host=$("vb-markets");
+ if(!btn||!host||!host.contains(btn)||btn.disabled)return;
+ const m=activeMatch();
+ if(!m||m.status!=="scheduled")return;
+ const market=(m.markets||[]).find(x=>x.id===btn.dataset.market);
+ if(!market||market.status!=="open")return;
+ const selection=btn.dataset.selection;
+ const existing=selected.findIndex(x=>x.market.id===market.id);
+ if(existing>=0){selected.splice(existing,1);}
+ else{
+  if(selected.length>=2){toast("You can select exactly two markets. Remove one selection first.");return;}
+  selected.push({market,selection,label:market.selections[selection],odds:Number(market.odds[selection])});
+ }
+ updateMarketSelectionUI(m);
  renderAccumulatorSlip(m);
+}
+function updateMarketSelectionUI(m){
+ const host=$("vb-markets");if(!host)return;
+ host.querySelectorAll("[data-market-card]").forEach(card=>{
+  const chosen=selected.find(x=>x.market.id===card.dataset.marketCard);
+  card.querySelectorAll("button[data-market]").forEach(btn=>{
+   btn.classList.toggle("selected",Boolean(chosen&&chosen.selection===btn.dataset.selection));
+  });
+  const picked=card.querySelector("[data-picked]");
+  if(picked){
+   picked.hidden=!chosen;
+   picked.textContent=chosen?"SELECTED: "+chosen.label+" · "+chosen.odds.toFixed(2)+"×":"";
+  }
+ });
 }
 function renderAccumulatorSlip(m){
  const slip=$("vb-slip");if(!slip)return;
@@ -127,7 +156,7 @@ async function refresh(force=false){if(refreshing){if(force)refreshQueued=true;r
 async function claimDaily(){if(busy||state?.daily_claimed)return;busy=true;$("vb-claim-daily").disabled=true;try{await api("claim_daily");busy=false;await refresh();toast("250 free points added to your balance.");}catch(e){toast(e.message);}finally{busy=false;}}
 async function createNext(){if(busy)return;busy=true;try{await api("create_match");selected=[];$("vb-slip").hidden=true;busy=false;await refresh();toast("Next battle is ready.");}catch(e){toast(e.message);}finally{busy=false;}}
 async function submitPrediction(){if(selected.length!==2||busy)return;const stake=Number($("vb-stake").value);if(!Number.isInteger(stake)||stake<100||stake>5000){toast("Enter a whole-number stake from 100 to 5,000 points.");return;}if(stake>Number(state?.balance||0)){toast("Not enough virtual points.");return;}busy=true;$("vb-submit").disabled=true;try{const match=activeMatch();await api("place_accumulator",{match_id:match.id,legs:selected.map(x=>({market_id:x.market.id,selection:x.selection})),stake});selected=[];$("vb-slip").hidden=true;busy=false;await refresh();toast("Two-selection accumulator submitted.");}catch(e){toast(e.message);}finally{busy=false;$("vb-submit").disabled=selected.length!==2;}}
-function startPolling(){clearInterval(pollTimer);pollTimer=setInterval(()=>{if(document.visibilityState==="visible"){updateMatchClock(activeMatch());refresh();}},1000);document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")refresh();});cancelAnimationFrame(raf);const loop=()=>{draw();raf=requestAnimationFrame(loop);};loop();}
-function boot(){if(!canvas)return;sessionToken=localStorage.getItem("tm_session")||"";if(!sessionToken){setText("vb-status","SIGN IN REQUIRED");$("vb-markets").innerHTML='<div class="vb-loading">Please sign in to your TM App account, then reopen Virtual Battle.</div>';return;}if($("vb-claim-daily"))$("vb-claim-daily").addEventListener("click",claimDaily);if($("vb-stake"))$("vb-stake").addEventListener("input",updatePotential);if($("vb-stake-minus"))$("vb-stake-minus").addEventListener("click",()=>adjustStake(-100));if($("vb-stake-plus"))$("vb-stake-plus").addEventListener("click",()=>adjustStake(100));if($("vb-slip-close"))$("vb-slip-close").addEventListener("click",()=>{selected=[];$("vb-slip").hidden=true;renderMarkets(activeMatch());});if($("vb-submit"))$("vb-submit").addEventListener("click",submitPrediction);refresh().then(startPolling);window.addEventListener("resize",resizeCanvas);resizeCanvas();}
+function startPolling(){clearInterval(pollTimer);pollTimer=setInterval(()=>{if(document.visibilityState==="visible"){updateMatchClock(activeMatch());refresh();}},3000);document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){refresh();}else{cancelAnimationFrame(raf);}});cancelAnimationFrame(raf);let lastDraw=0;const loop=(time)=>{if(document.visibilityState==="visible"&&time-lastDraw>=1000/24){draw();lastDraw=time;}raf=requestAnimationFrame(loop);};raf=requestAnimationFrame(loop);}
+function boot(){if(!canvas)return;sessionToken=localStorage.getItem("tm_session")||"";if(!sessionToken){setText("vb-status","SIGN IN REQUIRED");$("vb-markets").innerHTML='<div class="vb-loading">Please sign in to your TM App account, then reopen Virtual Battle.</div>';return;}if($("vb-claim-daily"))$("vb-claim-daily").addEventListener("click",claimDaily);if($("vb-stake"))$("vb-stake").addEventListener("input",updatePotential);if($("vb-stake-minus"))$("vb-stake-minus").addEventListener("click",()=>adjustStake(-100));if($("vb-stake-plus"))$("vb-stake-plus").addEventListener("click",()=>adjustStake(100));if($("vb-slip-close"))$("vb-slip-close").addEventListener("click",()=>{selected=[];$("vb-slip").hidden=true;renderMarkets(activeMatch());});if($("vb-submit"))$("vb-submit").addEventListener("click",submitPrediction);if($("vb-markets"))$("vb-markets").addEventListener("click",handleMarketClick);refresh().then(startPolling);window.addEventListener("resize",resizeCanvas);resizeCanvas();}
 boot();
 })();
