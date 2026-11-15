@@ -1,7 +1,6 @@
-// Public client configuration only. Never put a Supabase secret/service_role key here.
-// Create a dedicated Chichi_Ads Supabase project, then enter its Project URL and publishable key.
-// These values are public by design; database access must still be protected by RLS.
+// Public Supabase client configuration for Chichi_Ads.
+// Publishable keys are designed for browser use. Never place a secret/service_role key here.
 window.CHICHI_AUTH_CONFIG = {
-  url: "",
-  publishableKey: ""
+  url: "https://tluqyuvdumylwvtfpxgp.supabase.co",
+  publishableKey: "sb_publishable_AxgGIIkUK8_wR74ZQSbcjg_qClWfEY7"
 };
