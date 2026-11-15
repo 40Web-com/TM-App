@@ -1,25 +1,51 @@
 # Chichi_Ads authentication setup
 
-The rebrand branch now includes a browser authentication adapter for Supabase Auth email/password sessions and Google OAuth. It intentionally does not reuse the legacy TM App Supabase project or its user pool.
+The Chichi_Ads frontend uses a dedicated Supabase project and supports email/password authentication plus a Google OAuth PKCE flow. It does not reuse the legacy TM App database or user pool.
 
-## Required setup before sign-in can work
+## Project details
 
-1. Create or select a **separate Supabase project dedicated to Chichi_Ads**. This avoids coupling Chichi_Ads customers to TM App accounts and legacy data.
-2. In Supabase Project Settings → API, copy the Project URL and **publishable key**.
-3. Put those two public values in `chichi-config.js`.
-4. In Authentication → URL Configuration, add the deployed Chichi_Ads origin to the allowed redirect URLs.
-5. Enable Email provider. Configure email confirmation and password policies.
-6. If Google sign-in is required, configure Google OAuth credentials in Authentication → Providers and add the Supabase callback URL to the Google OAuth client.
-7. Test sign-up, email confirmation, password sign-in, expired-session refresh, sign-out and Google OAuth on the staging domain.
+- Project ref: `tluqyuvdumylwvtfpxgp`
+- API URL: `https://tluqyuvdumylwvtfpxgp.supabase.co`
+- Website: `https://40web-com.github.io/TM-App/`
+- Google callback URI: `https://tluqyuvdumylwvtfpxgp.supabase.co/auth/v1/callback`
 
-## Security boundaries
+## Google OAuth
 
-- Only the Supabase publishable key belongs in `chichi-config.js`. Never place a secret key or service_role key in browser code or Git.
-- The auth adapter stores the normal user session in browser local storage and refreshes it when close to expiry. Protect the site against XSS and use HTTPS.
-- Auth alone does not authorize access to website projects. Apply the separate Chichi_Ads project schema and owner-scoped RLS policies before connecting builder data.
-- Do not apply the project migration to the legacy TM App database.
-- The adapter remains safely unconfigured while the URL and publishable key are blank. The sign-in form reports this rather than pretending to authenticate.
+Open [Chichi_Ads Google provider settings](https://supabase.com/dashboard/project/tluqyuvdumylwvtfpxgp/auth/providers?provider=google).
 
-## Current state
+If the previous website Google OAuth web client is still under your control, reuse that same Google Cloud OAuth client:
+1. Add authorized JavaScript origin `https://40web-com.github.io`.
+2. Add authorized redirect URI `https://tluqyuvdumylwvtfpxgp.supabase.co/auth/v1/callback`.
+3. Enable Google in the Chichi_Ads Supabase provider settings.
+4. Enter the Google OAuth Client ID and Client Secret in the Supabase dashboard only. Do not place the secret in Git or browser JavaScript.
 
-Frontend auth adapter and UI wiring are present in this branch. Live sign-in is **not enabled** until the dedicated project is configured and staging tests pass.
+In Supabase Authentication URL Configuration:
+- Site URL: `https://40web-com.github.io/TM-App/`
+- Redirect allow list: `https://40web-com.github.io/TM-App/**`
+
+If you cannot access the old Google OAuth client, create a new Web application OAuth client in Google Cloud and configure it the same way. Supabase does not expose the old Google Client Secret through the database API, so it cannot be copied automatically from the old project.
+
+## Email provider
+
+Enable Email provider, configure email confirmation, and add a production SMTP provider. Test registration, confirmation, password reset, login, session refresh and logout on Android and desktop. Keep email confirmation enabled for public accounts.
+
+## Administrator role
+
+The Edge Function checks trusted `app_metadata.role = admin`. User-editable metadata is not accepted. After the owner has registered and confirmed the account, a project owner may grant the role in SQL Editor by replacing the email with the exact confirmed account:
+
+```sql
+update auth.users
+set raw_app_meta_data = coalesce(raw_app_meta_data, '{}'::jsonb) || '{"role":"admin"}'::jsonb
+where lower(email) = lower('YOUR_VERIFIED_ACCOUNT_EMAIL');
+```
+
+Sign out and back in to refresh the JWT claim. Never let a public user self-assign this role.
+
+## Security
+
+- Browser configuration contains only the publishable API key.
+- Never commit service-role/secret keys.
+- Website project and image access is owner-scoped.
+- Admin actions run in a JWT-verified Edge Function and check trusted app metadata.
+- Payment state is not writable by customers; the admin function requires a verified provider/bank reference.
+
