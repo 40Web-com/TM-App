@@ -55,24 +55,41 @@
     return session.user;
   }
   async function signInWithGoogle() {
-    if (!configured()) throw new Error("Google sign-in is not configured yet. Connect the Chichi_Ads Supabase project and enable Google under Authentication → Providers.");
-    const redirect = encodeURIComponent(window.location.href.split("?")[0].split("#")[0]);
-    window.location.assign(endpoint("authorize?provider=google&redirect_to=" + redirect));
+    if (!configured()) throw new Error("Chichi_Ads Google sign-in is not configured.");
+    const random = new Uint8Array(48);
+    crypto.getRandomValues(random);
+    const verifier = btoa(String.fromCharCode(...random)).replace(/\\+/g,"-").replace(/\\//g,"_").replace(/=+$/,"");
+    const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier));
+    const challenge = btoa(String.fromCharCode(...new Uint8Array(digest))).replace(/\\+/g,"-").replace(/\\//g,"_").replace(/=+$/,"");
+    localStorage.setItem("chichi_ads_pkce_verifier", verifier);
+    const redirect = window.location.origin + window.location.pathname;
+    const url = endpoint("authorize") + "?provider=google&redirect_to=" + encodeURIComponent(redirect) +
+      "&code_challenge=" + encodeURIComponent(challenge) + "&code_challenge_method=s256";
+    window.location.assign(url);
   }
   async function consumeOAuthCallback() {
     if (!configured()) return;
-    const params = new URLSearchParams(window.location.hash.replace(/^#/, ""));
-    const accessToken = params.get("access_token");
-    if (!accessToken) return;
-    const refreshToken = params.get("refresh_token");
-    const expiresIn = Number(params.get("expires_in") || 3600);
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    if (!code) return;
+    const verifier = localStorage.getItem("chichi_ads_pkce_verifier");
+    if (!verifier) { console.error("Chichi_Ads OAuth verifier is missing."); return; }
     try {
-      const response = await fetch(endpoint("user"), { headers: headers(accessToken) });
-      const user = await response.json();
-      if (!response.ok) throw new Error("Could not load the Google account.");
-      saveSession({ access_token: accessToken, refresh_token: refreshToken, token_type: params.get("token_type") || "bearer", expires_in: expiresIn, expires_at: Math.floor(Date.now() / 1000) + expiresIn, user });
-      history.replaceState({}, document.title, window.location.pathname + window.location.search);
-    } catch (error) { console.error("Chichi_Ads OAuth callback failed:", error); }
+      const response = await fetch(endpoint("token?grant_type=pkce"), {
+        method:"POST", headers:headers(),
+        body:JSON.stringify({auth_code:code,code_verifier:verifier})
+      });
+      const session = await response.json().catch(()=>({}));
+      if (!response.ok) throw new Error(session.msg || session.message || "Google sign-in could not be completed.");
+      persistSession(session);
+      localStorage.removeItem("chichi_ads_pkce_verifier");
+      history.replaceState({},document.title,window.location.pathname);
+    } catch(error) {
+      console.error("Chichi_Ads Google callback failed:",error);
+      localStorage.removeItem("chichi_ads_pkce_verifier");
+      alert(error.message);
+      history.replaceState({},document.title,window.location.pathname);
+    }
   }
   consumeOAuthCallback();
   async function signUp(email, password) {
@@ -135,6 +152,20 @@
     await api("chichi_website_projects?id=eq."+encodeURIComponent(id), {method:"DELETE"});
     return true;
   }
+  async function listProjectVersions(id) {
+    return await api("chichi_website_project_versions?select=id,version_number,snapshot,created_at&project_id=eq."+encodeURIComponent(id)+"&order=version_number.desc");
+  }
+  async function restoreProjectVersion(id, snapshot) {
+    const rows = await api("chichi_website_projects?id=eq."+encodeURIComponent(id)+"&select=id", {
+      method:"PATCH",headers:{"Prefer":"return=representation"},body:JSON.stringify({content:snapshot,updated_at:new Date().toISOString()})
+    });
+    if (!rows?.length) throw new Error("Could not restore this version.");
+    const latest = await listProjectVersions(id);
+    await api("chichi_website_project_versions",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify({
+      project_id:id,owner_id:(await getSession()).user.id,version_number:(latest?.[0]?.version_number||0)+1,snapshot
+    })});
+    return true;
+  }
   async function signOut() {
     const session = await getSession();
     if (session?.access_token && configured()) {
@@ -143,5 +174,5 @@
       } finally { saveSession(null); }
     } else saveSession(null);
   }
-  window.ChichiAuth = { configured, getSession, signIn, signUp, resetPassword, signInWithGoogle, signOut, listProjects, saveProject, deleteProject };
+  window.ChichiAuth = { configured, getSession, signIn, signUp, resetPassword, signInWithGoogle, signOut, listProjects, saveProject, deleteProject, listProjectVersions, restoreProjectVersion };
 })();
