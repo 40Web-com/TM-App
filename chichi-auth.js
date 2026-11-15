@@ -58,9 +58,9 @@
     if (!configured()) throw new Error("Chichi_Ads Google sign-in is not configured.");
     const random = new Uint8Array(48);
     crypto.getRandomValues(random);
-    const verifier = btoa(String.fromCharCode(...random)).replace(/\\+/g,"-").replace(/\\//g,"_").replace(/=+$/,"");
+    const verifier = btoa(String.fromCharCode(...random)).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
     const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier));
-    const challenge = btoa(String.fromCharCode(...new Uint8Array(digest))).replace(/\\+/g,"-").replace(/\\//g,"_").replace(/=+$/,"");
+    const challenge = btoa(String.fromCharCode(...new Uint8Array(digest))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
     localStorage.setItem("chichi_ads_pkce_verifier", verifier);
     const redirect = window.location.origin + window.location.pathname;
     const url = endpoint("authorize") + "?provider=google&redirect_to=" + encodeURIComponent(redirect) +
