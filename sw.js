@@ -1,9 +1,9 @@
-const CACHE_NAME = "chichi-ads-pages-v1";
+const CACHE_NAME = "chichi-ads-pages-v2";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./chichi.css",
-  "./chichi-app.js",
+  "./chichi-app.js",\n  "./chichi-auth.js",\n  "./chichi-config.js",
   "./style.css",
   "./auth.css",
   "./main.js",
