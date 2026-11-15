@@ -15,6 +15,7 @@ const listings=[
 ];
 let siteTitle=localStorage.getItem("cc_site_title")||"Your New Website";
 let siteTag=localStorage.getItem("cc_site_tag")||"A beautiful website for your business.";
+let currentProjectId=null,authMode="login";
 const safe=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const nav=(active)=>pages.map(([id,ico,label])=>'<button data-page="'+id+'" class="'+(active===id?"active":"")+'"><span class="ico">'+ico+'</span>'+label+'</button>').join("");
 const head=(eyebrow,title,desc)=>'<div class="eyebrow">'+eyebrow+'</div><h1 class="heading">'+title+'</h1><p class="sub">'+desc+'</p>';
@@ -26,7 +27,7 @@ function home(){return head("YOUR DIGITAL BUSINESS PLATFORM","Build something br
 '<div class="grid stats">'+stat("Website templates","06")+stat("Product categories","06")+stat("Builder","Starter preview")+stat("Platform status","Early access")+'</div>'+
 '<div class="section-head"><div><h3>What would you like to do?</h3><p>Choose a workspace to get started.</p></div></div><div class="grid tiles">'+card("▦","Buy a website","Explore ready-made website designs.")+card("✦","Build a website","Customize a starter template without coding.")+card("☁","Host a website","Review hosting options and site management.")+card("⌘","Sell as a developer","Submit your own website designs.")+card("↗","Earn as an affiliate","Promote products and earn on eligible sales.")+card("⚙","Platform operations","Admin tools and marketplace oversight.")+'</div>'+
 '<div class="section-head"><div><h3>Featured website templates</h3><p>Starter concepts for the first marketplace catalogue.</p></div><button class="btn outline" data-page="marketplace">View marketplace</button></div>'+listingCards()+
-'<div class="notice">Early-access preview: this branch currently demonstrates the Chichi_Ads interface. Purchases, hosting provisioning, user accounts, commissions and publishing are not connected yet.</div>'}
+'<div class="notice">Early access: account registration and private website drafts are available as the first working services. Marketplace checkout, hosting provisioning, affiliate commissions and public publishing are still being built.</div>'}
 function marketplace(){return head("WEBSITE MARKETPLACE","Find the right starting point.","Browse professionally structured starter concepts. Each listing will have a live demo, feature list, licence details and verified purchase flow.")+
 '<div class="grid cat-grid" style="margin:20px 0">'+[["🛍️","Online stores","Product catalogues"],["🏢","Business","Company websites"],["🍽️","Restaurants","Menus and enquiries"],["🏡","Real estate","Property showcases"],["🎨","Portfolios","Creative profiles"],["📅","Booking","Appointment enquiries"]].map(x=>'<button class="category"><span class="symbol">'+x[0]+'</span><strong>'+x[1]+'</strong><small>'+x[2]+'</small></button>').join("")+'</div>'+listingCards()+'<div class="notice">Prices shown are planning examples only, not active offers. No checkout or payment processing is enabled in this prototype.</div>'}
 function builder(){return head("NO-CODE WEBSITE BUILDER","Create your website.","Start with a template, edit your content and save your project to your Chichi_Ads account.")+
