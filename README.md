@@ -2,33 +2,33 @@
 
 **Build. Buy. Host. Earn.**
 
-Chichi_Ads is being developed from the existing TM-App codebase into a website marketplace, template-based website builder, hosting platform, developer marketplace and affiliate programme.
-
-## Rebrand migration
-
-The `chichi-ads-rebrand` branch is the isolated rebranding workstream. The original `main` branch remains the baseline while the existing application is audited and converted in stages.
+Chichi_Ads is a website marketplace and template-first website creation platform. The early-access release is built from the existing TM App repository and uses a separate Supabase project for Chichi_Ads accounts and website drafts.
 
 ## Product areas
-- Website marketplace and live demos
-- Template-based no-code website builder
-- Customer websites, publishing and hosting
-- Developer submissions and seller earnings
-- Affiliate referrals and commissions
-- Admin operations, payment verification and support
 
-## Development principles
-- Preserve reusable, working infrastructure where it is suitable.
-- Remove the old social/dating/chat product experience from the customer-facing product as the Chichi_Ads replacement is implemented.
-- Keep customer website projects isolated.
-- Verify payments server-side before releasing purchased websites.
-- Never expose secrets in frontend code or commit them to Git.
-- Treat free hosting tiers as limited capacity, not unlimited hosting.
+- Website marketplace: online stores, business sites, restaurants, real estate, portfolios and booking sites.
+- Website builder: template-driven editing and customer-owned drafts.
+- Hosting and domains: planned lightweight hosting, renewals, backups and custom domains.
+- Developer marketplace: reviewed third-party website listings and licensing.
+- Affiliate programme: referral attribution and verified commission accounting.
+- Custom website studio: tailored website requests and delivery.
 
-## Current migration status
-Initial brand metadata and visual theme groundwork are being applied on the rebrand branch. The full screen-by-screen migration, backend audit, database changes, builder and marketplace implementation remain staged work and must be verified before launch.
+## Current early-access capabilities
 
-## Local development
-Install dependencies with `npm install`, run `npm run dev`, and create a production build with `npm run build`.
+- Responsive Chichi_Ads interface and logo.
+- Email/password account registration and sign-in foundation.
+- Customer-owned website draft storage and version snapshots.
+- Separate Supabase project with row-level security on website-project tables.
 
-## Project handover
-All source code, deployment configuration, domain ownership and service accounts should remain under the business owner's control.
+## Important status
+
+This is an early-access foundation, not yet a complete production marketplace. Google OAuth still needs provider credentials and redirect configuration. Email confirmation and password-reset redirects need final configuration and browser testing. Public website publishing, hosting provisioning, payments, developer payouts, affiliate commissions and admin operations are not yet active. Demo marketplace cards are examples, not real purchasable inventory.
+
+See [the full business and product blueprint](docs/CHICHI_ADS_BLUEPRINT.md), [backend foundation](docs/CHICHI_ADS_BACKEND_FOUNDATION.md) and [authentication setup](docs/CHICHI_ADS_AUTH_SETUP.md).
+
+## Security
+
+- The frontend contains only the Supabase publishable key.
+- Never add a Supabase secret/service-role key to this repository or browser code.
+- The Chichi_Ads Supabase project is separate from the legacy TM App project.
+- Do not accept or fulfil payments based only on a client-side success message.
