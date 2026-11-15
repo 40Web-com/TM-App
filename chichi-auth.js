@@ -9,6 +9,13 @@
     apikey: config.publishableKey,
     ...(token ? { Authorization: "Bearer " + token } : {})
   });
+  const persistSession = (session) => {
+    if (session?.access_token) {
+      if (!session.expires_at) session.expires_at = Math.floor(Date.now() / 1000) + Number(session.expires_in || 3600);
+      saveSession(session);
+    }
+    return session;
+  };
   const readSession = () => {
     try { return JSON.parse(localStorage.getItem(storageKey) || "null"); }
     catch { return null; }
@@ -29,7 +36,7 @@
     const current = readSession();
     if (!current?.refresh_token) return null;
     const next = await request("token?grant_type=refresh_token", { refresh_token: current.refresh_token });
-    saveSession(next);
+    persistSession(next);
     return next;
   }
   async function getSession() {
@@ -44,7 +51,7 @@
   async function signIn(email, password) {
     if (!configured()) throw new Error("Chichi_Ads authentication is not configured yet. A separate Chichi_Ads Supabase project and its publishable settings are required.");
     const session = await request("token?grant_type=password", { email, password });
-    saveSession(session);
+    persistSession(session);
     return session.user;
   }
   async function signInWithGoogle() {
@@ -70,7 +77,9 @@
   consumeOAuthCallback();
   async function signUp(email, password) {
     if (!configured()) throw new Error("Chichi_Ads account service is not configured.");
-    return await request("signup", { email, password });
+    const result = await request("signup", { email, password });
+    if (result?.access_token) persistSession(result);
+    return result;
   }
   async function resetPassword(email) {
     if (!configured()) throw new Error("Chichi_Ads account service is not configured.");
