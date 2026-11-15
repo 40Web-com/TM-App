@@ -1,7 +1,9 @@
-const CACHE_NAME = "tm-app-pages-v176";
+const CACHE_NAME = "chichi-ads-pages-v1";
 const APP_SHELL = [
   "./",
   "./index.html",
+  "./chichi.css",
+  "./chichi-app.js",
   "./style.css",
   "./auth.css",
   "./main.js",
