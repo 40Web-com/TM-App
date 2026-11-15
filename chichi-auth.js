@@ -52,7 +52,7 @@
     const redirect = encodeURIComponent(window.location.href.split("?")[0].split("#")[0]);
     window.location.assign(endpoint("authorize?provider=google&redirect_to=" + redirect));
   }
-  async function signOut() {
+  async function consumeOAuthCallback() {\n    if (!configured()) return;\n    const params = new URLSearchParams(window.location.hash.replace(/^#/, ""));\n    const accessToken = params.get("access_token");\n    if (!accessToken) return;\n    const refreshToken = params.get("refresh_token");\n    const expiresIn = Number(params.get("expires_in") || 3600);\n    try {\n      const response = await fetch(endpoint("user"), { headers: headers(accessToken) });\n      const user = await response.json();\n      if (!response.ok) throw new Error("Could not load the Google account.");\n      saveSession({ access_token: accessToken, refresh_token: refreshToken, token_type: params.get("token_type") || "bearer", expires_in: expiresIn, expires_at: Math.floor(Date.now() / 1000) + expiresIn, user });\n      history.replaceState({}, document.title, window.location.pathname + window.location.search);\n    } catch (error) { console.error("Chichi_Ads OAuth callback failed:", error); }\n  }\n  consumeOAuthCallback();\n  async function signOut() {
     const session = await getSession();
     if (session?.access_token && configured()) {
       try {
