@@ -68,6 +68,64 @@
     } catch (error) { console.error("Chichi_Ads OAuth callback failed:", error); }
   }
   consumeOAuthCallback();
+  async function signUp(email, password) {
+    if (!configured()) throw new Error("Chichi_Ads account service is not configured.");
+    return await request("signup", { email, password });
+  }
+  async function resetPassword(email) {
+    if (!configured()) throw new Error("Chichi_Ads account service is not configured.");
+    const response = await fetch(endpoint("recover"), { method:"POST", headers:headers(), body:JSON.stringify({email}) });
+    const result = await response.json().catch(()=>({}));
+    if (!response.ok) throw new Error(result.msg || result.message || "Could not send password reset email.");
+    return true;
+  }
+  async function api(path, options={}) {
+    const session = await getSession();
+    if (!session?.access_token) throw new Error("Please sign in to manage your websites.");
+    const base = config.url.replace(/[/]$/, "");
+    const response = await fetch(base + "/rest/v1/" + path, {
+      ...options,
+      headers: { apikey:config.publishableKey, Authorization:"Bearer "+session.access_token,
+        "Content-Type":"application/json", ...(options.headers||{}) }
+    });
+    const raw = await response.text();
+    const result = raw ? JSON.parse(raw) : null;
+    if (!response.ok) throw new Error(result?.message || result?.hint || "Website project request failed.");
+    return result;
+  }
+  async function listProjects() {
+    return await api("chichi_website_projects?select=id,name,slug,category,template_key,status,content,updated_at&order=updated_at.desc");
+  }
+  async function saveProject(project) {
+    const session = await getSession();
+    if (!session?.user?.id) throw new Error("Please sign in first.");
+    const record = { owner_id:session.user.id, name:project.name, slug:project.slug,
+      category:project.category || "business", template_key:"business-starter",
+      content:project.content, updated_at:new Date().toISOString() };
+    let saved;
+    if (project.id) {
+      const rows = await api("chichi_website_projects?id=eq."+encodeURIComponent(project.id)+"&select=id,name,slug,category,content,updated_at", {
+        method:"PATCH", headers:{"Prefer":"return=representation"}, body:JSON.stringify(record)
+      });
+      saved = rows?.[0];
+    } else {
+      const rows = await api("chichi_website_projects?select=id,name,slug,category,content,updated_at", {
+        method:"POST", headers:{"Prefer":"return=representation"}, body:JSON.stringify(record)
+      });
+      saved = rows?.[0];
+    }
+    if (!saved) throw new Error("The project could not be saved.");
+    const latest = await api("chichi_website_project_versions?select=version_number&project_id=eq."+encodeURIComponent(saved.id)+"&order=version_number.desc&limit=1");
+    const version = (latest?.[0]?.version_number || 0) + 1;
+    await api("chichi_website_project_versions", {method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify({
+      project_id:saved.id, owner_id:session.user.id, version_number:version, snapshot:saved.content
+    })});
+    return saved;
+  }
+  async function deleteProject(id) {
+    await api("chichi_website_projects?id=eq."+encodeURIComponent(id), {method:"DELETE"});
+    return true;
+  }
   async function signOut() {
     const session = await getSession();
     if (session?.access_token && configured()) {
@@ -76,5 +134,5 @@
       } finally { saveSession(null); }
     } else saveSession(null);
   }
-  window.ChichiAuth = { configured, getSession, signIn, signInWithGoogle, signOut };
+  window.ChichiAuth = { configured, getSession, signIn, signUp, resetPassword, signInWithGoogle, signOut, listProjects, saveProject, deleteProject };
 })();
