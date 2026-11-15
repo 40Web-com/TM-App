@@ -1,11 +1,34 @@
-# TM-App
-TM App is a mobile-first, installable social PWA combining private messaging, friendship/dating discovery, and AI Studio.
+# Chichi_Ads
 
-Current version: responsive frontend shell. GitHub Pages deployment: https://40web-com.github.io/TM-App/
+**Build. Buy. Host. Earn.**
 
-Deployment refresh: 2026-11-09
+Chichi_Ads is being developed from the existing TM-App codebase into a website marketplace, template-based website builder, hosting platform, developer marketplace and affiliate programme.
 
+## Rebrand migration
 
-## TM Virtual Battle MVP
+The `chichi-ads-rebrand` branch is the isolated rebranding workstream. The original `main` branch remains the baseline while the existing application is audited and converted in stages.
 
-The `tm-virtual-battle-mvp` branch adds an isolated 1v1 virtual battle module. It uses the existing TM PWA navigation and Supabase project, a server-generated event sequence, a browser Canvas animation, and non-transferable virtual points only. No paid game APIs, game servers, or third-party assets are required. The battle module is not merged into `main` until reviewed and tested.
+## Product areas
+- Website marketplace and live demos
+- Template-based no-code website builder
+- Customer websites, publishing and hosting
+- Developer submissions and seller earnings
+- Affiliate referrals and commissions
+- Admin operations, payment verification and support
+
+## Development principles
+- Preserve reusable, working infrastructure where it is suitable.
+- Remove the old social/dating/chat product experience from the customer-facing product as the Chichi_Ads replacement is implemented.
+- Keep customer website projects isolated.
+- Verify payments server-side before releasing purchased websites.
+- Never expose secrets in frontend code or commit them to Git.
+- Treat free hosting tiers as limited capacity, not unlimited hosting.
+
+## Current migration status
+Initial brand metadata and visual theme groundwork are being applied on the rebrand branch. The full screen-by-screen migration, backend audit, database changes, builder and marketplace implementation remain staged work and must be verified before launch.
+
+## Local development
+Install dependencies with `npm install`, run `npm run dev`, and create a production build with `npm run build`.
+
+## Project handover
+All source code, deployment configuration, domain ownership and service accounts should remain under the business owner's control.

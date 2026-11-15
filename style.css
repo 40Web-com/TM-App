@@ -1,4 +1,8 @@
 :root {
+  --oxblood:#351052; --deep:#24102F; --pink:#C13D9B; --soft-pink:#E8B5DA;
+  --blush:#F7EAF5; --border-pink:#E7D5E6; --muted:#6B5A70; --surface:#FFFFFF;
+  --chat-bg:#FBF7FC; --gold:#D6A84F; --nav-height:68px;
+  --brand-purple:#351052; --brand-magenta:#C13D9B; --brand-gold:#D6A84F;
   color-scheme: light;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-synthesis: none;

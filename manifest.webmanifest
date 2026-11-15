@@ -1,15 +1,15 @@
 {
   "id": "./",
-  "name": "TM App — Game Hub",
-  "short_name": "TM App",
-  "description": "Your mobile home for TM Game Hub, gaming tools, and AI features.",
+  "name": "Chichi_Ads — Build. Buy. Host. Earn.",
+  "short_name": "Chichi_Ads",
+  "description": "Build, buy, host and sell professional websites with Chichi_Ads.",
   "start_url": "./?source=pwa",
   "scope": "./",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],
   "orientation": "any",
-  "background_color": "#09051c",
-  "theme_color": "#16062f",
+  "background_color": "#180B25",
+  "theme_color": "#351052",
   "icons": [
     {"src": "./logo.svg?v=3", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
   ]
