@@ -126,7 +126,7 @@
     const session = await getSession();
     if (!session?.user?.id) throw new Error("Please sign in first.");
     const record = { owner_id:session.user.id, name:project.name, slug:project.slug,
-      category:project.category || "business", template_key:"business-starter",
+      category:project.category || "business", template_key:project.template || "business-starter",
       content:project.content, updated_at:new Date().toISOString() };
     let saved;
     if (project.id) {
@@ -152,6 +152,62 @@
     await api("chichi_website_projects?id=eq."+encodeURIComponent(id), {method:"DELETE"});
     return true;
   }
+  async function listMarketplace() {
+    return await api("chichi_listings?select=id,title,slug,category,description,price_kobo,currency,demo_url,preview_image,features,licence_terms&review_status=eq.approved&order=is_featured.desc,created_at.desc");
+  }
+  async function submitListing(listing) {
+    const session=await getSession();
+    const slug=listing.title.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60)+"-"+Math.random().toString(36).slice(2,6);
+    const rows=await api("chichi_listings?select=id,title,review_status",{method:"POST",headers:{"Prefer":"return=representation"},body:JSON.stringify({seller_id:session.user.id,title:listing.title,slug,category:listing.category,description:listing.description,price_kobo:Math.round(Number(listing.price)*100),demo_url:listing.demo_url||"",licence_terms:listing.licence_terms||"",review_status:"pending"})});
+    return rows?.[0];
+  }
+  async function applyDeveloper(profile) {
+    const session=await getSession();
+    const rows=await api("chichi_developer_profiles?select=id,status",{method:"POST",headers:{"Prefer":"return=representation"},body:JSON.stringify({id:session.user.id,display_name:profile.display_name,bio:profile.bio||"",portfolio_url:profile.portfolio_url||"",status:"pending"})});
+    return rows?.[0];
+  }
+  async function applyAffiliate() {
+    const session=await getSession();
+    const code="CHICHI"+Math.random().toString(36).slice(2,9).toUpperCase();
+    const rows=await api("chichi_affiliate_profiles?select=id,referral_code,status",{method:"POST",headers:{"Prefer":"return=representation"},body:JSON.stringify({id:session.user.id,referral_code:code,status:"pending"})});
+    return rows?.[0];
+  }
+  async function createSupportTicket(ticket) {
+    const session=await getSession();
+    const rows=await api("chichi_support_tickets?select=id,subject,status,created_at",{method:"POST",headers:{"Prefer":"return=representation"},body:JSON.stringify({owner_id:session.user.id,subject:ticket.subject,message:ticket.message})});
+    return rows?.[0];
+  }
+  async function createOrder(order) {
+    const session=await getSession();
+    const rows=await api("chichi_orders?select=id,item_name,amount_kobo,payment_status,created_at",{method:"POST",headers:{"Prefer":"return=representation"},body:JSON.stringify({buyer_id:session.user.id,listing_id:order.listing_id||null,item_name:order.item_name,amount_kobo:Math.round(Number(order.amount)*100),currency:"NGN",payment_status:"pending",fulfilment_status:"awaiting_payment",provider:"manual"})});
+    return rows?.[0];
+  }
+  async function listOrders() { return await api("chichi_orders?select=id,item_name,amount_kobo,payment_status,fulfilment_status,created_at&order=created_at.desc"); }
+  async function listMyListings() { return await api("chichi_listings?select=id,title,review_status,created_at&order=created_at.desc"); }
+  async function listHostingPlans() { return await api("chichi_hosting_plans?select=id,name,price_kobo,billing_period,storage_mb,bandwidth_gb,backups_included&is_active=eq.true"); }
+  async function requestHosting(projectId, planId) {
+    const session=await getSession();
+    const rows=await api("chichi_hosting_subscriptions?select=id,status,created_at",{method:"POST",headers:{"Prefer":"return=representation"},body:JSON.stringify({owner_id:session.user.id,project_id:projectId||null,plan_id:planId,status:"pending"})});
+    return rows?.[0];
+  }
+  async function uploadAsset(file) {
+    const session=await getSession();
+    const types=["image/jpeg","image/png","image/webp","image/gif","image/svg+xml"];
+    if(!file || !types.includes(file.type) || file.size>5242880) throw new Error("Choose a JPG, PNG, WEBP, GIF or SVG image under 5 MB.");
+    const name=crypto.randomUUID()+"-"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+    const path=session.user.id+"/"+name;
+    const response=await fetch(config.url.replace(/[/]$/,"")+"/storage/v1/object/chichi-website-assets/"+path,{method:"POST",headers:{apikey:config.publishableKey,Authorization:"Bearer "+session.access_token,"Content-Type":file.type,"x-upsert":"false"},body:file});
+    const result=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error(result.message||"Image upload failed.");
+    return path;
+  }
+  async function adminAction(action,id,extra={}) {
+    const session=await getSession();
+    const response=await fetch(config.url.replace(/[/]$/,"")+"/functions/v1/chichi-admin",{method:"POST",headers:{apikey:config.publishableKey,Authorization:"Bearer "+session.access_token,"Content-Type":"application/json"},body:JSON.stringify({action,id,...extra})});
+    const result=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error(result.error||"Administrator action failed.");
+    return result.result;
+  }
   async function listProjectVersions(id) {
     return await api("chichi_website_project_versions?select=id,version_number,snapshot,created_at&project_id=eq."+encodeURIComponent(id)+"&order=version_number.desc");
   }
@@ -174,5 +230,5 @@
       } finally { saveSession(null); }
     } else saveSession(null);
   }
-  window.ChichiAuth = { configured, getSession, signIn, signUp, resetPassword, signInWithGoogle, signOut, listProjects, saveProject, deleteProject, listProjectVersions, restoreProjectVersion };
+  window.ChichiAuth = { configured, getSession, signIn, signUp, resetPassword, signInWithGoogle, signOut, listProjects, saveProject, deleteProject, listProjectVersions, restoreProjectVersion, listMarketplace, submitListing, applyDeveloper, applyAffiliate, createSupportTicket, createOrder, listOrders, listMyListings, listHostingPlans, requestHosting, uploadAsset, adminAction };
 })();
