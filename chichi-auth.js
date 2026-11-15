@@ -190,6 +190,17 @@
     const rows=await api("chichi_hosting_subscriptions?select=id,status,created_at",{method:"POST",headers:{"Prefer":"return=representation"},body:JSON.stringify({owner_id:session.user.id,project_id:projectId||null,plan_id:planId,status:"pending"})});
     return rows?.[0];
   }
+  async function getSignedAssetUrl(path) {
+    const session=await getSession();
+    const response=await fetch(config.url.replace(/[/]$/,"")+"/storage/v1/object/sign/chichi-website-assets/"+path,{
+      method:"POST",headers:{apikey:config.publishableKey,Authorization:"Bearer "+session.access_token,"Content-Type":"application/json"},
+      body:JSON.stringify({expiresIn:3600})
+    });
+    const result=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error(result.message||"Could not load image preview.");
+    const signed=result.signedURL||result.signedUrl;
+    return signed.startsWith("http")?signed:config.url.replace(/[/]$/,"")+"/storage/v1"+(signed.startsWith("/")?signed:"/"+signed);
+  }
   async function uploadAsset(file) {
     const session=await getSession();
     const types=["image/jpeg","image/png","image/webp","image/gif","image/svg+xml"];
@@ -230,5 +241,5 @@
       } finally { saveSession(null); }
     } else saveSession(null);
   }
-  window.ChichiAuth = { configured, getSession, signIn, signUp, resetPassword, signInWithGoogle, signOut, listProjects, saveProject, deleteProject, listProjectVersions, restoreProjectVersion, listMarketplace, submitListing, applyDeveloper, applyAffiliate, createSupportTicket, createOrder, listOrders, listMyListings, listHostingPlans, requestHosting, uploadAsset, adminAction };
+  window.ChichiAuth = { configured, getSession, signIn, signUp, resetPassword, signInWithGoogle, signOut, listProjects, saveProject, deleteProject, listProjectVersions, restoreProjectVersion, listMarketplace, submitListing, applyDeveloper, applyAffiliate, createSupportTicket, createOrder, listOrders, listMyListings, listHostingPlans, requestHosting, uploadAsset, getSignedAssetUrl, adminAction };
 })();
