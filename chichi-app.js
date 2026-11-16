@@ -15,7 +15,8 @@ const listings=[
 ];
 let siteTitle=localStorage.getItem("cc_site_title")||"Your New Website";
 let siteTag=localStorage.getItem("cc_site_tag")||"A beautiful website for your business.";
-let currentProjectId=null,authMode="login",siteImagePath="",siteImageUrl="";\nlet selectedPublicSmsNumber=null;
+let currentProjectId=null,authMode="login",siteImagePath="",siteImageUrl="";
+let selectedPublicSmsNumber=null;
 const safe=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const nav=(active)=>pages.map(([id,ico,label])=>'<button data-page="'+id+'" class="'+(active===id?"active":"")+'"><span class="ico">'+ico+'</span>'+label+'</button>').join("");
 const head=(eyebrow,title,desc)=>'<div class="eyebrow">'+eyebrow+'</div><h1 class="heading">'+title+'</h1><p class="sub">'+desc+'</p>';
@@ -37,6 +38,46 @@ function numberTools(){return head("MOBILE NUMBER TOOLS","Generate test numbers 
 '<div class="number-tabs"><button class="number-tab active" data-number-tab="random">Free test generator</button><button class="number-tab" data-number-tab="virtual">Real virtual numbers</button></div>'+
 '<section class="number-panel" id="number-random"><div class="number-intro"><div class="number-icon">✳</div><div><h3>Fictional mobile number generator</h3><p>Generate non-working sample numbers for mockups, demos and software testing. These are not SIM cards and cannot receive calls or SMS.</p></div></div><div class="number-controls"><label>Number format<select id="number-country"><option value="us">United States — reserved 555-01xx</option><option value="ca">Canada — reserved 555-01xx</option><option value="uk">United Kingdom — reserved 01632 960xxx</option><option value="generic">Other country — non-dialable placeholder</option></select></label><label>How many?<select id="number-count"><option>1</option><option>5</option><option selected>10</option><option>15</option><option>20</option></select></label><button class="btn" id="generate-numbers">Generate numbers</button></div><div class="number-result-head"><b>Your generated samples</b><button class="btn outline" id="copy-all-numbers" disabled>Copy all</button></div><div id="number-results" class="number-results"><div class="empty">Choose a format and generate your first test list.</div></div><div class="number-disclaimer"> <b>Testing only.</b> Sample numbers are fictional/reserved where supported, or intentionally non-dialable placeholders. Do not use them to contact people, register accounts or receive verification codes.</div></section>'+
 '<section class="number-panel" id="number-virtual" hidden><div class="number-intro"><div class="number-icon">▣</div><div><h3>Real virtual phone numbers</h3><p>Provider-assigned numbers that can receive calls or SMS, depending on country, number type and provider support.</p></div></div><div class="provider-status"><span class="status-dot"></span><div><b>Telecom provider not connected</b><p>Live number inventory and SMS reception are not active yet. Chichi_Ads will not display invented numbers or pretend that a line is working.</p></div></div><div class="number-feature-grid"><div><b>Country availability</b><span>Depends on provider inventory and local rules</span></div><div><b>SMS / voice support</b><span>Shown per number before purchase</span></div><div><b>Pricing</b><span>Provider charges apply; real numbers are not free to provision</span></div><div><b>Account ownership</b><span>Secure assignment and renewal records</span></div></div><div class="number-disclaimer">When a carrier/virtual-number provider is selected, this section can connect to its API for inventory, checkout, number assignment and incoming-message webhooks. Provider credentials must stay on the server, never in the browser.</div><button class="btn outline" type="button" disabled>Live numbers unavailable until provider setup</button></section>';
+}
+
+function publicSMS(){return head("FREE CANADIAN PUBLIC SMS","Receive texts in a shared inbox.","Browse real Canadian SMS numbers and view incoming messages in a public inbox. This service is receive-only in its first release.")+
+'<section class="public-sms-hero"><div><div class="eyebrow" style="color:#f0c8e7">CHICHI_ADS · CANADA</div><h2>Free public SMS inboxes</h2><p>Choose an available Canadian number to view incoming texts. Messages are public and may be seen by anyone using this website.</p><div class="public-sms-points"><span>🇨🇦 Canada only</span><span>↓ Receive SMS only</span><span>Free access · ad-supported plan</span></div></div><div class="public-sms-art">✉</div></section>'+
+'<div class="number-disclaimer public-warning"><b>Privacy warning — read before using.</b> Every message shown here is public. Do not use these numbers for banking, email, social media, government services, password resets, private conversations, or any account you care about. Do not send personal information or sensitive verification codes to a shared inbox.</div>'+
+'<div class="public-sms-layout"><section class="number-panel"><div class="public-sms-heading"><div><h3>Available Canadian numbers</h3><p>Only verified, active numbers will appear here.</p></div><button class="btn outline" id="public-sms-refresh">Refresh</button></div><div id="public-sms-numbers" class="public-sms-numbers"><div class="empty">Checking live number inventory…</div></div></section>'+
+'<section class="number-panel"><div class="public-sms-heading"><div><h3>Public message inbox</h3><p id="public-sms-inbox-title">Select a number to view its latest messages.</p></div></div><div id="public-sms-messages" class="public-sms-messages"><div class="empty">Choose a Canadian number to open its inbox.</div></div></section></div>'+
+'<div class="notice">Launch status: telecom provisioning and live inbound SMS routing are not connected yet. No test numbers or sample messages are shown as real. The inbox will activate only after a provider number passes an end-to-end SMS test.</div>'+
+'<div class="number-feature-grid"><div><b>Public by design</b><span>Anyone can view messages in the shared inbox.</span></div><div><b>Short retention</b><span>Approved messages are designed to expire after seven days.</span></div><div><b>Canada only</b><span>Only Canadian numbers verified by the telecom provider will be listed.</span></div><div><b>Private numbers later</b><span>Exclusive numbers and private inboxes are planned as a separate future service.</span></div></div>';}
+async function loadPublicSmsNumbers(){
+ const target=document.getElementById("public-sms-numbers");if(!target)return;
+ const cfg=window.CHICHI_AUTH_CONFIG||{};
+ if(!cfg.url||!cfg.publishableKey){target.innerHTML='<div class="empty">The public SMS service is not configured.</div>';return;}
+ target.innerHTML='<div class="empty">Loading verified Canadian numbers…</div>';
+ try{
+  const url=cfg.url.replace(/\/$/,"")+"/rest/v1/public_sms_public_numbers?select=id,phone_number,area_code,display_label,capabilities,last_verified_at&order=phone_number.asc";
+  const response=await fetch(url,{headers:{apikey:cfg.publishableKey,Authorization:"Bearer "+cfg.publishableKey}});
+  if(!response.ok)throw new Error("Could not load the live number list ("+response.status+").");
+  const rows=await response.json();
+  if(!Array.isArray(rows)||!rows.length){selectedPublicSmsNumber=null;target.innerHTML='<div class="empty"><b>No live Canadian numbers are online yet.</b><br>Real numbers will appear here after telecom provisioning and a successful inbound SMS test.</div>';const inbox=document.getElementById("public-sms-messages");if(inbox)inbox.innerHTML='<div class="empty">The public inbox will become available when a verified number is online.</div>';const title=document.getElementById("public-sms-inbox-title");if(title)title.textContent="No active number selected.";return;}
+  target.innerHTML=rows.map(n=>'<button class="public-sms-number '+(selectedPublicSmsNumber===n.id?'active':'')+'" data-public-number="'+safe(n.id)+'"><span><b>'+safe(n.display_label||"Canadian SMS")+'</b><small>🇨🇦 '+safe(n.phone_number)+(n.area_code?' · Area code '+safe(n.area_code):'')+'</small></span><span class="public-sms-open">Open inbox →</span></button>').join("");
+  const chosen=rows.find(n=>n.id===selectedPublicSmsNumber)||rows[0];
+  selectedPublicSmsNumber=chosen.id;
+  target.querySelectorAll("[data-public-number]").forEach(el=>el.classList.toggle("active",el.dataset.publicNumber===selectedPublicSmsNumber));
+  await loadPublicSmsInbox(chosen);
+ }catch(error){target.innerHTML='<div class="empty">'+safe(error.message||"Could not load number inventory.")+'</div>';}
+}
+async function loadPublicSmsInbox(number){
+ const target=document.getElementById("public-sms-messages");if(!target||!number)return;
+ const cfg=window.CHICHI_AUTH_CONFIG||{};
+ const title=document.getElementById("public-sms-inbox-title");if(title)title.textContent=number.phone_number+" · Latest public messages";
+ target.innerHTML='<div class="empty">Loading messages…</div>';
+ try{
+  const url=cfg.url.replace(/\/$/,"")+"/rest/v1/public_sms_public_messages?number_id=eq."+encodeURIComponent(number.id)+"&select=id,sender_masked,body,received_at&order=received_at.desc&limit=50";
+  const response=await fetch(url,{headers:{apikey:cfg.publishableKey,Authorization:"Bearer "+cfg.publishableKey}});
+  if(!response.ok)throw new Error("Could not load this inbox ("+response.status+").");
+  const rows=await response.json();
+  if(!Array.isArray(rows)||!rows.length){target.innerHTML='<div class="empty">No public messages have arrived on this number yet.<br>New messages will appear after the provider delivers them.</div>';return;}
+  target.innerHTML=rows.map(m=>'<article class="public-sms-message"><div class="public-sms-message-meta"><b>'+safe(m.sender_masked||"Unknown sender")+'</b><time>'+safe(new Date(m.received_at).toLocaleString())+'</time></div><p>'+safe(m.body)+'</p></article>').join("");
+ }catch(error){target.innerHTML='<div class="empty">'+safe(error.message||"Could not load messages.")+'</div>';}
 }
 
 function hosting(){return head("HOSTING & DOMAINS","Keep your website online.","Hosting plans will appear when the service limits and infrastructure are confirmed.")+'<div class="panel"><h3>Available hosting plans</h3><div id="hosting-plans">Loading available plans…</div></div><div class="notice">Hosting requests remain pending until payment and website deployment are verified.</div>'}
@@ -151,4 +192,21 @@ render();
 if(page==="builder")loadProjectList();
 if(page==="hosting")loadHostingPlans();
 if(page==="marketplace")loadMarketplace();
+if(page==="public-sms")loadPublicSmsNumbers();
+app.addEventListener("click",async e=>{
+ const refresh=e.target.closest("#public-sms-refresh");
+ if(refresh){await loadPublicSmsNumbers();return;}
+ const item=e.target.closest("[data-public-number]");
+ if(item){
+  selectedPublicSmsNumber=item.dataset.publicNumber;
+  app.querySelectorAll("[data-public-number]").forEach(b=>b.classList.toggle("active",b===item));
+  const cfg=window.CHICHI_AUTH_CONFIG||{};
+  try{
+   const url=cfg.url.replace(/\/$/,"")+"/rest/v1/public_sms_public_numbers?id=eq."+encodeURIComponent(selectedPublicSmsNumber)+"&select=id,phone_number,area_code,display_label,capabilities,last_verified_at";
+   const response=await fetch(url,{headers:{apikey:cfg.publishableKey,Authorization:"Bearer "+cfg.publishableKey}});
+   const rows=await response.json();
+   if(response.ok&&rows[0])await loadPublicSmsInbox(rows[0]);else throw new Error("Could not open this inbox.");
+  }catch(error){const out=document.getElementById("public-sms-messages");if(out)out.textContent=error.message;}
+ }
+});
 })();
