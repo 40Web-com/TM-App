@@ -173,7 +173,7 @@
       status.textContent = "Choose exactly two preview images.";
       busy = false; return;
     }
-    if (!files.length || files.length > 20 || files.some(file => !allowed.has(file.type) || file.size > 104857600)) {
+    if (!files.length || files.length > 20 || files.some(file => !allowed.has(file.type) || file.size <= 0 || file.size > 104857600)) {
       status.textContent = "Choose 1–20 supported image or video files. Each file must be 100 MB or smaller.";
       busy = false; return;
     }
@@ -218,7 +218,8 @@
         });
       }
       const kind = imageCount && videoCount ? "mixed" : videoCount ? "video_pack" : "image_pack";
-      const slug = title.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 55) + "-" + crypto.randomUUID().slice(0, 6);
+      const slugBase = title.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 55) || "tool";
+      const slug = slugBase + "-" + crypto.randomUUID().slice(0, 6);
       status.textContent = "Saving your listing for review…";
       const listingResponse = await fetch(base() + "/rest/v1/chichi_listings?select=id", {
         method: "POST",
