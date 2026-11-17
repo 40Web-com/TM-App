@@ -153,7 +153,16 @@
     return true;
   }
   async function listMarketplace() {
-    return await api("chichi_listings?select=id,title,slug,category,description,price_kobo,currency,demo_url,preview_image,features,licence_terms&review_status=eq.approved&order=is_featured.desc,created_at.desc");
+    const current = await getSession().catch(() => null);
+    const base = config.url.replace(/\/$/, "");
+    const query = "chichi_listings?select=id,title,slug,category,description,price_kobo,currency,demo_url,preview_image,features,licence_terms&category=neq.all-tools&review_status=eq.approved&order=is_featured.desc,created_at.desc";
+    const response = await fetch(base + "/rest/v1/" + query, {
+      headers: { apikey: config.publishableKey, Authorization: "Bearer " + (current?.access_token || config.publishableKey) }
+    });
+    const raw = await response.text();
+    const result = raw ? JSON.parse(raw) : [];
+    if (!response.ok) throw new Error(result?.message || "Could not load approved marketplace listings.");
+    return result;
   }
   async function submitListing(listing) {
     const session=await getSession();
@@ -182,7 +191,7 @@
     const rows=await api("chichi_orders?select=id,item_name,amount_kobo,payment_status,created_at",{method:"POST",headers:{"Prefer":"return=representation"},body:JSON.stringify({buyer_id:session.user.id,listing_id:order.listing_id||null,item_name:order.item_name,amount_kobo:Math.round(Number(order.amount)*100),currency:"NGN",payment_status:"pending",fulfilment_status:"awaiting_payment",provider:"manual"})});
     return rows?.[0];
   }
-  async function listOrders() { return await api("chichi_orders?select=id,item_name,amount_kobo,payment_status,fulfilment_status,created_at&order=created_at.desc"); }
+  async function listOrders() { return await api("chichi_orders?select=id,item_name,listing_id,amount_kobo,payment_status,fulfilment_status,created_at&order=created_at.desc"); }
   async function listMyListings() { return await api("chichi_listings?select=id,title,review_status,created_at&order=created_at.desc"); }
   async function listHostingPlans() { return await api("chichi_hosting_plans?select=id,name,price_kobo,billing_period,storage_mb,bandwidth_gb,backups_included&is_active=eq.true"); }
   async function requestHosting(projectId, planId) {
