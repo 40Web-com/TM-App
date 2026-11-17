@@ -13,3 +13,7 @@ jobs:
           node-version: 22
       - run: node --check main.js
       - run: node --check aliyankee-pay.js
+      - run: node --check chichi-app.js
+      - run: node --check chichi-auth.js
+      - run: node --check chichi-number-tools.js
+      - run: node --check chichi-tools.js
